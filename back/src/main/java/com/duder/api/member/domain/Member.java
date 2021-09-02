@@ -23,6 +23,8 @@ public class Member extends BaseEntity {
     @Column(name = "member_id")
     private Long id;
 
+    private String kakaoId;
+
     private String username;
 
     private String nickname;
@@ -31,15 +33,13 @@ public class Member extends BaseEntity {
 
     private String email;
 
+    private String token;
+
     public Member(String username, String nickname, String profile, String email) {
         this.username = username;
         this.nickname = nickname;
         this.profile = profile;
         this.email = email;
-    }
-
-    public static Member of (String username, String nickname, String profile, String email){
-        return new Member(username, nickname, profile, email);
     }
 
     public void changeNickname(String nickname){

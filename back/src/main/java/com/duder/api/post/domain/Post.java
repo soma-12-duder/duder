@@ -46,4 +46,13 @@ public class Post extends BaseEntity {
     @JoinColumn(name = "cell_id")
     private Cell cell;
 
+    public Post(double latitude, double longitude, Photo photo, String content, Member member, Cell cell) {
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.photo = photo;
+        this.content = content;
+        this.member = member;
+        this.cell = cell;
+    }
+
 }
