@@ -25,7 +25,7 @@ class BaseEntityTest {
     @DisplayName("생성일, 수정일 기입 확인")
     @Test
     public void checkBaseEntity() {
-        Member member = Member.of("jino", "beenzino",
+        Member member = new Member("jino", "beenzino",
                 "profile test", "rlawlsdh@naver.com");
 
         memberRepository.save(member);

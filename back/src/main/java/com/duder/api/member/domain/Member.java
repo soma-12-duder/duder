@@ -29,11 +29,25 @@ public class Member extends BaseEntity {
 
     private String nickname;
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Role role;
+
     private String profile;
 
     private String email;
 
     private String token;
+
+    public Member(String kakaoId, String username, String nickname, Role role, String profile, String email, String token) {
+        this.kakaoId = kakaoId;
+        this.username = username;
+        this.nickname = nickname;
+        this.role = role;
+        this.profile = profile;
+        this.email = email;
+        this.token = token;
+    }
 
     public Member(String username, String nickname, String profile, String email) {
         this.username = username;
@@ -42,7 +56,7 @@ public class Member extends BaseEntity {
         this.email = email;
     }
 
-    public void changeNickname(String nickname){
+    public void updateNickname(String nickname){
         this.nickname = nickname;
     }
 
