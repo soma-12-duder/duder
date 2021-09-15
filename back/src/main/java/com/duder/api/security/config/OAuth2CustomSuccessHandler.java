@@ -34,7 +34,7 @@ public class OAuth2CustomSuccessHandler implements AuthenticationSuccessHandler 
         OAuth2User oauthUser = (OAuth2User) authentication.getPrincipal();
 
         String kakaoId = oauthUser.getName();
-        System.out.println("success handler kakaoId = " + kakaoId);
+        System.out.println("인증성공 success handler kakaoId = " + kakaoId);
 
         Member member = memberRepository.findByKakaoId(kakaoId).orElseThrow(
                 () -> new AuthenticationCredentialsNotFoundException("회원이 존재하지 않습니다.")
@@ -47,7 +47,7 @@ public class OAuth2CustomSuccessHandler implements AuthenticationSuccessHandler 
         response.setCharacterEncoding("utf-8");
         response.getWriter()
                 .write(objectMapper.writeValueAsString(
-                    TokenResponse.of(member.getId(), token)
+                    TokenResponse.of(member.getId(), member.getEmail(), token)
                 ));
 
     }
