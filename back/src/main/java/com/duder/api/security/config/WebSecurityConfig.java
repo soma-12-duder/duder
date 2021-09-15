@@ -12,8 +12,6 @@ import org.springframework.security.oauth2.client.registration.ClientRegistratio
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
 import org.springframework.security.oauth2.client.registration.InMemoryClientRegistrationRepository;
 import org.springframework.security.oauth2.client.web.OAuth2LoginAuthenticationFilter;
-import org.springframework.security.web.authentication.logout.LogoutFilter;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,8 +32,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                     .csrf().disable()
                     .formLogin().disable()
                     .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-//                .and()
-//                    .headers().frameOptions().disable() // h2 화면 보이게 처리
+                .and()
+                    .headers().frameOptions().disable() // h2 화면 보이게 처리
                 .and()
 //                    .csrf().requireCsrfProtectionMatcher(new AntPathRequestMatcher("'!/h2-console/**"))
                     .authorizeRequests() // url별 권한 관리
