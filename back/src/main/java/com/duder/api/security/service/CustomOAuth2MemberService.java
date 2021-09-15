@@ -4,25 +4,21 @@ import com.duder.api.member.domain.Member;
 import com.duder.api.member.domain.MemberRepository;
 import com.duder.api.member.domain.Role;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
-import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.servlet.http.HttpSession;
-import java.util.Optional;
+import java.util.LinkedHashMap;
 
 @Service
 @RequiredArgsConstructor
 public class CustomOAuth2MemberService implements OAuth2UserService<OAuth2UserRequest, OAuth2User> {
 
     private final MemberRepository memberRepository;
-    private final HttpSession httpSession;
 
     @Transactional
     @Override
@@ -43,11 +39,14 @@ public class CustomOAuth2MemberService implements OAuth2UserService<OAuth2UserRe
         System.out.println("userNameAttributeName = " + userNameAttributeName);
 
         String kakaoId = oAuth2User.getName();
+        LinkedHashMap<String, Object> kakao_account = (LinkedHashMap<String, Object>) oAuth2User.getAttributes().get("kakao_account");
+        String email = (String) kakao_account.get("email");
+
         System.out.println("kakaoId = " + kakaoId);
 
         Member member = memberRepository.findByKakaoId(kakaoId)
-                .orElse(memberRepository.save(
-                        new Member(kakaoId, null, null, Role.USER, null, null, null)));
+                .orElseGet(() -> memberRepository.save(
+                        new Member(kakaoId, null, null, Role.USER, null, email, null)));
 
         System.out.println("loadUser member = " + member);
 
