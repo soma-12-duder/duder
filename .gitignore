@@ -1,13 +1,12 @@
 # FRONT
 
 # BACK
-application.yml
+application-*.yml
 
 # node.js
-node_modules/
 npm-debug.log
 yarn-error.log
-front/__tests__
+# front/__tests__
 front/package-lock.json
 *.log
 .nvm
@@ -17,10 +16,6 @@ front/package-lock.json
 
 # OS X
 .DS_Store
-
-# Watchman
-.watchmanconfig
-
 
 # 기타
 HELP.md
