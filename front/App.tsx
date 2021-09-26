@@ -1,12 +1,12 @@
 import React from 'react';
-import {SafeAreaView} from 'react-native';
-import LoginScreen from './src/LoginScreen';
+import {NavigationContainer} from '@react-navigation/native';
+import RootStack from './src/components/navigation/RootStack';
 
 const App = () => {
   return (
-    <SafeAreaView>
-      <LoginScreen />
-    </SafeAreaView>
+    <NavigationContainer>
+      <RootStack />
+    </NavigationContainer>
   );
 };
 
