@@ -8,9 +8,14 @@ const LoginScreen = () => {
   return (
     <Wrapper>
       <KakaoButton
-        onPress={() => {
+        onPress={async () => {
           console.log('hi');
-          axios.get('/oauth2/authorization/kakao');
+          try {
+            const response = await axios.get('http://localhost:8080');
+          } catch (e) {
+            console.error(e);
+          }
+
           return;
         }}>
         <ButtonContainer>
