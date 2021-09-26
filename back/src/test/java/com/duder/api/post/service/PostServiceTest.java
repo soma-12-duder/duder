@@ -35,7 +35,7 @@ class PostServiceTest {
 
         //when
         memberRepository.save(member);
-        postService.enroll(request, member);
+        postService.enroll(member, request);
 
         //then
         Post post = findById(1L);

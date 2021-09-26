@@ -20,7 +20,7 @@ public class PostService {
 
     // Cell 과 함께 저장해줘야함.
     @Transactional
-    public ApiForm<?> enroll(PostEnrollRequest request, Member member) {
+    public ApiForm<?> enroll(Member member, PostEnrollRequest request) {
 
         //Cell 계산 로직 추가
 

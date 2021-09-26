@@ -5,6 +5,8 @@ import com.duder.api.member.domain.Member;
 import com.duder.api.post.request.PostEnrollRequest;
 import com.duder.api.post.service.PostService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -19,8 +21,8 @@ public class PostController {
     private final PostService postService;
 
     @PostMapping
-    public ApiForm<?> enroll(PostEnrollRequest request, Member member){
-        return postService.enroll(request, member);
+    public ApiForm<?> enroll(@AuthenticationPrincipal OAuth2User oAuth2User, PostEnrollRequest request){
+        return postService.enroll(oAuth2User.getAttribute("member"), request);
     }
 
 }
