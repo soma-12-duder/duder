@@ -1,4 +1,4 @@
-package com.duder.api.security.config;
+package com.duder.api.security.util;
 
 import com.duder.api.member.domain.Member;
 import com.duder.api.member.domain.MemberRepository;
@@ -40,8 +40,9 @@ public class JwtTokenUtil {
 
     // JWT 토큰 생성
 
-    public String createToken(String userId, Role role){
-        Claims claims = Jwts.claims().setSubject(userId);
+    public String createToken(Long memberId, String kakaoId, Role role){
+        Claims claims = Jwts.claims().setSubject(kakaoId);
+        claims.put("member_id", memberId);
         claims.put("role", role.getKey()); // 정보는 key value 로 저장
         Date now = new Date();
         return Jwts.builder()
@@ -82,6 +83,7 @@ public class JwtTokenUtil {
     public Map<String, Object> createAttribute(Member member){
         Map<String, Object> attribute = new HashMap<>();
         attribute.put("kakaoId", member.getKakaoId());
+        attribute.put("member", member);
         return attribute;
     }
 
