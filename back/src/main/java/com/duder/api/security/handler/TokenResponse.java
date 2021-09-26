@@ -1,4 +1,4 @@
-package com.duder.api.security.config;
+package com.duder.api.security.handler;
 
 import lombok.Getter;
 

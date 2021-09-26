@@ -1,5 +1,6 @@
-package com.duder.api.security.config;
+package com.duder.api.security.filter;
 
+import com.duder.api.security.util.JwtTokenUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -33,7 +34,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 System.out.println("validate token = " + token);
                 SecurityContext context = SecurityContextHolder.createEmptyContext();
                 Authentication authentication = jwtTokenUtil.getAuthentication(token);
-
 
                 SecurityContextHolder.setContext(context);
                 SecurityContextHolder.getContext().setAuthentication(authentication);

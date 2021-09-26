@@ -1,14 +1,14 @@
-package com.duder.api.security.config;
+package com.duder.api.security.handler;
 
 import com.duder.api.member.domain.Member;
 import com.duder.api.member.domain.MemberRepository;
 import com.duder.api.member.domain.Role;
+import com.duder.api.security.util.JwtTokenUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
-import org.springframework.security.authentication.event.AuthenticationFailureBadCredentialsEvent;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
@@ -40,7 +40,7 @@ public class OAuth2CustomSuccessHandler implements AuthenticationSuccessHandler 
                 () -> new AuthenticationCredentialsNotFoundException("회원이 존재하지 않습니다.")
         );
 
-        String token = jwtTokenUtil.createToken(kakaoId, Role.USER);
+        String token = jwtTokenUtil.createToken(member.getId(), kakaoId, Role.USER);
 
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         response.setStatus(HttpStatus.OK.value());
