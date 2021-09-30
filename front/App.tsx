@@ -1,13 +1,32 @@
-import React from 'react';
-import {NavigationContainer} from '@react-navigation/native';
-import RootStack from './src/components/navigation/RootStack';
+import React, {useState} from 'react';
+import {Button, Text, View} from 'react-native';
 
-const App = () => {
+const Cat = ({name}: any) => {
+  const [isHungry, setIsHungry] = useState(true);
+
   return (
-    <NavigationContainer>
-      <RootStack />
-    </NavigationContainer>
+    <View>
+      <Text>
+        I am {name}, and I am {isHungry ? 'hungry' : 'full'}!
+      </Text>
+      <Button
+        onPress={() => {
+          setIsHungry(!isHungry);
+        }}
+        disabled={!isHungry}
+        title={isHungry ? 'Pour me some milk, please!' : 'Thank you!'}
+      />
+    </View>
   );
 };
 
-export default App;
+const Cafe = () => {
+  return (
+    <>
+      <Cat name="Munkustrap" />
+      <Cat name="Spot" />
+    </>
+  );
+};
+
+export default Cafe;
