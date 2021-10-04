@@ -35,18 +35,18 @@ class CoordinateUtilTest {
         double long_3 = -180.1;
 
         // latitude 초과
-        assertThat(CoordinateUtil.validateCoordinate(lat_1, long_1)).isFalse();
+        assertThatThrownBy(() -> CoordinateUtil.validateCoordinate(lat_1, long_1)).isInstanceOf(IllegalArgumentException.class);
 
         // longitude 초과
-        assertThat(CoordinateUtil.validateCoordinate(lat_2, long_2)).isFalse();
+        assertThatThrownBy(() -> CoordinateUtil.validateCoordinate(lat_2, long_2)).isInstanceOf(IllegalArgumentException.class);
 
         // latitude, longitude 둘 다 초과
-        assertThat(CoordinateUtil.validateCoordinate(lat_3, long_3)).isFalse();
+        assertThatThrownBy(() -> CoordinateUtil.validateCoordinate(lat_3, long_3)).isInstanceOf(IllegalArgumentException.class);
     }
 
     @DisplayName("거리측정 테스트 1: 좌표거리 322km")
     @Test
-    public void checkDistance1(){
+    public void checkDistance1() throws  IllegalArgumentException {
         double seoulLat = 37.547889; // 서울 위도
         double seoulLong = 126.997128; // 서울 경도
 
@@ -59,14 +59,14 @@ class CoordinateUtilTest {
 
     @DisplayName("거리측정 테스트 2: 좌표 거리 0m")
     @Test
-    public void checkDistance2(){
+    public void checkDistance2() throws IllegalArgumentException{
         assertThat(CoordinateUtil.calculateDistanceTwoPoints(homeLat, homeLong, homeLat, homeLong))
                 .isEqualTo(0.000, Offset.offset(0.001));
     }
 
     @DisplayName("거리측정 테스트 3: 좌표 거리 1000m +- 1 오차")
     @Test
-    public void checkDistance3(){
+    public void checkDistance3() throws IllegalArgumentException{
         // 합정역
         double latitude = 37.54892732943174;
         double longitude = 126.9135262949987;
