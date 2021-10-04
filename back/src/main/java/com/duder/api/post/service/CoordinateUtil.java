@@ -46,11 +46,11 @@ public class CoordinateUtil {
     public static String INVALID_COORDINATE = "위도는 " + MIN_LATITUDE + "이상 " + MAX_LATITUDE + "이하 이고, 경도는 " +
             MIN_LONGITUDE + "이상 " + MAX_LONGITUDE + "이하 이어야 합니다.";
 
-    public static double calculateDistanceTwoPoints(double firstLat, double firstLong, double secondLat, double secondLong) {
+    public static double calculateDistanceTwoPoints (double firstLat, double firstLong, double secondLat, double secondLong)
+            throws IllegalArgumentException{
 
-        if (!validateCoordinate(firstLat, firstLong) || !validateCoordinate(secondLat, secondLong)){
-            throw new IllegalArgumentException(INVALID_COORDINATE);
-        }
+        validateCoordinate(firstLat, firstLong);
+        validateCoordinate(secondLat, secondLong);
 
         double deltaLat = Math.abs(firstLat - secondLat) * RADIAN;
         double deltaLong = Math.abs(firstLong - secondLong) * RADIAN;
@@ -62,12 +62,13 @@ public class CoordinateUtil {
                 Math.cos(firstLat * RADIAN) * Math.cos(secondLat * RADIAN) * Math.pow(sinDeltaLong, 2));
 
         double distance = 2 * EARTH_RADIUS * Math.asin(squareRoot);
+
         return distance;
     }
 
     public static boolean validateCoordinate(double latitude, double longitude){
         if (latitude < MIN_LATITUDE || latitude > MAX_LATITUDE || longitude > MAX_LONGITUDE || longitude < MIN_LONGITUDE){
-            return false;
+            throw new IllegalArgumentException(INVALID_COORDINATE);
         }
 
         return true;
@@ -110,7 +111,8 @@ public class CoordinateUtil {
     }
 
     // 해당 위치에서 알맞은 Cell 값 반환
-    public static int findCellValue(double latitude, double longitude){
+    public static int findCellValue(double latitude, double longitude) throws IllegalArgumentException {
+        validateCoordinate(latitude, longitude);
         int row = calculateLength(UPPER_LEFT_LATITUDE, latitude, ONE_HUNDRED_METER_LATITUDE);
         int column = calculateLength(UPPER_LEFT_LONGITUDE, longitude, ONE_HUNDRED_METER_LONGITUDE);
         return LONGITUDE_LENGTH * row + column;
