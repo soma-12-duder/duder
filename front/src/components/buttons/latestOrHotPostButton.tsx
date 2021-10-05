@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {View, Alert, TouchableOpacity, Text} from 'react-native';
+import {Alert, TouchableOpacity, Text} from 'react-native';
 import styled from 'styled-components/native';
 
 interface Props {
