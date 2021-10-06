@@ -1,11 +1,16 @@
 import * as React from 'react';
-import {Text, View, Dimensions} from 'react-native';
+import {View, Dimensions} from 'react-native';
 import {TabView, TabBar, SceneMap} from 'react-native-tab-view';
+import HomePost from '../components/homePost';
 
 const FirstRoute = () => {
   return (
     <View>
-      <Text>here</Text>
+      <HomePost />
+      <HomePost />
+      <HomePost />
+      <HomePost />
+      <HomePost />
     </View>
   );
 };
@@ -15,7 +20,7 @@ const SecondRoute = () => {
 };
 const initialLayout = {width: Dimensions.get('window').width};
 
-export default function () {
+const LatestOrHotTabView = () => {
   const [index, setIndex] = React.useState(0);
   const [routes] = React.useState([
     {
@@ -60,4 +65,6 @@ export default function () {
       />
     </>
   );
-}
+};
+
+export default LatestOrHotTabView;
