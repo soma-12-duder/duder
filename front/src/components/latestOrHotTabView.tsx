@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {View, Dimensions} from 'react-native';
 import {TabView, TabBar, SceneMap} from 'react-native-tab-view';
-import HomePost from '../components/homePost';
+import HomePost from './HomePost';
 
 const FirstRoute = () => {
   return (

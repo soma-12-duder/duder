@@ -1,12 +1,20 @@
 import React from 'react';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
+import {NavigationContainer} from '@react-navigation/native';
+import {RecoilRoot} from 'recoil';
 
-import TabNavigation from './src/navigation/tabs';
+import RootStack from './src/navigation/RootStack';
 
-export default function App() {
+const App = () => {
   return (
     <SafeAreaProvider>
-      <TabNavigation />
+      <RecoilRoot>
+        <NavigationContainer>
+          <RootStack />
+        </NavigationContainer>
+      </RecoilRoot>
     </SafeAreaProvider>
   );
-}
+};
+
+export default App;
