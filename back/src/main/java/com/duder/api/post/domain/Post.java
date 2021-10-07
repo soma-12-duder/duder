@@ -1,6 +1,5 @@
 package com.duder.api.post.domain;
 
-import com.duder.api.cell.domain.Cell;
 import com.duder.api.common.BaseEntity;
 import com.duder.api.member.domain.Member;
 import lombok.Getter;
@@ -17,6 +16,7 @@ import javax.persistence.*;
  * content : 게시글 내용
  * view : 사용자 수
  * member_id : FK (Member 테이블)
+ * cellValue : 게시글의 cell 값
  */
 
  @Getter @NoArgsConstructor
@@ -42,17 +42,15 @@ public class Post extends BaseEntity {
     @JoinColumn(name = "member_id")
     private Member member;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "cell_id")
-    private Cell cell;
+    private Integer cellValue;
 
-    public Post(double latitude, double longitude, Photo photo, String content, Member member, Cell cell) {
+    public Post(double latitude, double longitude, Photo photo, String content, Member member, Integer cellValue) {
         this.latitude = latitude;
         this.longitude = longitude;
         this.photo = photo;
         this.content = content;
         this.member = member;
-        this.cell = cell;
+        this.cellValue = cellValue;
     }
 
 }

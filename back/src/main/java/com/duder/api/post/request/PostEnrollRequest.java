@@ -1,6 +1,5 @@
 package com.duder.api.post.request;
 
-import com.duder.api.cell.domain.Cell;
 import com.duder.api.member.domain.Member;
 import com.duder.api.post.domain.Photo;
 import com.duder.api.post.domain.Post;
@@ -19,8 +18,8 @@ public class PostEnrollRequest {
     private List<String> photoUrls;
     private String content;
 
-    public Post toPostWithMemberAndCell(Member member, Cell cell){
-        return new Post(latitude, longitude, new Photo(photoUrls), content, member, cell);
+    public Post toPostWithMemberAndCell(Member member, Integer cellValue){
+        return new Post(latitude, longitude, new Photo(photoUrls), content, member, cellValue);
     }
 
 }

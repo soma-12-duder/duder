@@ -1,32 +1,12 @@
-import React, {useState} from 'react';
-import {Button, Text, View} from 'react-native';
+import React from 'react';
+import {SafeAreaProvider} from 'react-native-safe-area-context';
 
-const Cat = ({name}: any) => {
-  const [isHungry, setIsHungry] = useState(true);
+import TabNavigation from './src/navigation/tabs';
 
+export default function App() {
   return (
-    <View>
-      <Text>
-        I am {name}, and I am {isHungry ? 'hungry' : 'full'}!
-      </Text>
-      <Button
-        onPress={() => {
-          setIsHungry(!isHungry);
-        }}
-        disabled={!isHungry}
-        title={isHungry ? 'Pour me some milk, please!' : 'Thank you!'}
-      />
-    </View>
+    <SafeAreaProvider>
+      <TabNavigation />
+    </SafeAreaProvider>
   );
-};
-
-const Cafe = () => {
-  return (
-    <>
-      <Cat name="Munkustrap" />
-      <Cat name="Spot" />
-    </>
-  );
-};
-
-export default Cafe;
+}
