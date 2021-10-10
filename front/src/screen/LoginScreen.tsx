@@ -7,7 +7,7 @@ import {useNavigation} from '@react-navigation/core';
 
 const LoginScreen = () => {
   const [isToggle, setIsToggle] = useState(false);
-  const [, setProfileUrl] = useRecoilState(ProfileUrlState);
+  const [profileUrl, setProfileUrl] = useRecoilState(ProfileUrlState);
   const navigation = useNavigation();
 
   const loginApi = async (data: any) => {
