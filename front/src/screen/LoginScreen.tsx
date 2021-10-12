@@ -9,6 +9,7 @@ import LoginButton from '../components/buttons/LoginButton';
 import DuderImage from '../util/DuderImage';
 
 const LoginScreen = () => {
+
   const [isToggle, setIsToggle] = useState(true);
   const [profileUrl, setProfileUrl] = useRecoilState(ProfileUrlState);
   const navigation = useNavigation();
