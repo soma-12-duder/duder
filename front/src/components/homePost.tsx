@@ -8,7 +8,7 @@ const HomePost = ({text, km}: any) => {
   const navigation: any = useNavigation();
 
   return (
-    <TouchableOpacity onPress={() => navigation.navigate('Settings')}>
+    <TouchableOpacity onPress={() => navigation.navigate('PostScreen')}>
       <PostWrapper>
         <Text
           style={{padding: 6, height: 70}}
