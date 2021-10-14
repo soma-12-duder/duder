@@ -36,6 +36,8 @@ public class Post extends BaseEntity {
     @Embedded
     private Photo photo;
 
+    private String title;
+
     private String content;
 
     private long view;
@@ -55,17 +57,19 @@ public class Post extends BaseEntity {
         this.cellValue = cellValue;
     }
 
-    public Post(Long id, double latitude, double longitude, Photo photo, String content, Member member, Integer cellValue) {
+    public Post(Long id, double latitude, double longitude, Photo photo, String title, String content, Member member, Integer cellValue) {
         this.id = id;
         this.latitude = latitude;
         this.longitude = longitude;
         this.photo = photo;
+        this.title = title;
         this.content = content;
         this.member = member;
         this.cellValue = cellValue;
     }
 
     public void update(PostUpdateRequest postUpdateRequest){
-        this.content = postUpdateRequest.getContent();
+        title = postUpdateRequest.getTitle();
+        content = postUpdateRequest.getContent();
     }
 }

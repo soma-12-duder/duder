@@ -96,6 +96,7 @@ class PostServiceTest {
 
         //then
         assertThat(POST1.getContent()).isEqualTo(게시글_수정_요청.getContent());
+        assertThat(POST1.getTitle()).isEqualTo(게시글_수정_요청.getTitle());
     }
 
 }
