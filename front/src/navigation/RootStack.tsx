@@ -23,7 +23,7 @@ const RootStack = () => {
           component={BottomTab}
           options={{headerShown: false}}
         />
-        <Stack.Screen name={'PostScreen'} component={PostScreen}></Stack.Screen>
+        <Stack.Screen name={'PostScreen'} component={PostScreen} />
       </Stack.Navigator>
     </>
   );

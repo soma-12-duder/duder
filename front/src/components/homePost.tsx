@@ -1,10 +1,18 @@
+/* eslint-disable react-native/no-inline-styles */
 import * as React from 'react';
 import {View, Text, Image, TouchableOpacity} from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import styled from 'styled-components/native';
 import {useNavigation} from '@react-navigation/core';
+import HorizontalLine from './HorizontalLine';
+import {Colors} from '../util/Constants';
 
-const HomePost = ({text, km}: any) => {
+interface Props {
+  text: String;
+  km: String;
+}
+
+const HomePost = ({text, km}: Props) => {
   const navigation: any = useNavigation();
 
   return (
@@ -16,16 +24,7 @@ const HomePost = ({text, km}: any) => {
           ellipsizeMode="tail">
           {text}
         </Text>
-        <View
-          style={{
-            alignSelf: 'stretch',
-            borderBottomWidth: 1,
-            borderBottomColor: '#E7E7E8',
-            margin: 0,
-            padding: 0,
-            top: 2,
-            height: 1,
-          }}></View>
+        <HorizontalLine />
         <View style={{top: -37}}>
           <ProfileWrapper>
             <UserProfileImage
@@ -71,7 +70,7 @@ const ProfileWrapper = styled(View)`
 
 const PostWrapper = styled(View)`
   margin: 7px;
-  background-color: #fffffe;
+  background-color: ${Colors.POST_BACKGROUND_COLOR}
   width: 350px;
   height: 100px;
   border-radius: 10px;
