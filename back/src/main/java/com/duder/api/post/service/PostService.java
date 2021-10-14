@@ -4,6 +4,7 @@ import com.duder.api.member.domain.Member;
 import com.duder.api.post.domain.Post;
 import com.duder.api.post.domain.PostRepository;
 import com.duder.api.post.request.PostEnrollRequest;
+import com.duder.api.post.request.PostUpdateRequest;
 import com.duder.api.post.response.PostResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -13,6 +14,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 @Service
 public class PostService {
@@ -23,28 +25,21 @@ public class PostService {
     @Transactional
     public Long enroll(Member member, PostEnrollRequest request) throws Exception {
 
-        //cell 계산 로직
         double latitude = request.getLatitude();
         double longitude = request.getLongitude();
 
         int cellValue = CoordinateUtil.findCellValue(latitude, longitude);
 
-        Long postId = postRepository.save(request.toPostWithMemberAndCell(member, cellValue)).getId();
-        return postId;
+        return postRepository.save(request.toPostWithMemberAndCell(member, cellValue)).getId();
     }
 
-    @Transactional(readOnly = true)
     public PostResponse findPostById (Long postId) throws IllegalArgumentException {
-        Post post = postRepository.findPostById(postId).orElseThrow(
-                () -> new IllegalArgumentException("해당 게시글이 존재하지 않습니다.")
-        );
-
-        return PostResponse.of(post);
+        return PostResponse.of(findById(postId));
     }
 
     // parameter : 현재 위치(latitude, longitude) 주변 거리 (distance)
-    @Transactional(readOnly = true)
-    public List<PostResponse> findPostsByDistance (double latitude, double longitude, int distance){
+    public List<PostResponse> findPostsByDistance (double latitude, double longitude, int distance)
+                                                                        throws IllegalArgumentException{
         int userCellValue = CoordinateUtil.findCellValue(latitude, longitude);
         List<Integer> allCellValue = CoordinateUtil.findCellValueInRange(userCellValue, distance);
         // 쿼리 날림
@@ -55,4 +50,26 @@ public class PostService {
                 .collect(Collectors.toList());
     }
 
+    @Transactional
+    public PostResponse updatePost (Long postId, PostUpdateRequest postUpdateRequest) throws IllegalArgumentException{
+        Post post = findById(postId);
+        post.update(postUpdateRequest);
+        return PostResponse.of(post);
+    }
+
+    @Transactional
+    public Long deletePost(Member member, Long postId) throws IllegalArgumentException{
+        Post post = findById(postId);
+        if (member.isNotSameId(post.getMember())){
+            throw new IllegalArgumentException("회원이 올린 글이 아닙니다.");
+        }
+        postRepository.delete(post);
+        return postId;
+    }
+
+    public Post findById(Long postId){
+        return postRepository.findPostById(postId).orElseThrow(
+                () -> new IllegalArgumentException("해당 게시글이 존재하지 않습니다.")
+        );
+    }
 }

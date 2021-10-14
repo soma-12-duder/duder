@@ -2,6 +2,7 @@ package com.duder.api.member.domain;
 
 import com.duder.api.common.BaseEntity;
 import com.duder.api.security.service.ProviderType;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -37,7 +38,15 @@ public class Member extends BaseEntity {
 
     private String email;
 
-    public Member(String providerId, ProviderType providerType, String name, String nickname, String profile, String email) {
+    public Member(String name, String nickname, String profile, String email) {
+        this.name = name;
+        this.nickname = nickname;
+        this.profile = profile;
+        this.email = email;
+    }
+
+    public Member(Long id, String providerId, ProviderType providerType, String name, String nickname, String profile, String email) {
+        this.id = id;
         this.providerId = providerId;
         this.providerType = providerType;
         this.name = name;
@@ -46,15 +55,15 @@ public class Member extends BaseEntity {
         this.email = email;
     }
 
-    public Member(String name, String nickname, String profile, String email) {
-        this.name = name;
-        this.nickname = nickname;
-        this.profile = profile;
-        this.email = email;
+    public Member(String providerId, ProviderType providerType, String name, String nickname, String profile, String email) {
+        this(null, providerId, providerType, name, nickname, profile, email);
     }
 
     public void updateNickname(String nickname){
         this.nickname = nickname;
     }
 
+    public boolean isNotSameId(Member member) {
+        return !id.equals(member.getId());
+    }
 }

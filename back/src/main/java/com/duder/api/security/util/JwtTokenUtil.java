@@ -64,8 +64,8 @@ public class JwtTokenUtil {
 
     // Jwt 토큰 -> 인증 정보 조회
     public Authentication getAuthentication(String token){
-        String kakaoId = getPayload(token);
-        Member member = memberRepository.findByProviderId(kakaoId).orElseThrow(
+        String providerId = getPayload(token);
+        Member member = memberRepository.findByProviderId(providerId).orElseThrow(
                 () -> new AuthenticationCredentialsNotFoundException("존재하지 않는 회원입니다.")
         );
 
@@ -73,11 +73,11 @@ public class JwtTokenUtil {
 
         OAuth2User defaultUser = new DefaultOAuth2User(
                 Collections.singleton(new SimpleGrantedAuthority(null)),
-                attribute, "kakaoId");
+                attribute, "providerId");
 
         return new OAuth2AuthenticationToken(defaultUser,
                 Collections.singleton(new SimpleGrantedAuthority(null)),
-                "kakao");
+                "provider");
     }
 
     public Map<String, Object> createAttribute(Member member){

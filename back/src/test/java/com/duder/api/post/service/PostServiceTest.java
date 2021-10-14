@@ -1,144 +1,102 @@
 package com.duder.api.post.service;
 
-import com.duder.api.member.domain.Member;
 import com.duder.api.member.domain.MemberRepository;
-import com.duder.api.post.domain.Photo;
-import com.duder.api.post.domain.Post;
 import com.duder.api.post.domain.PostRepository;
-import com.duder.api.post.request.PostEnrollRequest;
 import com.duder.api.post.response.PostResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.transaction.annotation.Transactional;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-import javax.annotation.PostConstruct;
-import javax.persistence.EntityManager;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
+import static com.duder.api.fixture.MemberFixture.*;
+import static com.duder.api.fixture.PostFixture.*;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
-@SpringBootTest
-@Transactional
+@ExtendWith(MockitoExtension.class)
 class PostServiceTest {
 
-    @Autowired MemberRepository memberRepository;
-    @Autowired PostRepository postRepository;
-    @Autowired PostService postService;
-    public Member memberA;
+    private PostService postService;
 
-    @Autowired EntityManager em;
+    @Mock
+    private MemberRepository memberRepository;
 
-    @PostConstruct
+    @Mock
+    private PostRepository postRepository;
+
+    @BeforeEach
     public void init(){
-        memberA = new Member("memeber1", "nick",
-                "www.abc.com", "www.naver.com");
-        memberRepository.save(memberA);
+        postService = new PostService(postRepository);
     }
 
-    @DisplayName("1. 게시글 등록 테스트: 전송 url이 하나일 때")
+    @DisplayName("1. 게시글 등록 테스트")
     @Test
     public void enroll_1() throws Exception {
-        //given
-        PostEnrollRequest request = new  PostEnrollRequest(37.2323, 126.2323,
-                Arrays.asList("www.abd.com"), "게시글");
+        when(postRepository.save(any())).thenReturn(POST1);
 
-        //when
-        Long postId = postService.enroll(memberA, request);
-        em.flush();
+        Long postId = postService.enroll(MEMBER1, 상수맛집_게시글_요청);
 
-        //then
-        Post post = findById(postId);
-
-        assertThat(post.getId()).isEqualTo(postId);
-        assertThat(post.getContent()).isEqualTo("게시글");
-        assertThat(post.getPhoto().getPhotoUrl()).contains("www.abd.com");
+        assertThat(postId).isEqualTo(POST1.getId());
     }
 
-    @DisplayName("2. 게시글 등록 테스트: 전송 url이 두개일 때")
-    @Test
-    public void enroll_2() throws Exception {
-        //given
-        PostEnrollRequest request = new PostEnrollRequest(37.2323, 126.2323,
-                Arrays.asList("www.abc.com", "www.abd.com"), "게시글");
-
-        //when
-        Long postId = postService.enroll(memberA, request);
-
-        //then
-        Post post = findById(postId);
-
-        assertThat(post.getId()).isEqualTo(postId);
-        assertThat(post.getContent()).isEqualTo("게시글");
-        assertThat(post.getPhoto().getPhotoUrl()).contains("www.abc.com", "www.abd.com");
-    }
-
-    @DisplayName("3. 게시글 조회 테스트: 한 개 조회")
+    @DisplayName("2. 게시글 조회 테스트")
     @Test
     public void findPostById() throws Exception{
-        //given
-        Post post = postRepository.save(new Post(37.2323, 126.2323,
-                new Photo(Arrays.asList("www.abc.com")), "게시글", memberA, 1));
-        em.flush();
+        Long postId = 1L;
+        when(postRepository.findPostById(postId)).thenReturn(Optional.of(POST1));
 
-        //when
-        PostResponse findPost = postService.findPostById(post.getId());
+        postService.updatePost(postId, 게시글_수정_요청);
 
-        //then
-
-        assertThat(findPost.getId()).isEqualTo(post.getId());
+        assertThat(POST1.getContent()).isEqualTo(게시글_수정_요청.getContent());
     }
 
-
-    @DisplayName("4. 게시글 조회 테스트: 여러 게시글 조회-1")
+    @DisplayName("3. 게시글 조회 테스트: 주변 게시글 조회")
     @Test
     public void findPostAll() throws Exception{
         //given
-        int cellValue = CoordinateUtil.findCellValue(37.2323, 126.2323);
-        int cellValue1 = CoordinateUtil.findCellValue(37.2322, 126.2325);
-        int cellValue2 = CoordinateUtil.findCellValue(37.2324, 126.2321);
-        Post post1 = new Post(37.2323, 126.2323, new Photo(Arrays.asList("www.abc.com")),
-                "게시글", memberA, cellValue);
-        Post post2 = new Post(37.2322, 126.2325, new Photo(Arrays.asList("www.abc.com")),
-                "게시글", memberA, cellValue1);
-        Post post3 = new Post(37.2324, 126.2321, new Photo(Arrays.asList("www.abc.com")),
-                "게시글", memberA, cellValue2);
+        when(postRepository.findByCellValues(any()))
+                .thenReturn(Arrays.asList(POST1, POST2, POST3));
 
         //when
-        postRepository.saveAll(Arrays.asList(post1, post2, post3));
-        List<PostResponse> allPosts = postService.findPostsByDistance(37.2323, 126.2323, 10);
+        List<PostResponse> responses = postService.findPostsByDistance(POST1.getLatitude(), POST1.getLongitude(), 10);
 
         //then
-        assertThat(allPosts.size()).isEqualTo(3);
+        assertThat(responses.size()).isEqualTo(3);
     }
 
-    @DisplayName("5. 게시글 조회 테스트: 여러 게시글 조회-2")
+    @DisplayName("4. 게시글 삭제 테스트 ")
     @Test
-    public void findPostAll2() throws Exception{
+    public void postDelete(){
         //given
-        int cellValue = CoordinateUtil.findCellValue(37.2323, 126.2323);
-        int cellValue1 = CoordinateUtil.findCellValue(37.2322, 126.2325);
-        int cellValue2 = CoordinateUtil.findCellValue(37.2324, 126.2321);
-        Post post1 = new Post(37.2323, 126.2323, new Photo(Arrays.asList("www.abc.com")),
-                "게시글", memberA, cellValue);
-        Post post2 = new Post(37.2322, 126.2325, new Photo(Arrays.asList("www.abc.com")),
-                "게시글", memberA, cellValue1);
-        Post post3 = new Post(37.2324, 126.2321, new Photo(Arrays.asList("www.abc.com")),
-                "게시글", memberA, cellValue2);
+        when(postRepository.findPostById(POST1.getId())).thenReturn(Optional.of(POST1));
 
         //when
-        postRepository.saveAll(Arrays.asList(post1, post2, post3));
-        List<PostResponse> allPosts = postService.findPostsByDistance(37.2323, 126.2323, 10);
+        postService.deletePost(MEMBER1, POST1.getId());
 
         //then
-        assertThat(allPosts.size()).isEqualTo(3);
+        verify(postRepository).delete(POST1);
     }
 
-    public Post findById(Long id) throws IllegalArgumentException {
-        return postRepository.findById(id).orElseThrow(() -> new IllegalArgumentException(id + "번은 존재하지 않는 post 입니다"));
+    @DisplayName("5. 게시물 업데이트 테스트")
+    @Test
+    public void postUpdate(){
+        //given
+        when(postRepository.findPostById(any())).thenReturn(Optional.of(POST1));
+
+        //when
+        postService.updatePost(1L, 게시글_수정_요청);
+
+        //then
+        assertThat(POST1.getContent()).isEqualTo(게시글_수정_요청.getContent());
+        assertThat(POST1.getTitle()).isEqualTo(게시글_수정_요청.getTitle());
     }
 
 }

@@ -2,6 +2,7 @@ package com.duder.api.post.domain;
 
 import com.duder.api.common.BaseEntity;
 import com.duder.api.member.domain.Member;
+import com.duder.api.post.request.PostUpdateRequest;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -19,7 +20,8 @@ import javax.persistence.*;
  * cellValue : 게시글의 cell 값
  */
 
- @Getter @NoArgsConstructor
+ @Getter
+ @NoArgsConstructor
  @Entity
 public class Post extends BaseEntity {
 
@@ -33,6 +35,8 @@ public class Post extends BaseEntity {
 
     @Embedded
     private Photo photo;
+
+    private String title;
 
     private String content;
 
@@ -53,4 +57,19 @@ public class Post extends BaseEntity {
         this.cellValue = cellValue;
     }
 
+    public Post(Long id, double latitude, double longitude, Photo photo, String title, String content, Member member, Integer cellValue) {
+        this.id = id;
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.photo = photo;
+        this.title = title;
+        this.content = content;
+        this.member = member;
+        this.cellValue = cellValue;
+    }
+
+    public void update(PostUpdateRequest postUpdateRequest){
+        title = postUpdateRequest.getTitle();
+        content = postUpdateRequest.getContent();
+    }
 }
