@@ -5,6 +5,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Getter @NoArgsConstructor
@@ -18,6 +19,10 @@ public class Photo {
 
     public Photo(List<String> photoUrls) {
         this.photoUrl = photoUrls;
+    }
+
+    public static Photo of(String ...photoUrl){
+        return new Photo(Arrays.asList(photoUrl));
     }
 
 }
