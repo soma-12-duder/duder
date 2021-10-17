@@ -1,8 +1,13 @@
+/* eslint-disable react-native/no-inline-styles */
 import React from 'react';
 import {Text, View} from 'react-native';
 import styled from 'styled-components';
 
-const HomeNotice = ({text}: any) => {
+interface Props {
+  text: String;
+}
+
+const HomeNotice = ({text}: Props) => {
   return (
     <NoticeView>
       <Text style={{padding: 4}}>공지: {text}</Text>

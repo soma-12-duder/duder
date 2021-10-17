@@ -1,3 +1,4 @@
+/* eslint-disable react-native/no-inline-styles */
 import * as React from 'react';
 import {StyleSheet, Dimensions, ScrollView} from 'react-native';
 import {TabView, TabBar, SceneMap} from 'react-native-tab-view';
@@ -7,12 +8,12 @@ import HomeNotice from './HomeNotice';
 const LatestViewRoute = () => {
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      <HomeNotice km="1.2" text="듀더 이벤트! 추첨을 통해 10명에게 에어팟!??" />
+      <HomeNotice text="듀더 이벤트! 추첨을 통해 10명에게 에어팟!??" />
       <HomePost km="1.4" text="상수역 맛집 추천좀요" />
       <HomePost km="0.5" text="합정역 주변 같이 노실분 구해요 ~~~~~~~~~" />
       <HomePost
         km="0.1"
-        text="공덕 이사왔는데 청솔아파트 주변 담배 어디서 핌?? 필 곳이 없네 ㅅㅂ"
+        text="공덕 이사왔는데 청솔아파트 주변 담배 어디서 핌?? 필 곳이 없네요"
       />
       <HomePost
         km="4.0"
@@ -29,12 +30,12 @@ const LatestViewRoute = () => {
 const HotViewRoute = () => {
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      <HomeNotice km="1.2" text="듀더 이벤트! 추첨을 통해 10명에게 에어팟!??" />
+      <HomeNotice text="듀더 이벤트! 추첨을 통해 10명에게 에어팟!??" />
       <HomePost km="1.4" text="상수역 맛집 추천좀요" />
       <HomePost km="0.5" text="합정역 주변 같이 노실분 구해요 ~~~~~~~~~" />
       <HomePost
         km="0.1"
-        text="공덕 이사왔는데 청솔아파트 주변 담배 어디서 핌?? 필 곳이 없네 ㅅㅂ"
+        text="공덕 이사왔는데 청솔아파트 주변 담배 어디서 핌?? 필 곳이 없네요s"
       />
     </ScrollView>
   );
