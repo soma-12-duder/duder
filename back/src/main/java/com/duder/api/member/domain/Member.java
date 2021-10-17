@@ -19,6 +19,7 @@ import javax.persistence.*;
 
  @Getter @NoArgsConstructor
  @Entity
+ @Table(indexes = {@Index(name = "i_member", columnList = "providerId")})
 public class Member extends BaseEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)

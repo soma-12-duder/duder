@@ -138,4 +138,28 @@ class CoordinateUtilTest {
                 cellValue + LONGITUDE_LENGTH * 10, cellValue - LONGITUDE_LENGTH * 10);
     }
 
+    @DisplayName("위치 중심으로 range 만큼 좌표 범위 구하기")
+    @Test
+    public void cell(){
+        int range = 10;
+        List<Coordinate> rangeValue = findCellCoordinateInRange(homeLat, homeLong, range);
+
+        assertThat(rangeValue.get(1).getRow() - rangeValue.get(0).getRow()).isEqualTo(2 * range);
+        assertThat(rangeValue.get(1).getColumn() - rangeValue.get(0).getColumn()).isEqualTo(2 * range);
+    }
+
+    @DisplayName("좌표 기준으로 coordiate가 잘 반환 되는지 테스트")
+    @Test
+    public void cell2(){
+        Coordinate coordiateHome = findCellCoordinate(homeLat, homeLong);
+        Coordinate far300M = findCellCoordinate(homeLat + ONE_HUNDRED_METER_LATITUDE * 3, homeLong + ONE_HUNDRED_METER_LONGITUDE * 3);
+
+
+        // 위도는 클 수록 row가 작음
+        assertThat(coordiateHome.getRow()).isGreaterThan(far300M.getRow());
+
+        // 경도는 클 수록 column이 큼
+        assertThat(coordiateHome.getColumn()).isLessThan(far300M.getColumn());
+    }
+
 }

@@ -2,6 +2,7 @@ package com.duder.api.post.service;
 
 import javax.annotation.PostConstruct;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class CoordinateUtil {
@@ -116,6 +117,21 @@ public class CoordinateUtil {
         int row = calculateLength(UPPER_LEFT_LATITUDE, latitude, ONE_HUNDRED_METER_LATITUDE);
         int column = calculateLength(UPPER_LEFT_LONGITUDE, longitude, ONE_HUNDRED_METER_LONGITUDE);
         return LONGITUDE_LENGTH * row + column;
+    }
+
+    public static Coordinate findCellCoordinate(double latitude, double longitude) throws IllegalArgumentException {
+        validateCoordinate(latitude, longitude);
+        int row = calculateLength(UPPER_LEFT_LATITUDE, latitude, ONE_HUNDRED_METER_LATITUDE);
+        int column = calculateLength(UPPER_LEFT_LONGITUDE, longitude, ONE_HUNDRED_METER_LONGITUDE);
+        return new Coordinate(row, column);
+    }
+
+    public static List<Coordinate> findCellCoordinateInRange(double latitude, double longitude, int range) throws IllegalArgumentException {
+        Coordinate coordinate = findCellCoordinate(latitude, longitude);
+        Integer row = coordinate.getRow();
+        Integer column = coordinate.getColumn();
+        return Arrays.asList(new Coordinate(Math.max(row-range,0), Math.max(column-range, 0)),
+                new Coordinate(Math.min(row+range, LONGITUDE_LENGTH), Math.min(column+range, LATITUDE_LENGTH)));
     }
 
     public static List<Integer> findCellValueInRange(int cellId, int range) {
