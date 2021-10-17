@@ -7,11 +7,17 @@ spring:
     console:
       enabled: true
 
+#  datasource:
+#    url: jdbc:h2:mem:duder # /h2-console 에서 이 주소로 들어가면 됨
+#    username: sa
+#    password:
+#    driver-class-name: org.h2.Driver
   datasource:
-    url: jdbc:h2:mem:duder # /h2-console 에서 이 주소로 들어가면 됨
-    username: sa
-    password:
-    driver-class-name: org.h2.Driver
+    hikari:
+      jdbc-url: jdbc:mysql://localhost:3306/duder?serverTimezone=UTC&characterEncoding=UTF-8
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    password: rla123
 
   jpa:
     hibernate:
