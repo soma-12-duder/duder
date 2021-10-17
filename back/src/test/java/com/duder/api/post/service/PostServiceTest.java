@@ -62,7 +62,7 @@ class PostServiceTest {
     @Test
     public void findPostAll() throws Exception{
         //given
-        when(postRepository.findByCellValues(any()))
+        when(postRepository.findCellByRange(any(), any(), any(), any()))
                 .thenReturn(Arrays.asList(POST1, POST2, POST3));
 
         //when
