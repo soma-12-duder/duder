@@ -7,6 +7,7 @@ import com.duder.api.post.request.PostEnrollRequest;
 import com.duder.api.post.request.PostUpdateRequest;
 import com.duder.api.post.response.PostResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,6 +15,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 
+@Slf4j
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 @Service
@@ -27,7 +29,7 @@ public class PostService {
 
         double latitude = request.getLatitude();
         double longitude = request.getLongitude();
-
+        log.info("latitude: " + latitude + " longitude: " + longitude);
         Coordinate coordinate = CoordinateUtil.findCellCoordinate(latitude, longitude);
 
         return postRepository.save(request.toPostWithMemberAndCell(member, coordinate)).getId();
