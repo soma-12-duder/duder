@@ -6,10 +6,13 @@ import {ProfileUrlState} from '../states/MemberState';
 import {useNavigation} from '@react-navigation/core';
 
 import LoginButton from '../components/buttons/LoginButton';
+import DivideLine from '../util/DivideLine';
 import DuderImage from '../util/DuderImage';
+import DuderName from '../components/loginScreen/DuderName';
+import KAKAO_ICON from '../assets/images/KAKAO_ICON.png';
+import UtilText from '../util/UtilText';
 
 const LoginScreen = () => {
-
   const [isToggle, setIsToggle] = useState(true);
   const [profileUrl, setProfileUrl] = useRecoilState(ProfileUrlState);
   const navigation = useNavigation();
@@ -38,15 +41,21 @@ const LoginScreen = () => {
         <>
           <DuderImageContainer>
             <DuderImage />
+            <DivideLine height={16} />
+            <DuderName />
+            <DivideLine height={16} />
+            <UtilText content={'우리 지역의 SNS'} />
           </DuderImageContainer>
           <ButtonContainer>
             <LoginButton
               onPress={() => setIsToggle(!isToggle)}
-              name={'카카오톡으로 시작'}
+              name={'카카오로 시작'}
+              image={KAKAO_ICON}
             />
             <LoginButton
-              onPress={() => navigation.navigate('BottomTab')}
+              onPress={() => navigation.navigate('NicknameScreen')}
               name={'다음 페이지'}
+              image={KAKAO_ICON}
             />
           </ButtonContainer>
         </>
@@ -75,19 +84,20 @@ export default LoginScreen;
 const Wrapper = styled.View`
   flex: 1;
   background-color: white;
+  padding-horizontal: 11%;
+  padding-bottom: 9%;
 `;
 
 const DuderImageContainer = styled.View`
-  flex: 5;
+  flex: 4;
   justify-content: center;
   align-items: center;
 `;
 
 const ButtonContainer = styled.View`
   flex: 1;
+  align-items: center;
   justify-content: space-around;
-  background-color: red;
-  padding: 10px;
 `;
 
 const KakaoLoginView = styled.View`
