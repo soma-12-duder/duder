@@ -3,6 +3,9 @@ spring:
     active: local
     include: oauth
 
+  jackson: # jackson 기본전략은 Lower_Camel_Case
+    property-naming-strategy: SNAKE_CASE
+
   h2:
     console:
       enabled: true
@@ -21,7 +24,7 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: create # 만들기 전에 테이블 있으면 삭제
+      ddl-auto: validate # 만들기 전에 테이블 있으면 삭제
     properties:
       hibernate:
         format_sql: true

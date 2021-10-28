@@ -35,9 +35,9 @@ public class Post extends BaseEntity {
     @Column(name = "post_id")
     private Long id;
 
-    private double latitude;
+    private Double latitude;
 
-    private double longitude;
+    private Double longitude;
 
     @Embedded
     private Photo photo;
@@ -57,15 +57,15 @@ public class Post extends BaseEntity {
     private Integer compressedColumn;
 
 
-    public Post(double latitude, double longitude, Photo photo, String title, String content, Member member, Integer compressedRow, Integer compressedColumn) {
+    public Post(Double latitude, Double longitude, Photo photo, String title, String content, Member member, Integer compressedRow, Integer compressedColumn) {
         this(null, latitude, longitude, photo, title, content, 0, member, compressedRow, compressedColumn);
     }
 
-    public Post(Long id, double latitude, double longitude, Photo photo, String title, String content, Member member, Coordinate coordinate) {
+    public Post(Long id, Double latitude, Double longitude, Photo photo, String title, String content, Member member, Coordinate coordinate) {
         this(id, latitude, longitude, photo, title, content, 0, member, coordinate.getRow(), coordinate.getColumn());
     }
 
-    public Post(double latitude, double longitude, Photo photo, String title, String content, Member member, Coordinate coordinate) {
+    public Post(Double latitude, Double longitude, Photo photo, String title, String content, Member member, Coordinate coordinate) {
         this(null, latitude, longitude, photo, title, content, 0, member, coordinate.getRow(), coordinate.getColumn());
     }
 

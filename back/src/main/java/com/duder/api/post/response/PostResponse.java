@@ -15,7 +15,7 @@ public class PostResponse {
     private double longitude;
     private String content;
     private long view;
-    private MemberResponse memberResponse;
+    private MemberResponse member;
 
     public static PostResponse of(Post post){
         return new PostResponse(post);
@@ -27,7 +27,7 @@ public class PostResponse {
         this.longitude = post.getLongitude();
         this.content = post.getContent();
         this.view = 0;
-        this.memberResponse = MemberResponse.of(post.getMember());
+        this.member = MemberResponse.of(post.getMember());
     }
 
 }

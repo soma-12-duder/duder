@@ -72,11 +72,11 @@ public class JwtTokenUtil {
         Map<String, Object> attribute = createAttribute(member);
 
         OAuth2User defaultUser = new DefaultOAuth2User(
-                Collections.singleton(new SimpleGrantedAuthority(null)),
+                Collections.singleton(new SimpleGrantedAuthority("ROLE_USER")),
                 attribute, "providerId");
 
         return new OAuth2AuthenticationToken(defaultUser,
-                Collections.singleton(new SimpleGrantedAuthority(null)),
+                Collections.singleton(new SimpleGrantedAuthority("ROLE_USER")),
                 "provider");
     }
 
