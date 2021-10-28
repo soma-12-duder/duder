@@ -23,6 +23,7 @@ const ViewCommentText = ({comment, commentOfComment}: Props) => {
   return (
     <>
       <HorizontalLine />
+      <Ionicons name="ios-return-down-forward-sharp" size={20} />
       <View
         style={{
           width: 375 - commentInterval,
@@ -36,8 +37,8 @@ const ViewCommentText = ({comment, commentOfComment}: Props) => {
               uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR5ebn2o15gmobO1xOj1ESvldLkPBxnC4ZwDg&usqp=CAU',
             }}
           />
-          <Text style={{left: 7, top: 1, fontSize: 12}}>fumyparli</Text>
-          <Text style={{left: 13, top: 1, fontWeight: 'bold', fontSize: 12}}>
+          <Text style={{paddingLeft: 7, fontSize: 12}}>fumyparli</Text>
+          <Text style={{paddingLeft: 7, fontWeight: 'bold', fontSize: 12}}>
             3km
           </Text>
         </ProfileWrapper>
