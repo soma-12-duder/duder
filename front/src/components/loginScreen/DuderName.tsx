@@ -1,20 +1,20 @@
 import React from 'react';
 import styled from 'styled-components/native';
-import DUDER from '../assets/images/DUDER_IMAGE.png';
+import DUDER_NAME from '../../assets/images/DUDER_NAME.png';
 
-const DuderImage = () => {
+const DuderName = () => {
   return (
     <Wrapper>
-      <AppImage source={DUDER}></AppImage>
+      <AppImage source={DUDER_NAME}></AppImage>
     </Wrapper>
   );
 };
 
-export default DuderImage;
+export default DuderName;
 
 const Wrapper = styled.View`
-  width: 208;
-  height: 124;
+  width: 80;
+  height: 40;
 `;
 
 const AppImage = styled.Image`
