@@ -5,6 +5,7 @@ import LoginScreen from '../screen/LoginScreen';
 import BottomTab from './BottomTab';
 import HomeScreen from '../screen/HomeScreen';
 import PostScreen from '../screen/PostScreen';
+import NicknameScreen from '../screen/NicknameScreen';
 
 const Stack = createStackNavigator();
 
@@ -16,6 +17,11 @@ const RootStack = () => {
         <Stack.Screen
           name={'LoginScreen'}
           component={LoginScreen}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name={'NicknameScreen'}
+          component={NicknameScreen}
           options={{headerShown: false}}
         />
         <Stack.Screen
