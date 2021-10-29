@@ -7,6 +7,7 @@ import com.duder.api.post.request.PostEnrollRequest;
 import com.duder.api.post.request.PostUpdateRequest;
 import com.duder.api.post.response.PostResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,6 +15,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 
+@Slf4j
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 @Service
@@ -27,10 +29,10 @@ public class PostService {
 
         double latitude = request.getLatitude();
         double longitude = request.getLongitude();
+        log.info("latitude: " + latitude + " longitude: " + longitude);
+        Coordinate coordinate = CoordinateUtil.findCellCoordinate(latitude, longitude);
 
-        int cellValue = CoordinateUtil.findCellValue(latitude, longitude);
-
-        return postRepository.save(request.toPostWithMemberAndCell(member, cellValue)).getId();
+        return postRepository.save(request.toPostWithMemberAndCell(member, coordinate)).getId();
     }
 
     public PostResponse findPostById (Long postId) throws IllegalArgumentException {
@@ -40,11 +42,13 @@ public class PostService {
     // parameter : 현재 위치(latitude, longitude) 주변 거리 (distance)
     public List<PostResponse> findPostsByDistance (double latitude, double longitude, int distance)
                                                                         throws IllegalArgumentException{
-        int userCellValue = CoordinateUtil.findCellValue(latitude, longitude);
-        List<Integer> allCellValue = CoordinateUtil.findCellValueInRange(userCellValue, distance);
-        // 쿼리 날림
+        List<Coordinate> coordinates = CoordinateUtil.findCellCoordinateInRange(latitude, longitude, distance);
+        Coordinate leftUpCoordinate = coordinates.get(0);
+        Coordinate rightDownCoordinate = coordinates.get(1);
 
-        return postRepository.findByCellValues(allCellValue)
+        // 쿼리 날림
+        return postRepository.findCellByRange(leftUpCoordinate.getRow(), rightDownCoordinate.getRow(),
+                        leftUpCoordinate.getColumn(), rightDownCoordinate.getColumn())
                 .stream()
                 .map(PostResponse::new)
                 .collect(Collectors.toList());

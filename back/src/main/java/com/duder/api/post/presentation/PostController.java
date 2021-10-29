@@ -5,6 +5,7 @@ import com.duder.api.post.request.PostEnrollRequest;
 import com.duder.api.post.request.PostUpdateRequest;
 import com.duder.api.post.service.PostService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.web.bind.annotation.*;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import static com.duder.api.form.ApiForm.fail;
 import static com.duder.api.form.ApiForm.succeed;
 
+@Slf4j
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/post")
@@ -24,7 +26,8 @@ public class PostController {
     public final String SUCCESS_DELETE_POST = "게시글을 삭제했습니다.";
 
     @PostMapping("/enroll")
-    public ApiForm<?> enroll(@AuthenticationPrincipal OAuth2User oAuth2User, PostEnrollRequest request){
+    public ApiForm<?> enroll(@AuthenticationPrincipal OAuth2User oAuth2User, @RequestBody PostEnrollRequest request){
+        log.info("request" + request);
         try {
             return succeed(postService.enroll(oAuth2User.getAttribute("member"), request), SUCCESS_ENROLL_POST);
         } catch (Exception e) {

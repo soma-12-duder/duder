@@ -3,6 +3,8 @@ package com.duder.api.post.domain;
 import com.duder.api.common.BaseEntity;
 import com.duder.api.member.domain.Member;
 import com.duder.api.post.request.PostUpdateRequest;
+import com.duder.api.post.service.Coordinate;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -22,16 +24,20 @@ import javax.persistence.*;
 
  @Getter
  @NoArgsConstructor
+ @AllArgsConstructor
  @Entity
+ @Table(
+         indexes = {@Index(name = "postMultiIndex", columnList = "compressedRow, compressedColumn")}
+ )
 public class Post extends BaseEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "post_id")
     private Long id;
 
-    private double latitude;
+    private Double latitude;
 
-    private double longitude;
+    private Double longitude;
 
     @Embedded
     private Photo photo;
@@ -46,26 +52,21 @@ public class Post extends BaseEntity {
     @JoinColumn(name = "member_id")
     private Member member;
 
-    private Integer cellValue;
+    private Integer compressedRow;
 
-    public Post(double latitude, double longitude, Photo photo, String content, Member member, Integer cellValue) {
-        this.latitude = latitude;
-        this.longitude = longitude;
-        this.photo = photo;
-        this.content = content;
-        this.member = member;
-        this.cellValue = cellValue;
+    private Integer compressedColumn;
+
+
+    public Post(Double latitude, Double longitude, Photo photo, String title, String content, Member member, Integer compressedRow, Integer compressedColumn) {
+        this(null, latitude, longitude, photo, title, content, 0, member, compressedRow, compressedColumn);
     }
 
-    public Post(Long id, double latitude, double longitude, Photo photo, String title, String content, Member member, Integer cellValue) {
-        this.id = id;
-        this.latitude = latitude;
-        this.longitude = longitude;
-        this.photo = photo;
-        this.title = title;
-        this.content = content;
-        this.member = member;
-        this.cellValue = cellValue;
+    public Post(Long id, Double latitude, Double longitude, Photo photo, String title, String content, Member member, Coordinate coordinate) {
+        this(id, latitude, longitude, photo, title, content, 0, member, coordinate.getRow(), coordinate.getColumn());
+    }
+
+    public Post(Double latitude, Double longitude, Photo photo, String title, String content, Member member, Coordinate coordinate) {
+        this(null, latitude, longitude, photo, title, content, 0, member, coordinate.getRow(), coordinate.getColumn());
     }
 
     public void update(PostUpdateRequest postUpdateRequest){
