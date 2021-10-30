@@ -3,6 +3,7 @@ package com.duder.api.comment.domain;
 import com.duder.api.common.BaseEntity;
 import com.duder.api.member.domain.Member;
 import com.duder.api.post.domain.Post;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -15,6 +16,7 @@ import javax.persistence.*;
  * post_id : FK (Post 테이블)
  */
 
+@AllArgsConstructor
 @Getter @NoArgsConstructor
 @Entity
 public class Comment extends BaseEntity {
@@ -38,4 +40,11 @@ public class Comment extends BaseEntity {
     @JoinColumn(name = "parent_id")
     private Comment comment;
 
+    public Comment(String content, Member member, Post post) {
+        this(null, content, member, post, null);
+    }
+
+    public Comment(String content, Member member, Post post, Comment parentComment) {
+        this(null, content, member, post, parentComment);
+    }
 }
