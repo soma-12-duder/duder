@@ -17,6 +17,9 @@ public class PostResponse {
     private long view;
     private MemberResponse member;
 
+    private int favoriteCount = 0;
+    private int commentCount = 0;
+
     public static PostResponse of(Post post){
         return new PostResponse(post);
     }

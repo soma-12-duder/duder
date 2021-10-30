@@ -27,9 +27,6 @@ class PostServiceTest {
     private PostService postService;
 
     @Mock
-    private MemberRepository memberRepository;
-
-    @Mock
     private PostRepository postRepository;
 
     @BeforeEach

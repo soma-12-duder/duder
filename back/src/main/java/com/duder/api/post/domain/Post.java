@@ -69,6 +69,10 @@ public class Post extends BaseEntity {
         this(null, latitude, longitude, photo, title, content, 0, member, coordinate.getRow(), coordinate.getColumn());
     }
 
+    public Post(Long postId) {
+        this(postId, null, null, null, null, null,0, null, null, null);
+    }
+
     public void update(PostUpdateRequest postUpdateRequest){
         title = postUpdateRequest.getTitle();
         content = postUpdateRequest.getContent();
