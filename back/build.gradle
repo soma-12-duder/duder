@@ -8,6 +8,12 @@ group = 'com.duder'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '8'
 
+bootJar{
+	archivesBaseName = 'duder'
+	archiveFileName = 'duder.jar'
+	archiveVersion = "0.0.1"
+}
+
 configurations {
 	compileOnly {
 		extendsFrom annotationProcessor
