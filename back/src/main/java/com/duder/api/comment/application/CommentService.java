@@ -25,15 +25,10 @@ public class CommentService {
 
     @Transactional
     public Long enrollSubComment(Member member, Long commentId, CommentEnrollRequest request){
+        // 게시글이 있다면 댓글도 있음.
         Comment comment = request.toSubCommentWithPost(member,
-                findPostById(request.getPostId()), findCommentById(commentId));
+                findPostById(request.getPostId()), new Comment(commentId));
         return commentRepository.save(comment).getId();
-    }
-
-    private Comment findCommentById(Long commentId) {
-        return commentRepository.findById(commentId).orElseThrow(
-                () -> new IllegalArgumentException("존재하지 않는 댓글 입니다.")
-        );
     }
 
     public Post findPostById(Long postId){

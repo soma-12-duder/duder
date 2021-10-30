@@ -47,4 +47,8 @@ public class Comment extends BaseEntity {
     public Comment(String content, Member member, Post post, Comment parentComment) {
         this(null, content, member, post, parentComment);
     }
+
+    public Comment(Long commentId) {
+        this(commentId, null, null, null, null);
+    }
 }

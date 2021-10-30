@@ -6,22 +6,20 @@ import com.duder.api.form.ApiForm;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.core.user.OAuth2User;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import static com.duder.api.form.ApiForm.fail;
 import static com.duder.api.form.ApiForm.succeed;
 
 @RequiredArgsConstructor
+@RequestMapping("/api/comment")
 @RestController
 public class CommentController {
 
     private final CommentService commentService;
     private final String SUCCESS_COMMENT_ENROLL = "댓글 등록에 성공했습니다.";
 
-    @PostMapping("/")
+    @PostMapping("")
     public ApiForm<?> enrollComment (@AuthenticationPrincipal OAuth2User oAuth2User,
                                      @RequestBody CommentEnrollRequest request){
         try{
