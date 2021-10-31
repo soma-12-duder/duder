@@ -8,89 +8,70 @@ import {Colors} from '../util/Constants';
 
 interface Props {
   comment: String;
-  commentOfComment: boolean;
+  nickname: String;
+  like: String;
+  commentOfComment?: boolean;
 }
 
-const ViewCommentText = ({comment, commentOfComment}: Props) => {
-  const [clicked, setClicked] = React.useState(false);
-  const clickHeart = () => setClicked(!clicked);
-
-  const commentInterval = commentOfComment ? 20 : 0;
-  const backgroundColor = commentOfComment
-    ? 'gray'
-    : Colors.POST_BACKGROUND_COLOR;
-
+const ViewCommentText = ({
+  comment,
+  commentOfComment,
+  nickname,
+  like,
+}: Props) => {
   return (
-    <>
-      <HorizontalLine />
-      <View
-        style={{
-          width: 375 - commentInterval,
-          top: -75,
-          left: commentInterval,
-          backgroundColor: backgroundColor,
-        }}>
-        <ProfileWrapper>
-          <UserProfileImage
-            source={{
-              uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR5ebn2o15gmobO1xOj1ESvldLkPBxnC4ZwDg&usqp=CAU',
-            }}
-          />
-          <Text style={{left: 7, top: 1, fontSize: 12}}>fumyparli</Text>
-          <Text style={{left: 13, top: 1, fontWeight: 'bold', fontSize: 12}}>
-            3km
-          </Text>
-        </ProfileWrapper>
-        <TextAndCommentWrapper>
-          <Text style={{top: -4, left: 10, fontSize: 15}}>{comment}</Text>
-          <IconWrapperMini style={{left: 14, top: 0}}>
-            <TouchableOpacity onPress={() => clickHeart()}>
-              {clicked ? (
-                <Ionicons name="heart" size={20} style={{left: -11}} />
-              ) : (
-                <Ionicons
-                  name="ios-heart-outline"
-                  size={20}
-                  style={{left: -11}}
-                />
-              )}
-            </TouchableOpacity>
-
-            <Text style={{top: -1, left: -10, fontSize: 16}}>2</Text>
-            <Ionicons
-              name="md-chatbubble-ellipses-outline"
-              size={19}
-              style={{left: -3}}
-            />
-            <Text style={{top: -1, left: -1, fontSize: 16}}>3</Text>
-          </IconWrapperMini>
-        </TextAndCommentWrapper>
-      </View>
-    </>
+    <CommentView commentOfComment={commentOfComment}>
+      <ProfileWrapper>
+        <UserProfileImage
+          source={{
+            uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR5ebn2o15gmobO1xOj1ESvldLkPBxnC4ZwDg&usqp=CAU',
+          }}
+        />
+        <Text style={{fontSize: 16, paddingLeft: '1.5%'}}>{nickname}</Text>
+      </ProfileWrapper>
+      <Text style={{paddingLeft: '4%'}}>{comment}</Text>
+      <GrayTextWrapper>
+        <TouchableOpacity>
+          <GrayText>좋아요</GrayText>
+        </TouchableOpacity>
+        <GrayText style={{paddingLeft: '1%'}}>{like}</GrayText>
+        <TouchableOpacity style={{paddingLeft: '3%'}}>
+          {commentOfComment ? <></> : <GrayText>답글쓰기</GrayText>}
+        </TouchableOpacity>
+      </GrayTextWrapper>
+    </CommentView>
   );
 };
 
 export default ViewCommentText;
 
+const ProfileWrapper = styled(View)`
+  flex-direction: row;
+  align-items: center;
+  padding-left: 4%;
+  padding-bottom: 2%;
+`;
+
 const UserProfileImage = styled(Image)`
-  width: 20px;
-  height: 20px;
+  width: 25px;
+  height: 25px;
   border-radius: 100px;
 `;
 
-const ProfileWrapper = styled(View)`
-  flex-direction: row;
-  justify-content: flex-start;
-  margin: 10px;
-  top: 30px;
+const GrayText = styled(Text)`
+  color: #a9a9a9;
 `;
 
-const TextAndCommentWrapper = styled(View)`
-  top: 30px;
+const GrayTextWrapper = styled(View)`
+  flex-direction: row;
+  align-items: center;
+  padding-left: 4%;
+  padding-top: 2%;
 `;
 
-const IconWrapperMini = styled(View)`
-  flex-direction: row;
-  justify-content: flex-start;
-  padding: 5px;
+const CommentView = styled(View)<{commentOfComment: any}>`
+  background-color: ${(props: any) =>
+    props.commentOfComment ? '#F0F0F0' : '#FFFFFF'};
+  padding: 4%;
+  padding-left: ${(props: any) => (props.commentOfComment ? '4%' : '0')};
 `;

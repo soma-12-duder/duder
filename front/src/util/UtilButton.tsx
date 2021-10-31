@@ -10,11 +10,11 @@ interface Style {
 
 interface Props {
   onPress: any;
-  height: number;
-  width: string | number;
+  height?: number;
+  width?: string | number;
   content: any;
-  color: string;
-  backgroundColor: string;
+  color?: string;
+  backgroundColor?: string;
 }
 
 interface Content {

@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components/native';
 
 interface Style {
-  height: number;
+  height?: number;
 }
 
 const DivideLine = ({height = 10}: Style) => {
