@@ -1,4 +1,6 @@
 import * as React from 'react';
+import {Image, Button} from 'react-native';
+
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
@@ -8,6 +10,15 @@ import SettingScreen from '../screen/SettingScreen';
 
 const Tab = createBottomTabNavigator();
 
+function LogoTitle() {
+  return (
+    <Image
+      style={{width: 50, height: 50}}
+      source={require('../assets/images/DUDER_IMAGE.png')}
+    />
+  );
+}
+
 const BottomTab = () => {
   return (
     <Tab.Navigator
@@ -15,11 +26,11 @@ const BottomTab = () => {
         tabBarIcon: ({focused, color, size}) => {
           let iconName = '';
 
-          if (route.name === 'Home') {
+          if (route.name === '홈') {
             iconName = focused ? 'home-sharp' : 'home-outline';
-          } else if (route.name === 'Chattings') {
+          } else if (route.name === '채팅') {
             iconName = focused ? 'ios-chatbox' : 'chatbox-outline';
-          } else if (route.name === 'Settings') {
+          } else if (route.name === '설정') {
             iconName = focused ? 'settings' : 'settings-outline';
           }
 
@@ -29,9 +40,9 @@ const BottomTab = () => {
         tabBarActiveTintColor: 'black',
         tabBarInactiveTintColor: 'gray',
       })}>
-      <Tab.Screen name="Home" component={HomeScreen} />
-      <Tab.Screen name="Chattings" component={ChattingScreen} />
-      <Tab.Screen name="Settings" component={SettingScreen} />
+      <Tab.Screen name="홈" component={HomeScreen} />
+      <Tab.Screen name="채팅" component={ChattingScreen} />
+      <Tab.Screen name="설정" component={SettingScreen} />
     </Tab.Navigator>
   );
 };

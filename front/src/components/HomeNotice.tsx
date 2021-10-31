@@ -10,17 +10,19 @@ interface Props {
 const HomeNotice = ({text}: Props) => {
   return (
     <NoticeView>
-      <Text style={{padding: 4}}>공지: {text}</Text>
+      <Text style={{padding: 4, color: '#F6F6F6'}}>공지: {text}</Text>
     </NoticeView>
   );
 };
 
 const NoticeView = styled(View)`
   margin: 7px;
-  background-color: #f9cf5b;
-  width: 350px;
-  height: 30px;
-  border-radius: 10px;
+  background-color: #000000;
+  width: 91%;
+  height: 8%;
+  border-radius: 5px;
+  justify-content: center;
+  align-items: center;
 `;
 
 export default HomeNotice;

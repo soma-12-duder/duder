@@ -12,86 +12,31 @@ interface Props {
 }
 
 const ViewCommentText = ({comment, commentOfComment}: Props) => {
-  const [clicked, setClicked] = React.useState(false);
-  const clickHeart = () => setClicked(!clicked);
-
-  const commentInterval = commentOfComment ? 20 : 0;
-  const backgroundColor = commentOfComment
-    ? 'gray'
-    : Colors.POST_BACKGROUND_COLOR;
-
   return (
     <>
-      <HorizontalLine />
-      <Ionicons name="ios-return-down-forward-sharp" size={20} />
-      <View
-        style={{
-          width: 375 - commentInterval,
-          top: -75,
-          left: commentInterval,
-          backgroundColor: backgroundColor,
-        }}>
-        <ProfileWrapper>
-          <UserProfileImage
-            source={{
-              uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR5ebn2o15gmobO1xOj1ESvldLkPBxnC4ZwDg&usqp=CAU',
-            }}
-          />
-          <Text style={{paddingLeft: 7, fontSize: 12}}>fumyparli</Text>
-          <Text style={{paddingLeft: 7, fontWeight: 'bold', fontSize: 12}}>
-            3km
-          </Text>
-        </ProfileWrapper>
-        <TextAndCommentWrapper>
-          <Text style={{top: -4, left: 10, fontSize: 15}}>{comment}</Text>
-          <IconWrapperMini style={{left: 14, top: 0}}>
-            <TouchableOpacity onPress={() => clickHeart()}>
-              {clicked ? (
-                <Ionicons name="heart" size={20} style={{left: -11}} />
-              ) : (
-                <Ionicons
-                  name="ios-heart-outline"
-                  size={20}
-                  style={{left: -11}}
-                />
-              )}
-            </TouchableOpacity>
-
-            <Text style={{top: -1, left: -10, fontSize: 16}}>2</Text>
-            <Ionicons
-              name="md-chatbubble-ellipses-outline"
-              size={19}
-              style={{left: -3}}
-            />
-            <Text style={{top: -1, left: -1, fontSize: 16}}>3</Text>
-          </IconWrapperMini>
-        </TextAndCommentWrapper>
-      </View>
+      <ProfileWrapper>
+        <UserProfileImage
+          source={{
+            uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR5ebn2o15gmobO1xOj1ESvldLkPBxnC4ZwDg&usqp=CAU',
+          }}
+        />
+        <Text style={{fontSize: 20}}>fumyparli</Text>
+      </ProfileWrapper>
     </>
   );
 };
 
 export default ViewCommentText;
 
-const UserProfileImage = styled(Image)`
-  width: 20px;
-  height: 20px;
-  border-radius: 100px;
-`;
-
 const ProfileWrapper = styled(View)`
   flex-direction: row;
-  justify-content: flex-start;
-  margin: 10px;
-  top: 30px;
+  justify-content: space-between;
+  align-items: center;
+  width: 34%;
 `;
 
-const TextAndCommentWrapper = styled(View)`
-  top: 30px;
-`;
-
-const IconWrapperMini = styled(View)`
-  flex-direction: row;
-  justify-content: flex-start;
-  padding: 5px;
+const UserProfileImage = styled(Image)`
+  width: 35px;
+  height: 35px;
+  border-radius: 100px;
 `;

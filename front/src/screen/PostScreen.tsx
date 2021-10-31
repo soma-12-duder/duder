@@ -3,18 +3,15 @@ import * as React from 'react';
 import ViewMainText from '../components/ViewMainText';
 import ViewCommentText from '../components/ViewCommentText';
 
-const PostScreen = () => {
+interface Props {
+  route: any;
+  navigation: any;
+}
+
+const PostScreen = ({route, navigation}: Props) => {
   return (
     <>
-      <ViewMainText
-        mainText="혜자구 hw1 인풋에 괄호가 포함되면 에러가 나는거 같은데.. 왜인진
-          도저히 모르겠다 ㅜㅜ 적당한 에타글을 가져왔어요 혜자구 hw1 인풋에
-          괄호가 포함되면 에러가 나는거 같은데.. 왜인진 도저히 모르겠다 ㅜㅜ
-          적당한 에타글을 가져왔어요 혜자구 hw1 인풋에 괄호가 포함되면 에러가
-          나는거 같은데.. 왜인진 도저히 모르겠다 ㅜㅜ 적당한 에타글을 가져왔어요
-          혜자구 hw1 인풋에 괄호가 포함되면 에러가 나는거 같은데.. 왜인진 도저히
-          모르겠다 ㅜㅜ"
-      />
+      <ViewMainText text={route.params.text} />
       <ViewCommentText
         commentOfComment={false}
         comment="댓글댓글댓글댓글댓글댓글댓글댓글댓글댓글댓글댓글댓글댓글댓글댓글댓글댓글댓글댓글댓글댓글댓글댓글댓글댓글댓글댓글댓글댓글댓글댓글댓글댓글"
