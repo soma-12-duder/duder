@@ -42,6 +42,16 @@ dependencies {
 	testImplementation 'org.springframework.security:spring-security-test'
 }
 
+processResources.dependsOn('copySecret')
+
+task copySecret(type: Copy) {
+	from '../duder-config/application.yml'
+	into 'src/main/resources'
+
+	from '../duder-config/application-oauth.yml'
+	into 'src/main/resources'
+}
+
 test {
 	useJUnitPlatform()
 }
