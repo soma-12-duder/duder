@@ -37,7 +37,7 @@ const data = [
   },
   {
     km: '1.4',
-    text: '공덕 이사왔는데 청솔아파트 주변 담배 어디서 핌?? 필 곳이 없네요',
+    text: '공덕 이사왔는데 청솔아파트 주변 담배 어디서 핌?? 필 곳이 없네요 ㅜㅠㅜㅠㅜㅠㅜㅜㅠㅜㅠㅜㅠㅜㅠㅜㅜㅠㅜㅠㅜㅠㅜㅠㅜㅠㅜ',
     nickname: 'fumyparli',
     like: '15',
     commentNumber: '11',
@@ -51,7 +51,7 @@ const data = [
   },
   {
     km: '1.4',
-    text: '이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이!!!',
+    text: '이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이!!!',
     nickname: 'fumyparli',
     like: '15',
     commentNumber: '11',
@@ -81,15 +81,13 @@ const HotViewRoute = () => {
     <ScrollView contentContainerStyle={styles.container}>
       <HomeNotice text="듀더 이벤트! 추첨을 통해 10명에게 에어팟!??" />
       {data.map(item => (
-        <>
-          <HomePost
-            km={item.km}
-            text={item.text}
-            nickname={item.nickname}
-            like={item.like}
-            commentNumber={item.commentNumber}
-          />
-        </>
+        <HomePost
+          km={item.km}
+          text={item.text}
+          nickname={item.nickname}
+          like={item.like}
+          commentNumber={item.commentNumber}
+        />
       ))}
     </ScrollView>
   );
@@ -151,5 +149,7 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     alignItems: 'center',
     flexGrow: 1,
+    backgroundColor: '#ffffff',
+    height: '117%',
   },
 });
