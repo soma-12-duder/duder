@@ -1,8 +1,10 @@
 package com.duder.api.post.service;
 
-import com.duder.api.member.domain.MemberRepository;
+import com.duder.api.comment.application.CommentService;
+import com.duder.api.comment.domain.CommentRepository;
 import com.duder.api.post.domain.PostRepository;
 import com.duder.api.post.response.PostResponse;
+import com.duder.api.post.response.PostWithCommentResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -14,6 +16,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
+import static com.duder.api.fixture.CommentFixture.*;
 import static com.duder.api.fixture.MemberFixture.*;
 import static com.duder.api.fixture.PostFixture.*;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -29,9 +32,15 @@ class PostServiceTest {
     @Mock
     private PostRepository postRepository;
 
+    @Mock
+    private CommentRepository commentRepository;
+
+    @Mock
+    private CommentService commentService;
+
     @BeforeEach
     public void init(){
-        postService = new PostService(postRepository);
+        postService = new PostService(postRepository, commentService);
     }
 
     @DisplayName("1. 게시글 등록 테스트")
@@ -49,10 +58,12 @@ class PostServiceTest {
     public void findPostById() throws Exception{
         Long postId = 1L;
         when(postRepository.findPostById(postId)).thenReturn(Optional.of(POST1));
+        when(commentService.getCommentByPostId(POST1.getId())).thenReturn(Arrays.asList(ALL_COMMENT1, ALL_COMMENT2));
 
-        postService.updatePost(postId, 게시글_수정_요청);
+        PostWithCommentResponse response = postService.findPostById(postId);
 
-        assertThat(POST1.getContent()).isEqualTo(게시글_수정_요청.getContent());
+        assertThat(response.getComments().size()).isEqualTo(2);
+        assertThat(response.getId()).isEqualTo(postId);
     }
 
     @DisplayName("3. 게시글 조회 테스트: 주변 게시글 조회")

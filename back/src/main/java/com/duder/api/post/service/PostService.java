@@ -1,11 +1,14 @@
 package com.duder.api.post.service;
 
+import com.duder.api.comment.application.CommentService;
+import com.duder.api.comment.domain.CommentRepository;
 import com.duder.api.member.domain.Member;
 import com.duder.api.post.domain.Post;
 import com.duder.api.post.domain.PostRepository;
 import com.duder.api.post.request.PostEnrollRequest;
 import com.duder.api.post.request.PostUpdateRequest;
 import com.duder.api.post.response.PostResponse;
+import com.duder.api.post.response.PostWithCommentResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -22,6 +25,7 @@ import java.util.stream.Collectors;
 public class PostService {
 
     private final PostRepository postRepository;
+    private final CommentService commentService;
 
     // cell 과 함께 저장해줘야함.
     @Transactional
@@ -35,8 +39,8 @@ public class PostService {
         return postRepository.save(request.toPostWithMemberAndCell(member, coordinate)).getId();
     }
 
-    public PostResponse findPostById (Long postId) throws IllegalArgumentException {
-        return PostResponse.of(findById(postId));
+    public PostWithCommentResponse findPostById (Long postId) throws IllegalArgumentException {
+        return PostWithCommentResponse.of(findById(postId), commentService.getCommentByPostId(postId));
     }
 
     // parameter : 현재 위치(latitude, longitude) 주변 거리 (distance)
