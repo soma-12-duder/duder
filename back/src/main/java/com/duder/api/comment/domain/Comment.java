@@ -28,27 +28,33 @@ public class Comment extends BaseEntity {
 
     private String content;
 
+    private boolean visible;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "post_id")
-    private Post post;
+    public Post post;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "parent_id")
     private Comment comment;
 
     public Comment(String content, Member member, Post post) {
-        this(null, content, member, post, null);
+        this(null, content, true, member, post, null);
     }
 
     public Comment(String content, Member member, Post post, Comment parentComment) {
-        this(null, content, member, post, parentComment);
+        this(null, content, true, member, post, parentComment);
     }
 
     public Comment(Long commentId) {
-        this(commentId, null, null, null, null);
+        this(commentId, null, true, null, null, null);
+    }
+
+    public void setVisibleFalse(){
+        this.visible = false;
     }
 }

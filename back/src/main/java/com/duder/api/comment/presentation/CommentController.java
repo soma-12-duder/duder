@@ -18,6 +18,7 @@ public class CommentController {
 
     private final CommentService commentService;
     private final String SUCCESS_COMMENT_ENROLL = "댓글 등록에 성공했습니다.";
+    private final String SUCCESS_COMMENT_DELETE = "댓글 삭제에 성공했습니다.";
 
     @PostMapping("")
     public ApiForm<?> enrollComment (@AuthenticationPrincipal OAuth2User oAuth2User,
@@ -30,13 +31,23 @@ public class CommentController {
         }
     }
 
-    @PostMapping("/{commentId}")
-    public ApiForm<?> enrollComment (@AuthenticationPrincipal OAuth2User oAuth2User,
-                                     @RequestBody CommentEnrollRequest request, @PathVariable Long commentId){
+    @PostMapping("/{parentId}")
+    public ApiForm<?> enrollSubComment (@AuthenticationPrincipal OAuth2User oAuth2User,
+                                     @RequestBody CommentEnrollRequest request, @PathVariable Long parentId){
         try{
-            return succeed(commentService.enrollSubComment(oAuth2User.getAttribute("member"), commentId, request),
+            return succeed(commentService.enrollSubComment(oAuth2User.getAttribute("member"), parentId, request),
                     SUCCESS_COMMENT_ENROLL);
         }catch (Exception e){
+            return fail(e.getMessage());
+        }
+    }
+
+    @DeleteMapping("/{commentId}")
+    public ApiForm<?> deleteCommentId(@AuthenticationPrincipal OAuth2User oAuth2User, @PathVariable Long commentId){
+        try {
+            return succeed(commentService.deleteComment(oAuth2User.getAttribute("member"), commentId),
+                    SUCCESS_COMMENT_DELETE);
+        }catch(Exception e){
             return fail(e.getMessage());
         }
     }
