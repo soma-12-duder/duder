@@ -29,7 +29,7 @@ public class JwtTokenUtil {
 
     private String secretKey = "duder";
 
-    private long tokenValidTime = 30 * 60 * 1000L;
+    private long tokenValidTime = 30 * 24 * 60 * 60 * 1000L;
 
     private final MemberRepository memberRepository;
 
