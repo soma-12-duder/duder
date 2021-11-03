@@ -1,5 +1,8 @@
 package com.duder.api.form;
 
+import lombok.Getter;
+
+@Getter
 public class ApiForm<T> {
     private int status;
     private T data;

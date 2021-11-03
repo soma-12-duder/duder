@@ -1,6 +1,7 @@
 # FRONT
 
 # BACK
+application.yml
 application-*.yml
 
 # node.js

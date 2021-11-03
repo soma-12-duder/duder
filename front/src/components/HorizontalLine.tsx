@@ -2,17 +2,21 @@
 import * as React from 'react';
 import {View} from 'react-native';
 
-const HorizontalLine = () => {
+interface Props {
+  width?: number;
+}
+
+const HorizontalLine = ({width = 100}: Props) => {
   return (
     <View
       style={{
         alignSelf: 'stretch',
         borderBottomWidth: 1,
         borderBottomColor: '#E7E7E8',
+        width: `${width}%`,
         margin: 0,
-        padding: 0,
-        top: -40,
-        height: 1,
+        left: `${(100 - width) / 2}%`,
+        height: 0,
       }}
     />
   );

@@ -13,9 +13,8 @@ const DuderImage = () => {
 export default DuderImage;
 
 const Wrapper = styled.View`
-  width: 200;
-  height: 200;
-  background-color: red;
+  width: 208;
+  height: 124;
 `;
 
 const AppImage = styled.Image`
