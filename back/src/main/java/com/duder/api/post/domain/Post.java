@@ -33,7 +33,7 @@ public class Post extends BaseEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "post_id")
-    private Long id;
+    public Long id;
 
     private Double latitude;
 
@@ -67,6 +67,10 @@ public class Post extends BaseEntity {
 
     public Post(Double latitude, Double longitude, Photo photo, String title, String content, Member member, Coordinate coordinate) {
         this(null, latitude, longitude, photo, title, content, 0, member, coordinate.getRow(), coordinate.getColumn());
+    }
+
+    public Post(Long postId) {
+        this(postId, null, null, null, null, null,0, null, null, null);
     }
 
     public void update(PostUpdateRequest postUpdateRequest){

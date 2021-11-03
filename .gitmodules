@@ -1,0 +1,3 @@
+[submodule "duder-config"]
+	path = duder-config
+	url = https://github.com/KIMJINOH97/duder-config

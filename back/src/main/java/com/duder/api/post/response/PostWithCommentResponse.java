@@ -1,15 +1,21 @@
 package com.duder.api.post.response;
 
+import com.duder.api.comment.response.AllCommentResponse;
+import com.duder.api.comment.response.CommentResponse;
 import com.duder.api.member.response.MemberResponse;
 import com.duder.api.post.domain.Post;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@AllArgsConstructor
+import java.util.ArrayList;
+import java.util.List;
+
+
 @NoArgsConstructor
+@AllArgsConstructor
 @Getter
-public class PostResponse {
+public class PostWithCommentResponse {
     private Long id;
     private double latitude;
     private double longitude;
@@ -17,20 +23,23 @@ public class PostResponse {
     private long view;
     private MemberResponse member;
 
+    private List<AllCommentResponse> comments = new ArrayList<>();
+
     private int favoriteCount = 0;
     private int commentCount = 0;
 
-    public static PostResponse of(Post post){
-        return new PostResponse(post);
+    public static PostWithCommentResponse of(Post post, List<AllCommentResponse> comments){
+        return new PostWithCommentResponse(post, comments);
     }
 
-    public PostResponse (Post post){
+    public PostWithCommentResponse (Post post, List<AllCommentResponse> comments){
         this.id = post.getId();
         this.latitude = post.getLatitude();
         this.longitude = post.getLongitude();
         this.content = post.getContent();
         this.view = 0;
         this.member = MemberResponse.of(post.getMember());
+        this.comments = comments;
     }
 
 }
