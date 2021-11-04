@@ -1,7 +1,10 @@
 package com.duder.api.post.service;
 
 import com.duder.api.comment.application.CommentService;
+import com.duder.api.comment.domain.CommentCountDto;
 import com.duder.api.comment.domain.CommentRepository;
+import com.duder.api.favorite.domain.FavoriteCountDto;
+import com.duder.api.favorite.domain.FavoriteRepository;
 import com.duder.api.post.domain.PostRepository;
 import com.duder.api.post.response.PostResponse;
 import com.duder.api.post.response.PostWithCommentResponse;
@@ -33,6 +36,9 @@ class PostServiceTest {
     private PostRepository postRepository;
 
     @Mock
+    private FavoriteRepository favoriteRepository;
+
+    @Mock
     private CommentRepository commentRepository;
 
     @Mock
@@ -40,7 +46,7 @@ class PostServiceTest {
 
     @BeforeEach
     public void init(){
-        postService = new PostService(postRepository, commentService);
+        postService = new PostService(postRepository, commentService, favoriteRepository, commentRepository);
     }
 
     @DisplayName("1. 게시글 등록 테스트")
@@ -72,7 +78,10 @@ class PostServiceTest {
         //given
         when(postRepository.findCellByRange(any(), any(), any(), any()))
                 .thenReturn(Arrays.asList(POST1, POST2, POST3));
-
+        when(commentRepository.findCommentCount(Arrays.asList(POST1, POST2, POST3)))
+                .thenReturn(Arrays.asList(new CommentCountDto(POST1.getId(), 1L)));
+        when(favoriteRepository.findFavoriteCount(Arrays.asList(POST1, POST2, POST3)))
+                .thenReturn(Arrays.asList(new FavoriteCountDto(POST1.getId(), 1L)));
         //when
         List<PostResponse> responses = postService.findPostsByDistance(POST1.getLatitude(), POST1.getLongitude(), 10);
 
@@ -105,6 +114,16 @@ class PostServiceTest {
         //then
         assertThat(POST1.getContent()).isEqualTo(게시글_수정_요청.getContent());
         assertThat(POST1.getTitle()).isEqualTo(게시글_수정_요청.getTitle());
+    }
+
+
+    @DisplayName("6. 내 게시글 보기")
+    @Test
+    public void getMyPost(){
+        //given
+        when(postRepository.findPostByMemberId(MEMBER_ID)).thenReturn(Arrays.asList(POST1, POST2));
+
+        assertThat(postService.findPostByMember(MEMBER1).size()).isEqualTo(2L);
     }
 
 }

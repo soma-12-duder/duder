@@ -1,7 +1,11 @@
 package com.duder.api.post.service;
 
 import com.duder.api.comment.application.CommentService;
+import com.duder.api.comment.domain.CommentCountDto;
 import com.duder.api.comment.domain.CommentRepository;
+import com.duder.api.favorite.domain.Favorite;
+import com.duder.api.favorite.domain.FavoriteCountDto;
+import com.duder.api.favorite.domain.FavoriteRepository;
 import com.duder.api.member.domain.Member;
 import com.duder.api.post.domain.Post;
 import com.duder.api.post.domain.PostRepository;
@@ -15,7 +19,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
+
+import static java.util.stream.Collectors.toMap;
 
 
 @Slf4j
@@ -26,6 +33,8 @@ public class PostService {
 
     private final PostRepository postRepository;
     private final CommentService commentService;
+    private final FavoriteRepository favoriteRepository;
+    private final CommentRepository commentRepository;
 
     // cell 과 함께 저장해줘야함.
     @Transactional
@@ -44,7 +53,7 @@ public class PostService {
     }
 
     // parameter : 현재 위치(latitude, longitude) 주변 거리 (distance)
-    public List<PostResponse> findPostsByDistance (double latitude, double longitude, int distance)
+    public List<PostResponse> findPostsByDistance2 (double latitude, double longitude, int distance)
                                                                         throws IllegalArgumentException{
         List<Coordinate> coordinates = CoordinateUtil.findCellCoordinateInRange(latitude, longitude, distance);
         Coordinate leftUpCoordinate = coordinates.get(0);
@@ -53,6 +62,34 @@ public class PostService {
         // 쿼리 날림
         return postRepository.findCellByRange(leftUpCoordinate.getRow(), rightDownCoordinate.getRow(),
                         leftUpCoordinate.getColumn(), rightDownCoordinate.getColumn())
+                .stream()
+                .map((o) -> new PostResponse(o, latitude, longitude, 1,0))
+                .collect(Collectors.toList());
+    }
+
+    public List<PostResponse> findPostsByDistance (double latitude, double longitude, int distance)
+            throws IllegalArgumentException{
+        List<Coordinate> coordinates = CoordinateUtil.findCellCoordinateInRange(latitude, longitude, distance);
+        Coordinate leftUpCoordinate = coordinates.get(0);
+        Coordinate rightDownCoordinate = coordinates.get(1);
+
+        // 쿼리 날림
+        List<Post> posts = postRepository.findCellByRange(leftUpCoordinate.getRow(), rightDownCoordinate.getRow(),
+                leftUpCoordinate.getColumn(), rightDownCoordinate.getColumn());
+
+        Map<Long, Long> favoriteOfPosts = favoriteRepository.findFavoriteCount(posts)
+                .stream().collect(toMap(FavoriteCountDto::getPostId, FavoriteCountDto::getFavoriteCount));
+
+        Map<Long, Long> commentOfPosts = commentRepository.findCommentCount(posts)
+                .stream().collect(toMap(CommentCountDto::getCommentId, CommentCountDto::getCommentCount));
+
+        return PostResponse.toList(posts, fillZero(favoriteOfPosts, posts),
+                fillZero(commentOfPosts, posts), latitude, longitude);
+    }
+
+
+    public List<PostResponse> findPostByMember(Member member){
+        return postRepository.findPostByMemberId(member.getId())
                 .stream()
                 .map(PostResponse::new)
                 .collect(Collectors.toList());
@@ -79,5 +116,14 @@ public class PostService {
         return postRepository.findPostById(postId).orElseThrow(
                 () -> new IllegalArgumentException("해당 게시글이 존재하지 않습니다.")
         );
+    }
+
+    public Map<Long, Long> fillZero(Map<Long, Long> countMap, List<Post> posts){
+        for (Post post : posts) {
+            if (countMap.containsKey(post.getId()))
+                continue;
+            countMap.put(post.getId(), 0L);
+        }
+        return countMap;
     }
 }
