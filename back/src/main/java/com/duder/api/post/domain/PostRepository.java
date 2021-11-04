@@ -18,4 +18,6 @@ public interface PostRepository extends JpaRepository<Post, Long> {
             "(P.compressedColumn between :columnStart and :columnEnd)")
     List<Post> findCellByRange(@Param("rowStart") Integer rowStart, @Param("rowEnd") Integer rowEnd,
                     @Param("columnStart") Integer columnStart, @Param("columnEnd") Integer columnEnd);
+
+    List<Post> findPostByMemberId(Long memberId);
 }

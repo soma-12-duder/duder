@@ -1,6 +1,7 @@
 package com.duder.api.post.presentation;
 
 import com.duder.api.form.ApiForm;
+import com.duder.api.member.domain.Member;
 import com.duder.api.post.request.PostEnrollRequest;
 import com.duder.api.post.request.PostUpdateRequest;
 import com.duder.api.post.service.PostService;
@@ -43,6 +44,16 @@ public class PostController {
             return fail(e.getMessage());
         }
     }
+
+    @GetMapping("/get/me")
+    public ApiForm<?> findPostById(@AuthenticationPrincipal OAuth2User oAuth2User) {
+        try {
+            return succeed(postService.findPostByMember(oAuth2User.getAttribute("member")), SUCCESS_FIND_POST);
+        }catch (IllegalArgumentException e){
+            return fail(e.getMessage());
+        }
+    }
+
 
     @GetMapping("/get")
     public ApiForm<?> findPostsByDistance(@RequestParam("latitude") double latitude, @RequestParam("longitude") double longitude,
