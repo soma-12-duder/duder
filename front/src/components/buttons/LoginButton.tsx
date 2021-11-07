@@ -1,11 +1,19 @@
 import React from 'react';
+import {Image} from 'react-native';
 import styled from 'styled-components/native';
 
-const LoginButton = ({onPress, name, image}: any) => {
+const LoginButton = ({onPress, name, image, kind}: any) => {
   return (
-    <Wrapper>
+    <Wrapper kind={kind}>
       <KakaoButton onPress={onPress}>
-        <LogoImage source={image} />
+        {kind === 'Kakao' ? (
+          <LogoImage source={image} />
+        ) : (
+          <Image
+            source={image}
+            style={{resizeMode: 'contain', width: 30, left: -7}}
+          />
+        )}
         <ButtonText>{name}</ButtonText>
         <RemainSpace />
       </KakaoButton>
@@ -15,11 +23,12 @@ const LoginButton = ({onPress, name, image}: any) => {
 
 export default LoginButton;
 
-const Wrapper = styled.View`
+const Wrapper = styled.View<{kind: any}>`
   border-radius: 3px;
   width: 100%;
   height: 50px;
-  background-color: #ffe500;
+  background-color: ${(props: any) =>
+    props.kind === 'Kakao' ? '#ffe500' : '#4285F4'};
   justify-content: center;
   align-items: center;
 `;

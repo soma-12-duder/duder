@@ -25,7 +25,7 @@ const Chatting = ({nickname, text, date, km, chattingNumber}: Props) => {
           <NicknameTextWrapper>
             <NicknameKmWrapper>
               <Text>{nickname}</Text>
-              <Text style={{fontWeight: 'bold', paddingLeft: '3%'}}>
+              <Text style={{fontFamily: 'NotoSansKR-Bold', paddingLeft: '3%'}}>
                 {km}km
               </Text>
             </NicknameKmWrapper>

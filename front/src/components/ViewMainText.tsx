@@ -1,21 +1,40 @@
 /* eslint-disable react-native/no-inline-styles */
-import * as React from 'react';
+import React, {useState} from 'react';
 import {View, Text, Image, TouchableOpacity, Dimensions} from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import styled from 'styled-components/native';
 import COMMENT_ICON2 from '../assets/images/COMMENT_ICON2.png';
 import COORD_ICON from '../assets/images/COORD_ICON.png';
 import HorizontalLine from './HorizontalLine';
+import {postApi} from '../api/indexApi';
 
 const fullWidth: number = Dimensions.get('window').width;
 
 interface Props {
-  text: String;
+  id: number;
+  content: String;
+  member: any;
+  distance: String;
+  favorite_count: String;
+  comment_count: String;
 }
 
-const ViewMainTextOfOthersPost = ({text}: Props) => {
-  const [clicked, setClicked] = React.useState(false);
-  const clickHeart = () => setClicked(!clicked);
+const ViewMainText = ({
+  id,
+  content,
+  member,
+  distance,
+  favorite_count,
+  comment_count,
+}: Props) => {
+  const [clicked, setClicked] = useState(false);
+  const [favoriteCount, setFavoriteCount] = useState(favorite_count);
+  const clickHeart = async () => {
+    setClicked(!clicked);
+    console.log(id);
+    const a = await postApi.postPostFavorite(id);
+    console.log('getFavorite:', a);
+  };
 
   return (
     <>
@@ -27,7 +46,9 @@ const ViewMainTextOfOthersPost = ({text}: Props) => {
                 uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR5ebn2o15gmobO1xOj1ESvldLkPBxnC4ZwDg&usqp=CAU',
               }}
             />
-            <Text style={{fontSize: 20}}>fumyparli</Text>
+            <Text style={{fontSize: 18, paddingLeft: '1%'}}>
+              {member.nickname}
+            </Text>
           </ProfileWrapper>
           <CoordKmWrapper>
             <Image
@@ -42,16 +63,16 @@ const ViewMainTextOfOthersPost = ({text}: Props) => {
                 paddingLeft: 4,
                 color: '#CA925D',
               }}>
-              3km
+              {distance}km
             </Text>
           </CoordKmWrapper>
         </ProfileKmWrapper>
-        <HorizontalLine width={90} />
+        <HorizontalLine />
         <Text
           style={{paddingLeft: '4%', paddingTop: '4%'}}
           numberOfLines={3}
           ellipsizeMode="tail">
-          {text}
+          {content}
         </Text>
         <IconWrapper>
           <InnerIconWrapper>
@@ -62,15 +83,15 @@ const ViewMainTextOfOthersPost = ({text}: Props) => {
                 <Ionicons name="ios-heart-outline" size={20} style={{}} />
               )}
             </TouchableOpacity>
-            <Text style={{paddingLeft: 2}}>{15}</Text>
+            <Text style={{paddingLeft: 2}}>{favorite_count}</Text>
           </InnerIconWrapper>
           <InnerIconWrapper>
             <Image
               source={COMMENT_ICON2}
               resizeMode="contain"
-              style={{width: 13}}
+              style={{width: 14, top: 1}}
             />
-            <Text style={{paddingLeft: 2}}>{15}</Text>
+            <Text style={{paddingLeft: 3}}>{comment_count}</Text>
           </InnerIconWrapper>
         </IconWrapper>
       </View>
@@ -79,7 +100,7 @@ const ViewMainTextOfOthersPost = ({text}: Props) => {
   );
 };
 
-export default ViewMainTextOfOthersPost;
+export default ViewMainText;
 
 const UserProfileImage = styled(Image)`
   width: 35px;
@@ -96,7 +117,6 @@ const ProfileWrapper = styled(View)`
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  width: 34%;
 `;
 
 const ProfileKmWrapper = styled(View)`
