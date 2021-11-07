@@ -22,10 +22,10 @@ const LoginScreen = () => {
   const loginApi = async (data: any) => {
     try {
       console.log(JSON.parse(data));
-      navigation.navigate('BottomTab' as never);
-      const {accessToken, email} = JSON.parse(data);
-      console.log(accessToken, email);
-      authApi.getProfile(accessToken);
+      navigation.navigate('NicknameScreen' as never);
+      const {access_token, email} = JSON.parse(data);
+      console.log(access_token, email);
+      authApi.getProfile(access_token);
     } catch (error) {
       console.error(error);
     }
@@ -67,7 +67,7 @@ const LoginScreen = () => {
       ) : (
         <KakaoLoginView>
           <WebView
-            incognito={true} // 시크릿 모드
+            // incognito={true} // 시크릿 모드
             scalesPageToFit={true}
             source={{
               uri: 'http://52.79.234.33:8080/oauth2/authorization/kakao',
