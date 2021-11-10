@@ -23,20 +23,7 @@ const RootStack = () => {
   return (
     <>
       <Stack.Navigator initialRouteName={'LoginScreen'}>
-        <Stack.Screen
-          name={'HomeScreen'}
-          component={HomeScreen}
-          // options={{
-          //   headerTitle: props => <LogoTitle {...props} />,
-          //   headerRight: () => (
-          //     <Button
-          //       onPress={() => alert('This is a button!')}
-          //       title="Info"
-          //       color="#00cc00"
-          //     />
-          //   ),
-          // }}
-        />
+        <Stack.Screen name={'HomeScreen'} component={HomeScreen} />
         <Stack.Screen
           name={'LoginScreen'}
           component={LoginScreen}
@@ -52,7 +39,7 @@ const RootStack = () => {
           component={BottomTab}
           options={{headerShown: false}}
         />
-        <Stack.Screen name={'PostScreen'} component={PostScreen} />
+        <Stack.Screen name={'게시글'} component={PostScreen} />
       </Stack.Navigator>
     </>
   );

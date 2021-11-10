@@ -11,6 +11,8 @@ import DuderImage from '../util/DuderImage';
 import DuderName from '../components/loginScreen/DuderName';
 import KAKAO_ICON from '../assets/images/KAKAO_ICON.png';
 import UtilText from '../util/UtilText';
+import {authApi} from '../api/indexApi';
+import GOOGLE_ICON from '../assets/images/GOOGLE_ICON.png';
 
 const LoginScreen = () => {
   const [isToggle, setIsToggle] = useState(true);
@@ -20,9 +22,10 @@ const LoginScreen = () => {
   const loginApi = async (data: any) => {
     try {
       console.log(JSON.parse(data));
-      navigation.navigate('BottomTab');
-      const {accessToken, email} = JSON.parse(data);
-      console.log(accessToken, email);
+      navigation.navigate('NicknameScreen' as never);
+      const {access_token, email} = JSON.parse(data);
+      console.log(access_token, email);
+      authApi.getProfile(access_token);
     } catch (error) {
       console.error(error);
     }
@@ -51,20 +54,24 @@ const LoginScreen = () => {
               onPress={() => setIsToggle(!isToggle)}
               name={'카카오로 시작'}
               image={KAKAO_ICON}
+              kind="Kakao"
             />
             <LoginButton
-              onPress={() => navigation.navigate('NicknameScreen')}
-              name={'다음 페이지'}
-              image={KAKAO_ICON}
+              onPress={() => navigation.navigate('NicknameScreen' as never)}
+              name={'구글로 시작'}
+              image={GOOGLE_ICON}
+              kind="Google"
             />
           </ButtonContainer>
         </>
       ) : (
         <KakaoLoginView>
           <WebView
-            incognito={true} // 시크릿 모드
+            // incognito={true} // 시크릿 모드
             scalesPageToFit={true}
-            source={{uri: 'http://localhost:8080/oauth2/authorization/kakao'}}
+            source={{
+              uri: 'http://52.79.234.33:8080/oauth2/authorization/kakao',
+            }}
             // To avoid 403 disallowed useragent 구글 보안 정책
             userAgent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36"
             sharedCookiesEnabled={true}

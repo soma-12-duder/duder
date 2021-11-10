@@ -7,34 +7,48 @@ import HorizontalLine from './HorizontalLine';
 import {Colors} from '../util/Constants';
 import HEART_ICON from '../assets/images/HEART_ICON.png';
 import COMMENT_ICON from '../assets/images/COMMENT_ICON.png';
+import COORD_ICON from '../assets/images/COORD_ICON.png';
 
 const fullWidth: number = Dimensions.get('window').width;
 
 interface Props {
-  text: String;
-  km: String;
-  nickname: String;
-  like: String;
-  commentNumber: String;
+  id: number;
+  content: String;
+  distance: String;
+  member: any;
+  favorite_count: String;
+  comment_count: String;
 }
 
-const HomePost = ({text, km, nickname, like, commentNumber}: Props) => {
+const HomePost = ({
+  id,
+  content,
+  distance,
+  member,
+  favorite_count,
+  comment_count,
+}: Props) => {
   const navigation: any = useNavigation();
 
   return (
     <>
       <TouchableOpacity
         onPress={() => {
-          navigation.navigate('PostScreen', {
-            text: text,
+          navigation.navigate('게시글', {
+            id: id,
+            content: content,
+            member: member,
+            favorite_count: favorite_count,
+            comment_count: comment_count,
+            distance: distance,
           });
         }}>
         <PostWrapper>
           <Text
-            style={{paddingTop: 7, paddingLeft: 7, paddingRight: 7}}
+            style={{marginBottom: 7}}
             numberOfLines={3}
             ellipsizeMode="tail">
-            {text}
+            {content}
           </Text>
           <ProfileIconWrapper>
             <ProfileWrapper>
@@ -43,8 +57,7 @@ const HomePost = ({text, km, nickname, like, commentNumber}: Props) => {
                   uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR5ebn2o15gmobO1xOj1ESvldLkPBxnC4ZwDg&usqp=CAU',
                 }}
               />
-              <Text>{nickname}</Text>
-              <Text style={{fontWeight: 'bold'}}>{km}km</Text>
+              <Text style={{paddingLeft: 8}}>{member.nickname}</Text>
             </ProfileWrapper>
             <IconWrapper>
               <InnerIconWrapper>
@@ -53,7 +66,7 @@ const HomePost = ({text, km, nickname, like, commentNumber}: Props) => {
                   resizeMode="contain"
                   style={{width: 13}}
                 />
-                <Text style={{paddingLeft: 2}}>{like}</Text>
+                <Text style={{paddingLeft: 4}}>{favorite_count}</Text>
               </InnerIconWrapper>
               <InnerIconWrapper>
                 <Image
@@ -61,7 +74,23 @@ const HomePost = ({text, km, nickname, like, commentNumber}: Props) => {
                   resizeMode="contain"
                   style={{width: 13, top: 1}}
                 />
-                <Text style={{paddingLeft: 2}}>{commentNumber}</Text>
+                <Text style={{paddingLeft: 5, paddingRight: 12}}>
+                  {comment_count}
+                </Text>
+                <Image
+                  source={COORD_ICON}
+                  resizeMode="contain"
+                  style={{width: 13}}
+                />
+                <Text
+                  style={{
+                    fontFamily: 'NotoSansKR-Bold',
+                    paddingLeft: 4,
+                    fontSize: 15,
+                    color: '#CA925D',
+                  }}>
+                  {distance}km
+                </Text>
               </InnerIconWrapper>
             </IconWrapper>
           </ProfileIconWrapper>
@@ -78,6 +107,7 @@ const UserProfileImage = styled(Image)`
   width: 24px;
   height: 24px;
   border-radius: 100px;
+  border: 1px solid #cfcfcf;
 `;
 
 const IconWrapper = styled(View)`
@@ -98,8 +128,6 @@ const InnerIconWrapper = styled(View)`
 const ProfileWrapper = styled(View)`
   flex-direction: row;
   justify-content: space-between;
-  width: 38%;
-  padding-left: 7px;
   padding-right: 7px;
 `;
 
@@ -112,4 +140,5 @@ const ProfileIconWrapper = styled(View)`
 const PostWrapper = styled(View)`
   background-color: ${Colors.POST_BACKGROUND_COLOR};
   width: ${fullWidth};
+  padding: 20px 20px 10px 20px;
 `;
