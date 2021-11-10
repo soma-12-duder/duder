@@ -5,10 +5,10 @@ import {useRecoilState} from 'recoil';
 import {ProfileUrlState} from '../states/MemberState';
 import {useNavigation} from '@react-navigation/core';
 
-import LoginButton from '../components/buttons/LoginButton';
+import LoginButton from '../components/LoginButton';
 import DivideLine from '../util/DivideLine';
 import DuderImage from '../util/DuderImage';
-import DuderName from '../components/loginScreen/DuderName';
+import DuderName from '../components/DuderName';
 import KAKAO_ICON from '../assets/images/KAKAO_ICON.png';
 import UtilText from '../util/UtilText';
 import {authApi} from '../api/indexApi';

@@ -2,7 +2,8 @@
 import React, {useEffect} from 'react';
 import ViewMainText from '../components/ViewMainText';
 import ViewCommentText from '../components/ViewCommentText';
-import {ScrollView, StyleSheet, Image} from 'react-native';
+import CommentAndChattingInput from '../components/CommentAndChattingInput';
+import {ScrollView, StyleSheet, Image, FlatList, View} from 'react-native';
 import {useRecoilState} from 'recoil';
 import {commentState} from '../states/MemberState';
 import {postApi} from '../api/indexApi';
@@ -20,7 +21,7 @@ const PostScreen = ({route, navigation}: Props) => {
     try {
       const {data} = await postApi.getPostById(route.params.id);
       setComments(data.comments);
-      console.log('data comment: ', data.comments);
+      console.log('data comment: ', data);
     } catch (e) {
       console.error(e);
     }
@@ -64,21 +65,11 @@ const PostScreen = ({route, navigation}: Props) => {
           );
         })}
       </ScrollView>
-      <InputView>
-        <InputWraaper>
-          <CommentInput multiline={true} numberOfLines={3}></CommentInput>
-          <CommentInputButton>
-            <Image
-              source={MESSAGE_ICON}
-              style={{
-                resizeMode: 'contain',
-                width: 20,
-                left: -1,
-                top: 1,
-              }}></Image>
-          </CommentInputButton>
-        </InputWraaper>
-      </InputView>
+
+      <CommentAndChattingInput
+        postId={route.params.id}
+        apiFunc={postApi.postComment}
+      />
     </>
   );
 };
@@ -90,6 +81,7 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     alignItems: 'center',
     flexGrow: 1,
+    paddingBottom: 70,
   },
 });
 

@@ -10,8 +10,8 @@ export default (axios: any) => ({
       });
       console.log(data);
       return data;
-    } catch (error) {
-      console.log(error);
+    } catch (e) {
+      console.error(e);
     }
   },
 
@@ -21,8 +21,8 @@ export default (axios: any) => ({
       const {data} = await axios.get(`/api/post/${id}`);
       console.log('date3:', data);
       return data;
-    } catch (error) {
-      console.log(error);
+    } catch (e) {
+      console.error(e);
     }
   },
 
@@ -32,8 +32,31 @@ export default (axios: any) => ({
         post_id: id,
       });
       return data;
-    } catch (error) {
-      console.log(error);
+    } catch (e) {
+      console.error(e);
+    }
+  },
+
+  deletePostFavorite: async (id: any) => {
+    try {
+      const {data} = await axios.delete(`/api/favorite`, {
+        post_id: id,
+      });
+      return data;
+    } catch (e) {
+      console.error(e);
+    }
+  },
+
+  postComment: async (id: any, content: any) => {
+    try {
+      const {data} = await axios.post(`/api/comment`, {
+        post_id: id,
+        content: content,
+      });
+      return data;
+    } catch (e) {
+      console.error(e);
     }
   },
 });
