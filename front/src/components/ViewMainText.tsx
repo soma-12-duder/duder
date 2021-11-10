@@ -29,11 +29,33 @@ const ViewMainText = ({
 }: Props) => {
   const [clicked, setClicked] = useState(false);
   const [favoriteCount, setFavoriteCount] = useState(favorite_count);
+  let timer: any;
   const clickHeart = async () => {
     setClicked(!clicked);
-    console.log(id);
-    const a = await postApi.postPostFavorite(id);
-    console.log('getFavorite:', a);
+    if (timer) {
+      clearTimeout(timer);
+    }
+    if (!clicked) {
+      timer = setTimeout(async () => {
+        const data = await postApi.postPostFavorite(id);
+        console.log('++', data);
+        if (data.status === 200) {
+          console.log('11111111111');
+          const favoriteToSet = +favorite_count + 1;
+          setFavoriteCount(favoriteToSet + '');
+        }
+      }, 1000);
+    } else {
+      timer = setTimeout(async () => {
+        const data = await postApi.deletePostFavorite(id);
+        console.log('--', data);
+        if (data.status === 200) {
+          console.log('222222222222');
+          const favoriteToSet = +favorite_count - 1;
+          setFavoriteCount(favoriteToSet + '');
+        }
+      }, 1000);
+    }
   };
 
   return (
@@ -83,7 +105,7 @@ const ViewMainText = ({
                 <Ionicons name="ios-heart-outline" size={20} style={{}} />
               )}
             </TouchableOpacity>
-            <Text style={{paddingLeft: 2}}>{favorite_count}</Text>
+            <Text style={{paddingLeft: 2}}>{favoriteCount}</Text>
           </InnerIconWrapper>
           <InnerIconWrapper>
             <Image

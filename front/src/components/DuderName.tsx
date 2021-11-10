@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components/native';
-import DUDER_NAME from '../../assets/images/DUDER_NAME.png';
+import DUDER_NAME from '../assets/images/DUDER_NAME.png';
 
 const DuderName = () => {
   return (
