@@ -59,7 +59,17 @@ public class PostController {
     public ApiForm<?> findPostsByDistance(@RequestParam("latitude") double latitude, @RequestParam("longitude") double longitude,
                                           @RequestParam("distance") int distance){
         try{
-            return succeed(postService.findPostsByDistance(latitude, longitude, distance), SUCCESS_FIND_POST);
+            return succeed(postService.findPostsOrderByCreatedAt(latitude, longitude, distance), SUCCESS_FIND_POST);
+        }catch (IllegalArgumentException e){
+            return fail(e.getMessage());
+        }
+    }
+
+    @GetMapping("/get/hot")
+    public ApiForm<?> findPostsByDistanceOrderByFavorite(@RequestParam("latitude") double latitude, @RequestParam("longitude") double longitude,
+                                          @RequestParam("distance") int distance){
+        try{
+            return succeed(postService.findPostsOrderByFavorite(latitude, longitude, distance), SUCCESS_FIND_POST);
         }catch (IllegalArgumentException e){
             return fail(e.getMessage());
         }

@@ -14,8 +14,8 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     @Query("select P from Post P")
     List<Post> findByCellValues(@Param("cellValues") List<Integer> cellValues);
 
-    @Query("select P from Post P where (P.compressedRow between :rowStart and :rowEnd) and " +
-            "(P.compressedColumn between :columnStart and :columnEnd)")
+    @Query("select P from Post P join fetch P.member where (P.compressedRow between :rowStart and :rowEnd) and " +
+            "(P.compressedColumn between :columnStart and :columnEnd) order by P.createdAt DESC")
     List<Post> findCellByRange(@Param("rowStart") Integer rowStart, @Param("rowEnd") Integer rowEnd,
                     @Param("columnStart") Integer columnStart, @Param("columnEnd") Integer columnEnd);
 
