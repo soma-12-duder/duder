@@ -6,7 +6,7 @@ import com.duder.api.comment.domain.CommentRepository;
 import com.duder.api.favorite.domain.FavoriteCountDto;
 import com.duder.api.favorite.domain.FavoriteRepository;
 import com.duder.api.post.domain.PostRepository;
-import com.duder.api.post.response.PostResponse;
+import com.duder.api.post.response.PostListResponse;
 import com.duder.api.post.response.PostWithCommentResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -66,7 +66,7 @@ class PostServiceTest {
         when(postRepository.findPostById(postId)).thenReturn(Optional.of(POST1));
         when(commentService.getCommentByPostId(POST1.getId())).thenReturn(Arrays.asList(ALL_COMMENT1, ALL_COMMENT2));
 
-        PostWithCommentResponse response = postService.findPostById(postId);
+        PostWithCommentResponse response = postService.findPostById(MEMBER1, postId);
 
         assertThat(response.getComments().size()).isEqualTo(2);
         assertThat(response.getId()).isEqualTo(postId);
@@ -83,7 +83,7 @@ class PostServiceTest {
         when(favoriteRepository.findFavoriteCount(Arrays.asList(POST1, POST2, POST3)))
                 .thenReturn(Arrays.asList(new FavoriteCountDto(POST1.getId(), 1L)));
         //when
-        List<PostResponse> responses = postService.findPostsByDistance(POST1.getLatitude(), POST1.getLongitude(), 10);
+        List<PostListResponse> responses = postService.findPostsByDistance(POST1.getLatitude(), POST1.getLongitude(), 10);
 
         //then
         assertThat(responses.size()).isEqualTo(3);
