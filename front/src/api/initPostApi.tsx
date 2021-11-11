@@ -8,7 +8,7 @@ export default (axios: any) => ({
       const {data} = await axios.get('/api/post/get', {
         params: {latitude: latitude, longitude: longitude, distance: distance},
       });
-      console.log(data);
+      console.log('data222222:', data);
       return data;
     } catch (e) {
       console.error(e);
@@ -52,6 +52,27 @@ export default (axios: any) => ({
     try {
       const {data} = await axios.post(`/api/comment`, {
         post_id: id,
+        content: content,
+      });
+      return data;
+    } catch (e) {
+      console.error(e);
+    }
+  },
+
+  enrollPost: async (
+    latitude: any,
+    longitude: any,
+    photo_urls: any,
+    title: any,
+    content: any,
+  ) => {
+    try {
+      const {data} = await axios.post(`/api/post/enroll`, {
+        latitude: latitude,
+        longitude: longitude,
+        photo_urls: photo_urls,
+        title: title,
         content: content,
       });
       return data;

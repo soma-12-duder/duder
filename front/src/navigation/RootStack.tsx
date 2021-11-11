@@ -6,6 +6,7 @@ import LoginScreen from '../screen/LoginScreen';
 import BottomTab from './BottomTab';
 import HomeScreen from '../screen/HomeScreen';
 import PostScreen from '../screen/PostScreen';
+import PostWrittingScreen from '../screen/PostWrittingScreen';
 import NicknameScreen from '../screen/NicknameScreen';
 
 const Stack = createStackNavigator();
@@ -40,6 +41,7 @@ const RootStack = () => {
           options={{headerShown: false}}
         />
         <Stack.Screen name={'게시글'} component={PostScreen} />
+        <Stack.Screen name={'글쓰기'} component={PostWrittingScreen} />
       </Stack.Navigator>
     </>
   );

@@ -14,59 +14,34 @@ import HomeNotice from '../components/HomeNotice';
 import HorizontalLine from '../components/HorizontalLine';
 import {postApi} from '../api/indexApi';
 import Geolocation from 'react-native-geolocation-service';
-import {useRecoilState, useResetRecoilState} from 'recoil';
+import {useRecoilState} from 'recoil';
 import {postState} from '../states/MemberState';
+import {useNavigation} from '@react-navigation/core';
+import styled from 'styled-components/native';
+import usePosition from '../util/usePosition';
+// import Icons from 'react-native-vector-icons/Ionicons';
 
 interface Props {
   getPostsApi: Function;
+  position: any;
 }
 
-const ViewRoute = ({getPostsApi}: Props) => {
+const ViewRoute = ({getPostsApi, position}: Props) => {
+  const navigation: any = useNavigation();
   const [posts, setPosts] = useRecoilState(postState);
-  const [position, setPosition] = useState<any>(null);
-
-  async function getCoor() {
-    if (Platform.OS === 'android') {
-      await PermissionsAndroid.request(
-        PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
-      );
-      if ('granted' === PermissionsAndroid.RESULTS.GRANTED) {
-        Geolocation.getCurrentPosition(
-          position => {
-            setPosition(position);
-            console.log('position: ', position);
-          },
-          error => {
-            console.error('error2:', error);
-          },
-          {
-            enableHighAccuracy: true,
-            timeout: 15000,
-            maximumAge: 10000,
-          },
-        );
-      }
-    }
-  }
 
   async function getData() {
     try {
       const {data} = await getPostsApi(37.1, 127.1212, '1000');
       setPosts(data);
-      console.log('postData2: ', data);
     } catch (e) {
       console.error(e);
     }
   }
 
   useEffect(() => {
-    getCoor();
+    getData();
   }, []);
-
-  useEffect(() => {
-    if (position) getData();
-    else console.log('fucking');
-  }, [position]);
 
   const renderItem = ({item}: any) => {
     return (
@@ -89,6 +64,12 @@ const ViewRoute = ({getPostsApi}: Props) => {
           renderItem={renderItem}
           keyExtractor={(item: any) => item.id}></FlatList>
       </View>
+      <PostWriteButton
+        onPress={() => {
+          navigation.navigate('글쓰기', {});
+        }}>
+        <PostWriteText>글쓰기</PostWriteText>
+      </PostWriteButton>
     </>
   );
 };
@@ -96,6 +77,7 @@ const ViewRoute = ({getPostsApi}: Props) => {
 const initialLayout = {width: Dimensions.get('window').width};
 
 const HomeScreen = () => {
+  const [position, excuteGetCoordinates] = usePosition();
   const [index, setIndex] = React.useState(0);
   const [routes] = React.useState([
     {
@@ -107,6 +89,10 @@ const HomeScreen = () => {
       title: '핫 게시물',
     },
   ]);
+
+  useEffect(() => {
+    excuteGetCoordinates();
+  }, []);
 
   return (
     <TabView
@@ -132,8 +118,12 @@ const HomeScreen = () => {
       )}
       navigationState={{index, routes}}
       renderScene={SceneMap({
-        first: () => <ViewRoute getPostsApi={postApi.getAllPosts} />,
-        second: () => <ViewRoute getPostsApi={postApi.getAllPosts} />,
+        first: () => (
+          <ViewRoute getPostsApi={postApi.getAllPosts} position={position} />
+        ),
+        second: () => (
+          <ViewRoute getPostsApi={postApi.getAllPosts} position={position} />
+        ),
       })}
       onIndexChange={setIndex}
       initialLayout={initialLayout}
@@ -150,3 +140,19 @@ const styles = StyleSheet.create({
     backgroundColor: '#ffffff',
   },
 });
+
+const PostWriteButton = styled.TouchableOpacity`
+  background-color: #c38753;
+  position: absolute;
+  left: 41%;
+  bottom: 5px;
+  width: 70px;
+  height: 40px;
+  justify-content: center;
+  align-items: center;
+  border-radius: 35px;
+`;
+
+const PostWriteText = styled.Text`
+  color: #ffffff;
+`;
