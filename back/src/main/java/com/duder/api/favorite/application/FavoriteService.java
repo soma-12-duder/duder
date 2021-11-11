@@ -18,11 +18,15 @@ public class FavoriteService {
 
     private static final String FAILED_NOT_FOUND_POST = "게시글이 존재하지 않거나 삭제되었습니다.";
     private static final String FAILED_NOT_FOUND_DATA = "해당 좋아요는 이미 삭제되었거나 중복되어 저장되어 있습니다.";
+    private static final String FAILED_NOT_DUPLICATE_DATA = "해당 중복되어 저장되어 있습니다.";
+
 
     @Transactional
     public Long push(Member member, Long postId) throws IllegalArgumentException{
-        Post post = findPostById(postId);
-        return favoriteRepository.save(new Favorite(member, post)).getId();
+        if (findFavorite(member.getId(), postId)){
+            throw new IllegalArgumentException(FAILED_NOT_DUPLICATE_DATA);
+        }
+        return favoriteRepository.save(new Favorite(member, new Post(postId))).getId();
     }
 
     @Transactional
@@ -35,9 +39,7 @@ public class FavoriteService {
         return favorite.getId();
     }
 
-    public Post findPostById(Long postId){
-        return postRepository.findPostById(postId).orElseThrow(
-                () -> new IllegalArgumentException(FAILED_NOT_FOUND_POST)
-        );
+    public boolean findFavorite(Long memberId, Long postId){
+        return favoriteRepository.findFavoriteByMemberIdAndPostId(memberId, postId).isPresent();
     }
 }
