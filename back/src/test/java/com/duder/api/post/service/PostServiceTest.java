@@ -83,7 +83,7 @@ class PostServiceTest {
         when(favoriteRepository.findFavoriteCount(Arrays.asList(POST1, POST2, POST3)))
                 .thenReturn(Arrays.asList(new FavoriteCountDto(POST1.getId(), 1L)));
         //when
-        List<PostListResponse> responses = postService.findPostsByDistance(POST1.getLatitude(), POST1.getLongitude(), 10);
+        List<PostListResponse> responses = postService.findPostsOrderByCreatedAt(POST1.getLatitude(), POST1.getLongitude(), 10);
 
         //then
         assertThat(responses.size()).isEqualTo(3);

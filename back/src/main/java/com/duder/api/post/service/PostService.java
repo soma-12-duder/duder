@@ -17,6 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -52,16 +53,59 @@ public class PostService {
                 checkFavorite(member.getId(), postId));
     }
 
-    public List<PostListResponse> findPostsByDistance (double latitude, double longitude, int distance)
+    public List<PostListResponse> findPostsOrderByCreatedAt (double latitude, double longitude, int distance)
             throws IllegalArgumentException{
+        // 쿼리 날림
+        List<Post> posts = findPostsByDistance(latitude, longitude, distance);
+        return toPostListResponse(posts, latitude, longitude);
+    }
+
+    public List<PostListResponse> findPostsOrderByFavorite(double latitude, double longitude, int distance)
+            throws IllegalArgumentException{
+
+        List<Post> posts = findPostsByDistance(latitude, longitude, distance);
+        Comparator<PostListResponse> comparator = new Comparator<PostListResponse>() {
+            @Override
+            public int compare(PostListResponse o1, PostListResponse o2) {
+                return (int) (o2.getFavoriteCount() - o1.getFavoriteCount());
+            }
+        };
+        List<PostListResponse> responses = toPostListResponse(posts, latitude, longitude);
+        responses.sort(comparator);
+        return responses;
+    }
+
+
+    @Transactional
+    public PostListResponse updatePost (Long postId, PostUpdateRequest postUpdateRequest) throws IllegalArgumentException{
+        Post post = findById(postId);
+        post.update(postUpdateRequest);
+        return PostListResponse.of(post);
+    }
+
+    @Transactional
+    public Long deletePost(Member member, Long postId) throws IllegalArgumentException{
+        Post post = findById(postId);
+        if (member.isNotSameId(post.getMember())){
+            throw new IllegalArgumentException("회원이 올린 글이 아닙니다.");
+        }
+        postRepository.delete(post);
+        return postId;
+    }
+
+
+    public List<Post> findPostsByDistance(double latitude, double longitude, int distance) throws IllegalArgumentException{
         List<Coordinate> coordinates = CoordinateUtil.findCellCoordinateInRange(latitude, longitude, distance);
         Coordinate leftUpCoordinate = coordinates.get(0);
         Coordinate rightDownCoordinate = coordinates.get(1);
-
+        System.out.println("latitude = " + latitude);
+        System.out.println("longitude = " + longitude);
         // 쿼리 날림
-        List<Post> posts = postRepository.findCellByRange(leftUpCoordinate.getRow(), rightDownCoordinate.getRow(),
+        return postRepository.findCellByRange(leftUpCoordinate.getRow(), rightDownCoordinate.getRow(),
                 leftUpCoordinate.getColumn(), rightDownCoordinate.getColumn());
+    }
 
+    public List<PostListResponse> toPostListResponse(List<Post> posts, double latitude, double longitude){
         Map<Long, Long> favoriteOfPosts = favoriteRepository.findFavoriteCount(posts)
                 .stream().collect(toMap(FavoriteCountDto::getPostId, FavoriteCountDto::getFavoriteCount));
 
@@ -80,22 +124,6 @@ public class PostService {
                 .collect(Collectors.toList());
     }
 
-    @Transactional
-    public PostListResponse updatePost (Long postId, PostUpdateRequest postUpdateRequest) throws IllegalArgumentException{
-        Post post = findById(postId);
-        post.update(postUpdateRequest);
-        return PostListResponse.of(post);
-    }
-
-    @Transactional
-    public Long deletePost(Member member, Long postId) throws IllegalArgumentException{
-        Post post = findById(postId);
-        if (member.isNotSameId(post.getMember())){
-            throw new IllegalArgumentException("회원이 올린 글이 아닙니다.");
-        }
-        postRepository.delete(post);
-        return postId;
-    }
 
     public Post findById(Long postId){
         return postRepository.findPostById(postId).orElseThrow(
@@ -115,4 +143,6 @@ public class PostService {
         }
         return countMap;
     }
+
+
 }
