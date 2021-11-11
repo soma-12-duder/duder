@@ -37,9 +37,9 @@ public class PostController {
     }
 
     @GetMapping("/{postId}")
-    public ApiForm<?> findPostById(@PathVariable Long postId) {
+    public ApiForm<?> findPostById(@AuthenticationPrincipal OAuth2User oAuth2User, @PathVariable Long postId) {
         try {
-            return succeed(postService.findPostById(postId), SUCCESS_FIND_POST);
+            return succeed(postService.findPostById(oAuth2User.getAttribute("member"), postId), SUCCESS_FIND_POST);
         }catch (IllegalArgumentException e){
             return fail(e.getMessage());
         }
@@ -59,7 +59,17 @@ public class PostController {
     public ApiForm<?> findPostsByDistance(@RequestParam("latitude") double latitude, @RequestParam("longitude") double longitude,
                                           @RequestParam("distance") int distance){
         try{
-            return succeed(postService.findPostsByDistance(latitude, longitude, distance), SUCCESS_FIND_POST);
+            return succeed(postService.findPostsOrderByCreatedAt(latitude, longitude, distance), SUCCESS_FIND_POST);
+        }catch (IllegalArgumentException e){
+            return fail(e.getMessage());
+        }
+    }
+
+    @GetMapping("/get/hot")
+    public ApiForm<?> findPostsByDistanceOrderByFavorite(@RequestParam("latitude") double latitude, @RequestParam("longitude") double longitude,
+                                          @RequestParam("distance") int distance){
+        try{
+            return succeed(postService.findPostsOrderByFavorite(latitude, longitude, distance), SUCCESS_FIND_POST);
         }catch (IllegalArgumentException e){
             return fail(e.getMessage());
         }
