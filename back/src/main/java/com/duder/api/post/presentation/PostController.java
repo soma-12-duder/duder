@@ -37,9 +37,9 @@ public class PostController {
     }
 
     @GetMapping("/{postId}")
-    public ApiForm<?> findPostById(@PathVariable Long postId) {
+    public ApiForm<?> findPostById(@AuthenticationPrincipal OAuth2User oAuth2User, @PathVariable Long postId) {
         try {
-            return succeed(postService.findPostById(postId), SUCCESS_FIND_POST);
+            return succeed(postService.findPostById(oAuth2User.getAttribute("member"), postId), SUCCESS_FIND_POST);
         }catch (IllegalArgumentException e){
             return fail(e.getMessage());
         }

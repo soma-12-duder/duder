@@ -3,7 +3,6 @@ package com.duder.api.post.service;
 import com.duder.api.comment.application.CommentService;
 import com.duder.api.comment.domain.CommentCountDto;
 import com.duder.api.comment.domain.CommentRepository;
-import com.duder.api.favorite.domain.Favorite;
 import com.duder.api.favorite.domain.FavoriteCountDto;
 import com.duder.api.favorite.domain.FavoriteRepository;
 import com.duder.api.member.domain.Member;
@@ -11,7 +10,7 @@ import com.duder.api.post.domain.Post;
 import com.duder.api.post.domain.PostRepository;
 import com.duder.api.post.request.PostEnrollRequest;
 import com.duder.api.post.request.PostUpdateRequest;
-import com.duder.api.post.response.PostResponse;
+import com.duder.api.post.response.PostListResponse;
 import com.duder.api.post.response.PostWithCommentResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -48,26 +47,12 @@ public class PostService {
         return postRepository.save(request.toPostWithMemberAndCell(member, coordinate)).getId();
     }
 
-    public PostWithCommentResponse findPostById (Long postId) throws IllegalArgumentException {
-        return PostWithCommentResponse.of(findById(postId), commentService.getCommentByPostId(postId));
+    public PostWithCommentResponse findPostById (Member member, Long postId) throws IllegalArgumentException {
+        return PostWithCommentResponse.of(findById(postId), commentService.getCommentByPostId(postId),
+                checkFavorite(member.getId(), postId));
     }
 
-    // parameter : 현재 위치(latitude, longitude) 주변 거리 (distance)
-    public List<PostResponse> findPostsByDistance2 (double latitude, double longitude, int distance)
-                                                                        throws IllegalArgumentException{
-        List<Coordinate> coordinates = CoordinateUtil.findCellCoordinateInRange(latitude, longitude, distance);
-        Coordinate leftUpCoordinate = coordinates.get(0);
-        Coordinate rightDownCoordinate = coordinates.get(1);
-
-        // 쿼리 날림
-        return postRepository.findCellByRange(leftUpCoordinate.getRow(), rightDownCoordinate.getRow(),
-                        leftUpCoordinate.getColumn(), rightDownCoordinate.getColumn())
-                .stream()
-                .map((o) -> new PostResponse(o, latitude, longitude, 1,0))
-                .collect(Collectors.toList());
-    }
-
-    public List<PostResponse> findPostsByDistance (double latitude, double longitude, int distance)
+    public List<PostListResponse> findPostsByDistance (double latitude, double longitude, int distance)
             throws IllegalArgumentException{
         List<Coordinate> coordinates = CoordinateUtil.findCellCoordinateInRange(latitude, longitude, distance);
         Coordinate leftUpCoordinate = coordinates.get(0);
@@ -83,23 +68,23 @@ public class PostService {
         Map<Long, Long> commentOfPosts = commentRepository.findCommentCount(posts)
                 .stream().collect(toMap(CommentCountDto::getCommentId, CommentCountDto::getCommentCount));
 
-        return PostResponse.toList(posts, fillZero(favoriteOfPosts, posts),
+        return PostListResponse.toList(posts, fillZero(favoriteOfPosts, posts),
                 fillZero(commentOfPosts, posts), latitude, longitude);
     }
 
 
-    public List<PostResponse> findPostByMember(Member member){
+    public List<PostListResponse> findPostByMember(Member member){
         return postRepository.findPostByMemberId(member.getId())
                 .stream()
-                .map(PostResponse::new)
+                .map(PostListResponse::new)
                 .collect(Collectors.toList());
     }
 
     @Transactional
-    public PostResponse updatePost (Long postId, PostUpdateRequest postUpdateRequest) throws IllegalArgumentException{
+    public PostListResponse updatePost (Long postId, PostUpdateRequest postUpdateRequest) throws IllegalArgumentException{
         Post post = findById(postId);
         post.update(postUpdateRequest);
-        return PostResponse.of(post);
+        return PostListResponse.of(post);
     }
 
     @Transactional
@@ -116,6 +101,10 @@ public class PostService {
         return postRepository.findPostById(postId).orElseThrow(
                 () -> new IllegalArgumentException("해당 게시글이 존재하지 않습니다.")
         );
+    }
+
+    public boolean checkFavorite(Long memberId, Long postId){
+        return favoriteRepository.findFavoriteByMemberIdAndPostId(memberId, postId).isPresent();
     }
 
     public Map<Long, Long> fillZero(Map<Long, Long> countMap, List<Post> posts){
