@@ -19,8 +19,10 @@ public class PostWithCommentResponse {
     private Long id;
     private double latitude;
     private double longitude;
+    private List<String> photoUrls = new ArrayList<>();
     private String content;
     private long view;
+    private boolean favoriteState;
     private MemberResponse member;
 
     private List<AllCommentResponse> comments = new ArrayList<>();
@@ -28,16 +30,18 @@ public class PostWithCommentResponse {
     private int favoriteCount = 0;
     private int commentCount = 0;
 
-    public static PostWithCommentResponse of(Post post, List<AllCommentResponse> comments){
-        return new PostWithCommentResponse(post, comments);
+    public static PostWithCommentResponse of(Post post, List<AllCommentResponse> comments, boolean favoriteState){
+        return new PostWithCommentResponse(post, comments, favoriteState);
     }
 
-    public PostWithCommentResponse (Post post, List<AllCommentResponse> comments){
+    public PostWithCommentResponse (Post post, List<AllCommentResponse> comments, boolean favoriteState){
         this.id = post.getId();
         this.latitude = post.getLatitude();
         this.longitude = post.getLongitude();
+        this.photoUrls = post.getPhoto().getPhotoUrl();
         this.content = post.getContent();
         this.view = 0;
+        this.favoriteState = favoriteState;
         this.member = MemberResponse.of(post.getMember());
         this.comments = comments;
     }

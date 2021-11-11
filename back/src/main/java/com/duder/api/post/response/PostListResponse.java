@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
-public class PostResponse {
+public class PostListResponse {
     private Long id;
     private double latitude;
     private double longitude;
@@ -26,11 +26,11 @@ public class PostResponse {
     private long commentCount = 0;
     private double distance = 0.0;
 
-    public static PostResponse of(Post post){
-        return new PostResponse(post);
+    public static PostListResponse of(Post post){
+        return new PostListResponse(post);
     }
 
-    public PostResponse (Post post){
+    public PostListResponse(Post post){
         this.id = post.getId();
         this.latitude = post.getLatitude();
         this.longitude = post.getLongitude();
@@ -39,7 +39,7 @@ public class PostResponse {
         this.member = MemberResponse.of(post.getMember());
     }
 
-    public PostResponse (Post post, double latitude, double longitude, long favoriteCount, long commentCount){
+    public PostListResponse(Post post, double latitude, double longitude, long favoriteCount, long commentCount){
         this.id = post.getId();
         this.latitude = post.getLatitude();
         this.longitude = post.getLongitude();
@@ -52,9 +52,9 @@ public class PostResponse {
         this.commentCount = commentCount;
     }
 
-    public static List<PostResponse> toList(List<Post> posts, Map<Long, Long> favoriteOfPosts, Map<Long, Long> commentOfPosts, double latitude, double longitude) {
+    public static List<PostListResponse> toList(List<Post> posts, Map<Long, Long> favoriteOfPosts, Map<Long, Long> commentOfPosts, double latitude, double longitude) {
         return posts.stream()
-                .map(o-> new PostResponse(o, latitude, longitude, favoriteOfPosts.get(o.getId()), commentOfPosts.get(o.getId())))
+                .map(o-> new PostListResponse(o, latitude, longitude, favoriteOfPosts.get(o.getId()), commentOfPosts.get(o.getId())))
                 .collect(Collectors.toList());
     }
 }
