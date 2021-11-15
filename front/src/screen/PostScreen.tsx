@@ -1,11 +1,11 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import ViewMainText from '../components/ViewMainText';
 import ViewCommentText from '../components/ViewCommentText';
 import CommentAndChattingInput from '../components/CommentAndChattingInput';
 import {ScrollView, StyleSheet, Image, FlatList, View} from 'react-native';
 import {useRecoilState} from 'recoil';
-import {commentState} from '../states/MemberState';
+import {postState} from '../states/MemberState';
 import {postApi} from '../api/indexApi';
 import styled from 'styled-components/native';
 import MESSAGE_ICON from '../assets/images/MESSAGE_ICON.png';
@@ -16,41 +16,35 @@ interface Props {
 }
 
 const PostScreen = ({route, navigation}: Props) => {
-  const [comments, setComments]: any = useRecoilState(commentState);
+  const [post, setPost]: any = useRecoilState(postState);
+  const commentInputRef: any = React.useRef(null);
+
   async function getData() {
     try {
       const {data} = await postApi.getPostById(route.params.id);
-      setComments(data.comments);
-      console.log('data comment: ', data);
+      setPost(data);
     } catch (e) {
       console.error(e);
     }
   }
-
   useEffect(() => {
     getData();
   }, []);
-
   return (
     <>
       <ScrollView contentContainerStyle={styles.container}>
-        <ViewMainText
-          id={route.params.id}
-          content={route.params.content}
-          member={route.params.member}
-          distance={route.params.distance}
-          favorite_count={route.params.favorite_count}
-          comment_count={route.params.comment_count}
-        />
-        {comments.map((item: any, index: any) => {
+        <ViewMainText id={route.params.id} distance={route.params.distance} />
+        {post?.comments?.map((item: any, index: any) => {
           return (
             <>
               <ViewCommentText
-                key={index + 'comment'}
+                key={index}
                 commentOfComment={false}
                 content={item.comment.content}
                 member={item.comment.member}
                 favorite_count={item.favorite_count}
+                commentInputRef={commentInputRef}
+                comment_id={item.comment.id}
               />
               {item.sub_comments.map((item2: any, index: any) => (
                 <ViewCommentText
@@ -59,6 +53,7 @@ const PostScreen = ({route, navigation}: Props) => {
                   content={item2.content}
                   member={item2.member}
                   favorite_count={'7'}
+                  commentInputRef={commentInputRef}
                 />
               ))}
             </>
@@ -69,6 +64,8 @@ const PostScreen = ({route, navigation}: Props) => {
       <CommentAndChattingInput
         postId={route.params.id}
         apiFunc={postApi.postComment}
+        apiFunc2={postApi.postCommentOfComment}
+        ref={commentInputRef}
       />
     </>
   );

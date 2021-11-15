@@ -6,6 +6,7 @@ import {useNavigation} from '@react-navigation/core';
 import HorizontalLine from './HorizontalLine';
 import {Colors} from '../util/Constants';
 import HEART_ICON from '../assets/images/HEART_ICON.png';
+import HEART_ICON_BLACK from '../assets/images/HEART_ICON_BLACK.png';
 import COMMENT_ICON from '../assets/images/COMMENT_ICON.png';
 import COORD_ICON from '../assets/images/COORD_ICON.png';
 
@@ -64,7 +65,7 @@ const HomePost = ({
                 <Image
                   source={HEART_ICON}
                   resizeMode="contain"
-                  style={{width: 13}}
+                  style={{width: 14}}
                 />
                 <Text style={{paddingLeft: 4}}>{favorite_count}</Text>
               </InnerIconWrapper>
@@ -72,7 +73,7 @@ const HomePost = ({
                 <Image
                   source={COMMENT_ICON}
                   resizeMode="contain"
-                  style={{width: 13, top: 1}}
+                  style={{width: 13, top: 0.55}}
                 />
                 <Text style={{paddingLeft: 5, paddingRight: 12}}>
                   {comment_count}

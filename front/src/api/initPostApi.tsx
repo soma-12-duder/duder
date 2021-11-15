@@ -8,7 +8,23 @@ export default (axios: any) => ({
       const {data} = await axios.get('/api/post/get', {
         params: {latitude: latitude, longitude: longitude, distance: distance},
       });
-      console.log('data222222:', data);
+      console.log('data latest:', data);
+      return data;
+    } catch (e) {
+      console.error(e);
+    }
+  },
+
+  getAllHotPosts: async (
+    latitude: number,
+    longitude: number,
+    distance: string,
+  ) => {
+    try {
+      const {data} = await axios.get('/api/post/get/hot', {
+        params: {latitude: latitude, longitude: longitude, distance: distance},
+      });
+      console.log('data hot:', data);
       return data;
     } catch (e) {
       console.error(e);
@@ -40,7 +56,9 @@ export default (axios: any) => ({
   deletePostFavorite: async (id: any) => {
     try {
       const {data} = await axios.delete(`/api/favorite`, {
-        post_id: id,
+        data: {
+          post_id: id,
+        },
       });
       return data;
     } catch (e) {
@@ -51,6 +69,18 @@ export default (axios: any) => ({
   postComment: async (id: any, content: any) => {
     try {
       const {data} = await axios.post(`/api/comment`, {
+        post_id: id,
+        content: content,
+      });
+      return data;
+    } catch (e) {
+      console.error(e);
+    }
+  },
+
+  postCommentOfComment: async (id: any, content: any, comment_id: any) => {
+    try {
+      const {data} = await axios.post(`/api/comment/${comment_id}`, {
         post_id: id,
         content: content,
       });

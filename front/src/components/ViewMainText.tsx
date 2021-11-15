@@ -1,62 +1,76 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {View, Text, Image, TouchableOpacity, Dimensions} from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import styled from 'styled-components/native';
 import COMMENT_ICON2 from '../assets/images/COMMENT_ICON2.png';
 import COORD_ICON from '../assets/images/COORD_ICON.png';
+import HEART_ICON from '../assets/images/HEART_ICON.png';
+import HEART_ICON_BLACK from '../assets/images/HEART_ICON_BLACK.png';
 import HorizontalLine from './HorizontalLine';
+
+import {useRecoilState} from 'recoil';
+import {postState} from '../states/MemberState';
 import {postApi} from '../api/indexApi';
 
 const fullWidth: number = Dimensions.get('window').width;
 
 interface Props {
   id: number;
-  content: String;
-  member: any;
-  distance: String;
-  favorite_count: String;
-  comment_count: String;
+  distance: string;
 }
 
-const ViewMainText = ({
-  id,
-  content,
-  member,
-  distance,
-  favorite_count,
-  comment_count,
-}: Props) => {
-  const [clicked, setClicked] = useState(false);
-  const [favoriteCount, setFavoriteCount] = useState(favorite_count);
-  let timer: any;
+const ViewMainText = ({id, distance}: Props) => {
+  const [post, setPost] = useRecoilState(postState);
+  const [timer, setTimer]: any = useState();
   const clickHeart = async () => {
-    setClicked(!clicked);
+    const prevFavorite_state = post.favorite_state;
+    const prevFavorite_count = post.favorite_count;
+    setPost((post: any) => {
+      return {
+        ...post,
+        favorite_state: !prevFavorite_state,
+      };
+    });
+
     if (timer) {
       clearTimeout(timer);
     }
-    if (!clicked) {
-      timer = setTimeout(async () => {
+    console.log('ViewMainTextId:', id);
+    let timerToSet;
+    if (!post.favorite_state) {
+      timerToSet = setTimeout(async () => {
         const data = await postApi.postPostFavorite(id);
         console.log('++', data);
         if (data.status === 200) {
-          console.log('11111111111');
-          const favoriteToSet = +favorite_count + 1;
-          setFavoriteCount(favoriteToSet + '');
+          setPost((post: any) => {
+            return {
+              ...post,
+              favorite_count: prevFavorite_count + 1,
+            };
+          });
         }
       }, 1000);
     } else {
-      timer = setTimeout(async () => {
+      timerToSet = setTimeout(async () => {
         const data = await postApi.deletePostFavorite(id);
         console.log('--', data);
         if (data.status === 200) {
-          console.log('222222222222');
-          const favoriteToSet = +favorite_count - 1;
-          setFavoriteCount(favoriteToSet + '');
+          setPost((post: any) => {
+            return {
+              ...post,
+              favorite_count: prevFavorite_count - 1,
+            };
+          });
         }
       }, 1000);
     }
+    setTimer(timerToSet);
   };
+
+  useEffect(() => {
+    console.log('pppppppppppp:', post);
+  }, [post]);
 
   return (
     <>
@@ -69,7 +83,7 @@ const ViewMainText = ({
               }}
             />
             <Text style={{fontSize: 18, paddingLeft: '1%'}}>
-              {member.nickname}
+              {post?.member?.nickname}
             </Text>
           </ProfileWrapper>
           <CoordKmWrapper>
@@ -94,18 +108,26 @@ const ViewMainText = ({
           style={{paddingLeft: '4%', paddingTop: '4%'}}
           numberOfLines={3}
           ellipsizeMode="tail">
-          {content}
+          {post?.content}
         </Text>
         <IconWrapper>
           <InnerIconWrapper>
             <TouchableOpacity onPress={() => clickHeart()}>
-              {clicked ? (
-                <Ionicons name="heart" size={20} style={{}} />
+              {post?.favorite_state ? (
+                <Image
+                  source={HEART_ICON_BLACK}
+                  resizeMode="contain"
+                  style={{width: 17}}
+                />
               ) : (
-                <Ionicons name="ios-heart-outline" size={20} style={{}} />
+                <Image
+                  source={HEART_ICON}
+                  resizeMode="contain"
+                  style={{width: 17}}
+                />
               )}
             </TouchableOpacity>
-            <Text style={{paddingLeft: 2}}>{favoriteCount}</Text>
+            <Text style={{paddingLeft: 2}}>{post?.favorite_count}</Text>
           </InnerIconWrapper>
           <InnerIconWrapper>
             <Image
@@ -113,7 +135,7 @@ const ViewMainText = ({
               resizeMode="contain"
               style={{width: 14, top: 1}}
             />
-            <Text style={{paddingLeft: 3}}>{comment_count}</Text>
+            <Text style={{paddingLeft: 3}}>{post?.comment_count}</Text>
           </InnerIconWrapper>
         </IconWrapper>
       </View>

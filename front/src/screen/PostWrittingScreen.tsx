@@ -14,7 +14,7 @@ import {
   Keyboard,
 } from 'react-native';
 import {useRecoilState} from 'recoil';
-import {postState} from '../states/MemberState';
+import {postsState, hotPostsState} from '../states/MemberState';
 import {postApi} from '../api/indexApi';
 import styled from 'styled-components/native';
 import MESSAGE_ICON from '../assets/images/MESSAGE_ICON.png';
@@ -32,7 +32,8 @@ const PostWrittingScreen = ({route, navigation}: Props) => {
   const [mainText, setMainText] = useState('');
   const [position, excuteGetCoordinates] = usePosition();
 
-  const [posts, setPosts] = useRecoilState(postState);
+  const [posts, setPosts] = useRecoilState(postsState);
+  const [hotPosts, setHotPosts] = useRecoilState(hotPostsState);
 
   async function enrollPostUsingUseEffect() {
     try {
@@ -55,7 +56,13 @@ const PostWrittingScreen = ({route, navigation}: Props) => {
           127.1212,
           '1000',
         );
+        const {data: hotPostsData} = await postApi.getAllHotPosts(
+          37.1,
+          127.1212,
+          '1000',
+        );
         setPosts(postsData);
+        setPosts(hotPostsData);
         navigation.pop();
       }
     } catch (e) {
