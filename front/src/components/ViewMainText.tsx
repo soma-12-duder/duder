@@ -18,9 +18,10 @@ const fullWidth: number = Dimensions.get('window').width;
 interface Props {
   id: number;
   distance: string;
+  photo_urls: [];
 }
 
-const ViewMainText = ({id, distance}: Props) => {
+const ViewMainText = ({id, distance, photo_urls}: Props) => {
   const [post, setPost] = useRecoilState(postState);
   const [timer, setTimer]: any = useState();
   const clickHeart = async () => {
@@ -68,6 +69,10 @@ const ViewMainText = ({id, distance}: Props) => {
     console.log('pppppppppppp:', post);
   }, [post]);
 
+  useEffect(() => {
+    console.log('photo_urls:', photo_urls);
+  }, [photo_urls]);
+
   return (
     <>
       <View style={{width: fullWidth, backgroundColor: '#ffffff'}}>
@@ -106,6 +111,18 @@ const ViewMainText = ({id, distance}: Props) => {
           ellipsizeMode="tail">
           {post?.content}
         </Text>
+        {photo_urls ? (
+          <PhotoWarrper>
+            {photo_urls.map(url => (
+              <Photo
+                source={{uri: url}}
+                resizeMode="cover"
+                style={{width: '40%', height: 100}}></Photo>
+            ))}
+          </PhotoWarrper>
+        ) : (
+          <></>
+        )}
         <IconWrapper>
           <InnerIconWrapper>
             <TouchableOpacity onPress={() => clickHeart()}>
@@ -181,4 +198,14 @@ const InnerIconWrapper = styled(View)`
   justify-content: space-between;
   align-items: center;
   width: 30%;
+`;
+
+const PhotoWarrper = styled.View`
+  width: 100%;
+  flex-direction: row;
+  flex-wrap: wrap;
+`;
+
+const Photo = styled.Image`
+  margin: 4% 4% 0 4%;
 `;

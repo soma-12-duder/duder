@@ -33,7 +33,11 @@ const PostScreen = ({route, navigation}: Props) => {
   return (
     <>
       <ScrollView contentContainerStyle={styles.container}>
-        <ViewMainText id={route.params.id} distance={route.params.distance} />
+        <ViewMainText
+          id={route.params.id}
+          distance={route.params.distance}
+          photo_urls={post.photo_urls}
+        />
         {post?.comments?.map((item: any, index: any) => {
           return (
             <>
