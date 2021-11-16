@@ -40,6 +40,9 @@ const CommentAndChattingInput = React.forwardRef(
                 if (data.status === 200) {
                   const posts = await postApi.getPostById(postId);
                   setPost(posts.data);
+                  setCommentForRecoil({
+                    isClickCommentInput: false,
+                  });
                   onChangeText('');
                   Keyboard.dismiss();
                 }

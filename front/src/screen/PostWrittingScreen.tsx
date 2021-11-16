@@ -21,6 +21,9 @@ import MESSAGE_ICON from '../assets/images/MESSAGE_ICON.png';
 import HorizontalLine from '../components/HorizontalLine';
 import usePosition from '../util/usePosition';
 import {requestAuthorization} from 'react-native-geolocation-service';
+import {TouchableOpacity} from 'react-native-gesture-handler';
+import {RNS3} from 'react-native-aws3';
+import {launchImageLibrary, launchCamera} from 'react-native-image-picker';
 
 interface Props {
   route: any;
@@ -34,6 +37,7 @@ const PostWrittingScreen = ({route, navigation}: Props) => {
 
   const [posts, setPosts] = useRecoilState(postsState);
   const [hotPosts, setHotPosts] = useRecoilState(hotPostsState);
+  const [photos, setPhotos] = useState<any>();
 
   async function enrollPostUsingUseEffect() {
     try {
@@ -75,6 +79,10 @@ const PostWrittingScreen = ({route, navigation}: Props) => {
     enrollPostUsingUseEffect();
   }, [position]);
 
+  useEffect(() => {
+    console.log('photos:', photos);
+  }, [photos]);
+
   return (
     <>
       <ScrollView>
@@ -95,7 +103,59 @@ const PostWrittingScreen = ({route, navigation}: Props) => {
         />
         <HorizontalLine width={90} />
         <View
-          style={{backgroundColor: '#999999', height: 300, margin: 20}}></View>
+          style={{
+            backgroundColor: '#ffffff',
+            height: 300,
+            margin: 20,
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}>
+          <TouchableOpacity
+            style={{
+              backgroundColor: '#000000',
+              justifyContent: 'center',
+              alignItems: 'center',
+              width: 100,
+              height: 100,
+            }}
+            onPress={async () => {
+              // const file;
+              await launchImageLibrary(
+                {
+                  mediaType: 'photo',
+                  includeExtra: true,
+                  selectionLimit: 10,
+                },
+                (res: any) => {
+                  // console.log('res uri:', res.assets[0].uri);
+                  setPhotos(res.assets.map((photo: any) => photo.uri));
+                  // console.log('awefawefawefwefwaefewafweaf');
+                },
+              );
+              // const response = await RNS3.put(file, options);
+            }}>
+            <Text style={{color: '#ffffff'}}>테스트 버튼</Text>
+          </TouchableOpacity>
+        </View>
+        <View
+          style={{
+            backgroundColor: '#befbbb',
+            height: 150,
+            flexDirection: 'row',
+          }}>
+          {photos ? (
+            photos.map((photoUri: any) => (
+              <Image
+                source={{
+                  uri: photoUri,
+                }}
+                style={{width: 100, height: 100}}
+              />
+            ))
+          ) : (
+            <></>
+          )}
+        </View>
       </ScrollView>
       <PostWirttingConfirmButton
         onPress={async () => {

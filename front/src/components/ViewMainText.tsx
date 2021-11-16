@@ -39,30 +39,26 @@ const ViewMainText = ({id, distance}: Props) => {
     console.log('ViewMainTextId:', id);
     let timerToSet;
     if (!post.favorite_state) {
+      setPost((post: any) => {
+        return {
+          ...post,
+          favorite_count: prevFavorite_count + 1,
+        };
+      });
       timerToSet = setTimeout(async () => {
         const data = await postApi.postPostFavorite(id);
         console.log('++', data);
-        if (data.status === 200) {
-          setPost((post: any) => {
-            return {
-              ...post,
-              favorite_count: prevFavorite_count + 1,
-            };
-          });
-        }
       }, 1000);
     } else {
+      setPost((post: any) => {
+        return {
+          ...post,
+          favorite_count: prevFavorite_count - 1,
+        };
+      });
       timerToSet = setTimeout(async () => {
         const data = await postApi.deletePostFavorite(id);
         console.log('--', data);
-        if (data.status === 200) {
-          setPost((post: any) => {
-            return {
-              ...post,
-              favorite_count: prevFavorite_count - 1,
-            };
-          });
-        }
       }, 1000);
     }
     setTimer(timerToSet);
