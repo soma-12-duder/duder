@@ -1,5 +1,5 @@
 export default (axios: any) => ({
-  getProfile: async (token: string) => {
+  getUserInfo: async (token: string) => {
     axios.defaults.headers.common['X-Auth-Token'] = token;
     console.log(token);
     try {
