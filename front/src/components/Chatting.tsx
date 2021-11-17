@@ -1,21 +1,38 @@
 /* eslint-disable react-native/no-inline-styles */
 import * as React from 'react';
-import {View, Text, Image, TouchableOpacity, Dimensions} from 'react-native';
+import {View, Text} from 'react-native';
 import styled from 'styled-components/native';
 import HorizontalLine from '../components/HorizontalLine';
+import UtilText from '../util/UtilText';
+import {NK700, GRAY, BROWN} from '../util/Color';
 
 interface Props {
-  nickname: string;
-  text: string;
+  opponent: any;
   date: string;
   km: string;
-  chattingNumber?: string;
+  chatroom_id?: string;
+  content?: string;
+  onClick: Function;
 }
 
-const Chatting = ({nickname, text, date, km, chattingNumber}: Props) => {
+const Chatting = ({
+  opponent,
+  chatroom_id,
+  date,
+  km,
+  onClick,
+  content,
+}: Props) => {
+  const re = /\d+/g;
+  const parsingTime = (date: string) => {
+    if (date == null) return;
+    const time: any = date?.match(re);
+    return `${time[1]}월 ${time[2]}일 \n${time[3]}시 ${time[4]}분`;
+  };
+
   return (
     <>
-      <ChattingWrapper>
+      <ChattingWrapper onPress={() => onClick(opponent.nickname, chatroom_id)}>
         <ProfileNicknameTextWrapper>
           <UserProfileImage
             source={{
@@ -24,32 +41,34 @@ const Chatting = ({nickname, text, date, km, chattingNumber}: Props) => {
           />
           <NicknameTextWrapper>
             <NicknameKmWrapper>
-              <Text>{nickname}</Text>
-              <Text style={{fontFamily: 'NotoSansKR-Bold', paddingLeft: '3%'}}>
-                {km}km
-              </Text>
+              <UtilText
+                size={'15px'}
+                content={opponent.nickname}
+                family={NK700}
+                style={{marginRight: 8}}
+              />
+              <UtilText size={'15px'} content={km + 'km'} family={NK700} />
             </NicknameKmWrapper>
-            <Text
-              style={{color: '#757575'}}
-              numberOfLines={1}
-              ellipsizeMode="tail">
-              {text}
+            <Text style={{color: GRAY}} numberOfLines={1} ellipsizeMode="tail">
+              {content}
             </Text>
           </NicknameTextWrapper>
         </ProfileNicknameTextWrapper>
         <DateChattingsNumberWrapper>
-          <Text style={{paddingBottom: '7%'}}>{date}</Text>
-          {chattingNumber && +chattingNumber > 0 ? (
+          <Text style={{fontSize: 10, paddingBottom: '7%'}}>
+            {parsingTime(date)}
+          </Text>
+          {chatroom_id && +chatroom_id > 0 ? (
             <View
               style={{
-                backgroundColor: '#C58852',
-                width: 24,
-                height: 24,
+                backgroundColor: BROWN,
+                width: 16,
+                height: 16,
                 borderRadius: 12,
                 justifyContent: 'center',
                 alignItems: 'center',
               }}>
-              <Text style={{color: '#ffffff'}}>2</Text>
+              <Text style={{color: '#ffffff', fontSize: 10}}>2</Text>
             </View>
           ) : (
             <View style={{height: 24}}></View>
@@ -63,37 +82,38 @@ const Chatting = ({nickname, text, date, km, chattingNumber}: Props) => {
 
 export default Chatting;
 
-const UserProfileImage = styled(Image)`
+const ChattingWrapper = styled.TouchableOpacity`
+  flex-direction: row;
+  justify-content: space-between;
+  height: 11%;
+  padding-horizontal: 20;
+`;
+
+const UserProfileImage = styled.Image`
   width: 50px;
   height: 50px;
   border-radius: 100px;
 `;
 
-const NicknameKmWrapper = styled(View)`
+const NicknameKmWrapper = styled.View`
+  font-family: 'NotoSansKR-Bold';
   flex-direction: row;
 `;
 
-const NicknameTextWrapper = styled(View)`
+const NicknameTextWrapper = styled.View`
   flex: 1;
   padding-left: 4%;
 `;
 
-const ProfileNicknameTextWrapper = styled(View)`
+const ProfileNicknameTextWrapper = styled.View`
   flex-direction: row;
   align-items: center;
   flex: 3;
 `;
 
-const DateChattingsNumberWrapper = styled(View)`
+const DateChattingsNumberWrapper = styled.View`
   justify-content: center;
   align-items: flex-end;
   flex: 1;
   padding-right: 3%;
-`;
-
-const ChattingWrapper = styled(TouchableOpacity)`
-  flex-direction: row;
-  justify-content: space-between;
-  height: 10%;
-  padding-left: 3%;
 `;
