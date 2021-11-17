@@ -52,9 +52,27 @@ public class PostListResponse {
         this.commentCount = commentCount;
     }
 
+    public PostListResponse(Post post, long favoriteCount, long commentCount){
+        this.id = post.getId();
+        this.latitude = post.getLatitude();
+        this.longitude = post.getLongitude();
+        this.content = post.getContent();
+        this.view = 0;
+        this.member = MemberResponse.of(post.getMember());
+        this.favoriteCount = favoriteCount;
+        this.commentCount = commentCount;
+    }
+
     public static List<PostListResponse> toList(List<Post> posts, Map<Long, Long> favoriteOfPosts, Map<Long, Long> commentOfPosts, double latitude, double longitude) {
         return posts.stream()
                 .map(o-> new PostListResponse(o, latitude, longitude, favoriteOfPosts.get(o.getId()), commentOfPosts.get(o.getId())))
                 .collect(Collectors.toList());
     }
+
+    public static List<PostListResponse> toList(List<Post> posts, Map<Long, Long> favoriteOfPosts, Map<Long, Long> commentOfPosts) {
+        return posts.stream()
+                .map(o-> new PostListResponse(o, favoriteOfPosts.get(o.getId()), commentOfPosts.get(o.getId())))
+                .collect(Collectors.toList());
+    }
+
 }
