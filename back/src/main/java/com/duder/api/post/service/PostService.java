@@ -3,6 +3,7 @@ package com.duder.api.post.service;
 import com.duder.api.comment.application.CommentService;
 import com.duder.api.comment.domain.CommentCountDto;
 import com.duder.api.comment.domain.CommentRepository;
+import com.duder.api.favorite.domain.Favorite;
 import com.duder.api.favorite.domain.FavoriteCountDto;
 import com.duder.api.favorite.domain.FavoriteRepository;
 import com.duder.api.member.domain.Member;
@@ -49,8 +50,9 @@ public class PostService {
     }
 
     public PostWithCommentResponse findPostById (Member member, Long postId) throws IllegalArgumentException {
+        List<Favorite> favorites = favoriteRepository.findAllByPostId(postId);
         return PostWithCommentResponse.of(findById(postId), commentService.getCommentByPostId(postId),
-                checkFavorite(member.getId(), postId));
+                checkFavorite(favorites, member.getId()), favorites.size());
     }
 
     public List<PostListResponse> findPostsOrderByCreatedAt (double latitude, double longitude, int distance)
@@ -139,8 +141,10 @@ public class PostService {
         );
     }
 
-    public boolean checkFavorite(Long memberId, Long postId){
-        return favoriteRepository.findFavoriteByMemberIdAndPostId(memberId, postId).isPresent();
+    public boolean checkFavorite(List<Favorite> favorites, Long memberId){
+        return favorites.stream()
+                .map(o -> o.getMember().getId())
+                .anyMatch(o -> o.equals(memberId));
     }
 
     public Map<Long, Long> fillZero(Map<Long, Long> countMap, List<Post> posts){

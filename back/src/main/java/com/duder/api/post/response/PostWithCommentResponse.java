@@ -30,11 +30,11 @@ public class PostWithCommentResponse {
     private int favoriteCount = 0;
     private int commentCount = 0;
 
-    public static PostWithCommentResponse of(Post post, List<AllCommentResponse> comments, boolean favoriteState){
-        return new PostWithCommentResponse(post, comments, favoriteState);
+    public static PostWithCommentResponse of(Post post, List<AllCommentResponse> comments, boolean favoriteState, int favoriteCount){
+        return new PostWithCommentResponse(post, comments, favoriteState, favoriteCount);
     }
 
-    public PostWithCommentResponse (Post post, List<AllCommentResponse> comments, boolean favoriteState){
+    public PostWithCommentResponse (Post post, List<AllCommentResponse> comments, boolean favoriteState, int favoriteCount){
         this.id = post.getId();
         this.latitude = post.getLatitude();
         this.longitude = post.getLongitude();
@@ -44,6 +44,8 @@ public class PostWithCommentResponse {
         this.favoriteState = favoriteState;
         this.member = MemberResponse.of(post.getMember());
         this.comments = comments;
+        this.commentCount = comments.size();
+        this.favoriteCount = favoriteCount;
     }
 
 }

@@ -15,6 +15,8 @@ public interface FavoriteRepository extends JpaRepository<Favorite, Long> {
             "where F.post in (:post) group by F.post.id")
     List<FavoriteCountDto> findFavoriteCount(@Param("post") List<Post> post);
 
+    List<Favorite> findAllByPostId(Long postId);
+
     @Query("select F from Favorite F join fetch F.post join fetch F.member where F.member.id = :memberId")
     List<Favorite> findAllFavoritesByMemberId(@Param("memberId") Long memberId);
 
