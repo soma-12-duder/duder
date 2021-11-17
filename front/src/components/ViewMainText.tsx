@@ -13,15 +13,20 @@ import {useRecoilState} from 'recoil';
 import {postState} from '../states/MemberState';
 import {postApi} from '../api/indexApi';
 
+import {useNavigation} from '@react-navigation/core';
+
 const fullWidth: number = Dimensions.get('window').width;
 
 interface Props {
   id: number;
   distance: string;
   photo_urls: [];
+  member: any;
 }
 
-const ViewMainText = ({id, distance, photo_urls}: Props) => {
+const ViewMainText = ({id, distance, photo_urls, member}: Props) => {
+  const navigation: any = useNavigation();
+
   const [post, setPost] = useRecoilState(postState);
   const [timer, setTimer]: any = useState();
   const clickHeart = async () => {
@@ -37,7 +42,6 @@ const ViewMainText = ({id, distance, photo_urls}: Props) => {
     if (timer) {
       clearTimeout(timer);
     }
-    console.log('ViewMainTextId:', id);
     let timerToSet;
     if (!post.favorite_state) {
       setPost((post: any) => {
@@ -65,19 +69,14 @@ const ViewMainText = ({id, distance, photo_urls}: Props) => {
     setTimer(timerToSet);
   };
 
-  useEffect(() => {
-    console.log('pppppppppppp:', post);
-  }, [post]);
-
-  useEffect(() => {
-    console.log('photo_urls:', photo_urls);
-  }, [photo_urls]);
-
   return (
     <>
       <View style={{width: fullWidth, backgroundColor: '#ffffff'}}>
         <ProfileKmWrapper>
-          <ProfileWrapper>
+          <ProfileWrapper
+            onPress={() =>
+              navigation.navigate('상대방 프로필', {member: member})
+            }>
             <UserProfileImage
               source={{
                 uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR5ebn2o15gmobO1xOj1ESvldLkPBxnC4ZwDg&usqp=CAU',
@@ -170,7 +169,7 @@ const CoordKmWrapper = styled(View)`
   align-items: center;
 `;
 
-const ProfileWrapper = styled(View)`
+const ProfileWrapper = styled(TouchableOpacity)`
   flex-direction: row;
   justify-content: space-between;
   align-items: center;

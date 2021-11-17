@@ -8,12 +8,13 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import HomeScreen from '../screen/HomeScreen';
 import ChattingScreen from '../screen/ChattingScreen';
 import SettingScreen from '../screen/SettingScreen';
+import ProfileScreen from '../screen/ProfileScreen';
 import HOME_ICON from '../assets/images/HOME_ICON.png';
 import HOME_ICON_FOCUS from '../assets/images/HOME_ICON_FOCUS.png';
 import CHATTING_ICON from '../assets/images/CHATTING_ICON.png';
 import CHATTING_ICON_FOCUS from '../assets/images/CHATTING_ICON_FOCUS.png';
-import SETTING_ICON from '../assets/images/SETTING_ICON.png';
-import SETTING_ICON_FOUCS from '../assets/images/SETTING_ICON_FOCUS.png';
+import PROFILE_ICON from '../assets/images/PROFILE_ICON.png';
+import PROFILE_ICON_FOUCS from '../assets/images/PROFILE_ICON_FOCUS.png';
 import {NK700} from '../util/Color';
 
 const Tab: any = createBottomTabNavigator();
@@ -48,12 +49,12 @@ const BottomTab = () => {
             ) : (
               <IconImage source={CHATTING_ICON} />
             );
-          } else if (route.name === '설정') {
+          } else if (route.name === '프로필') {
             // iconName = focused ? 'settings' : 'settings-outline';
             return focused ? (
-              <IconImage source={SETTING_ICON_FOUCS} />
+              <IconImage source={PROFILE_ICON_FOUCS} />
             ) : (
-              <IconImage source={SETTING_ICON} />
+              <IconImage source={PROFILE_ICON} />
             );
           }
 
@@ -75,8 +76,8 @@ const BottomTab = () => {
         options={{headerTitleStyle: {fontFamily: NK700}}}
       />
       <Tab.Screen
-        name="설정"
-        component={SettingScreen}
+        name="프로필"
+        component={ProfileScreen}
         options={{headerTitleStyle: {fontFamily: NK700}}}
       />
     </Tab.Navigator>

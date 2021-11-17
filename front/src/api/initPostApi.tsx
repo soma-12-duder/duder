@@ -8,7 +8,6 @@ export default (axios: any) => ({
       const {data} = await axios.get('/api/post/get', {
         params: {latitude: latitude, longitude: longitude, distance: distance},
       });
-      console.log('data latest:', data);
       return data;
     } catch (e) {
       console.error(e);
@@ -24,7 +23,6 @@ export default (axios: any) => ({
       const {data} = await axios.get('/api/post/get/hot', {
         params: {latitude: latitude, longitude: longitude, distance: distance},
       });
-      console.log('data hot:', data);
       return data;
     } catch (e) {
       console.error(e);
@@ -33,9 +31,7 @@ export default (axios: any) => ({
 
   getPostById: async (id: any) => {
     try {
-      console.log('id3:', id);
       const {data} = await axios.get(`/api/post/${id}`);
-      console.log('date3:', data);
       return data;
     } catch (e) {
       console.error(e);

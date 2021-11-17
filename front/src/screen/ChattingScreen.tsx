@@ -19,7 +19,6 @@ const ChattingScreen = () => {
   const getData = async () => {
     const {status, data}: any = await chatApi.findAllChatrooms();
     if (status === 200) {
-      // console.log('###### 채팅 전체 목록 데이터: ', data);
       setChatList(data);
     }
   };

@@ -25,4 +25,15 @@ export default (axios: any) => ({
       console.log(error);
     }
   },
+
+  chatWithOpponent: async (opponent_id: any) => {
+    try {
+      const {data} = await axios.post(`/api/chatroom`, {
+        opponent_id,
+      });
+      return data;
+    } catch (error) {
+      console.log(error);
+    }
+  },
 });

@@ -57,7 +57,6 @@ const PostWrittingScreen = ({route, navigation}: Props) => {
         mainText,
       );
       if (data.status === 200) {
-        console.log(data);
         setTitleText('');
         setMainText('');
         Keyboard.dismiss();
@@ -109,7 +108,6 @@ const PostWrittingScreen = ({route, navigation}: Props) => {
                 type: 'image/png',
               };
               const res = await RNS3.put(file, options);
-              console.log('s3 response:', res.body.postResponse.location);
               photoUris.push(res.body.postResponse.location);
             }
             setUris(() => {
