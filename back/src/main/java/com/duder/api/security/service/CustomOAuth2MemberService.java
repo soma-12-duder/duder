@@ -31,7 +31,7 @@ public class CustomOAuth2MemberService implements OAuth2UserService<OAuth2UserRe
 
         // 서비스 id(카카오, 구글 등)
         String registrationId = userRequest.getClientRegistration().getRegistrationId();
-        log.info("success Authentication: " + registrationId);
+
         ProviderType providerType = ProviderType.valueOf(registrationId.toUpperCase());
 
         Map<String, Object> attributes = oAuth2User.getAttributes();
@@ -40,7 +40,7 @@ public class CustomOAuth2MemberService implements OAuth2UserService<OAuth2UserRe
         Member member = memberRepository.findByProviderId(oAuthAttribute.getProviderId())
                 .orElseGet(() -> memberRepository.save(oAuthAttribute.toEntity()));
 
-        log.info("loadUser member = " + member);
+        log.info("success Authentication: " + registrationId);
 
         return new PrincipalDetail(member, attributes);
     }

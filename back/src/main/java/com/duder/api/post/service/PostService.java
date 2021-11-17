@@ -98,8 +98,6 @@ public class PostService {
         List<Coordinate> coordinates = CoordinateUtil.findCellCoordinateInRange(latitude, longitude, distance);
         Coordinate leftUpCoordinate = coordinates.get(0);
         Coordinate rightDownCoordinate = coordinates.get(1);
-        System.out.println("latitude = " + latitude);
-        System.out.println("longitude = " + longitude);
         // 쿼리 날림
         return postRepository.findCellByRange(leftUpCoordinate.getRow(), rightDownCoordinate.getRow(),
                 leftUpCoordinate.getColumn(), rightDownCoordinate.getColumn());
@@ -116,6 +114,17 @@ public class PostService {
                 fillZero(commentOfPosts, posts), latitude, longitude);
     }
 
+    public List<PostListResponse> toPostListResponse(List<Post> posts){
+        Map<Long, Long> favoriteOfPosts = favoriteRepository.findFavoriteCount(posts)
+                .stream().collect(toMap(FavoriteCountDto::getPostId, FavoriteCountDto::getFavoriteCount));
+
+        Map<Long, Long> commentOfPosts = commentRepository.findCommentCount(posts)
+                .stream().collect(toMap(CommentCountDto::getCommentId, CommentCountDto::getCommentCount));
+
+        return PostListResponse.toList(posts, fillZero(favoriteOfPosts, posts),
+                fillZero(commentOfPosts, posts));
+    }
+
 
     public List<PostListResponse> findPostByMember(Member member){
         return postRepository.findPostByMemberId(member.getId())
@@ -123,7 +132,6 @@ public class PostService {
                 .map(PostListResponse::new)
                 .collect(Collectors.toList());
     }
-
 
     public Post findById(Long postId){
         return postRepository.findPostById(postId).orElseThrow(
