@@ -1,16 +1,27 @@
 /* eslint-disable react-native/no-inline-styles */
 import * as React from 'react';
-import {View, Text, Image, TouchableOpacity, ScrollView} from 'react-native';
+import {
+  View,
+  Text,
+  Image,
+  TouchableOpacity,
+  ScrollView,
+  Keyboard,
+} from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import styled from 'styled-components/native';
 import HorizontalLine from '../components/HorizontalLine';
 import {Colors} from '../util/Constants';
+import {useRecoilState} from 'recoil';
+import {commentState} from '../states/MemberState';
 
 interface Props {
   content: String;
   commentOfComment?: boolean;
   member: any;
   favorite_count: String;
+  commentInputRef: any;
+  comment_id?: any;
 }
 
 const ViewCommentText = ({
@@ -18,7 +29,12 @@ const ViewCommentText = ({
   commentOfComment,
   member,
   favorite_count,
+  commentInputRef,
+  comment_id,
 }: Props) => {
+  const [commentForRecoil, setCommentForRecoil]: any =
+    useRecoilState(commentState);
+
   return (
     <>
       <CommentView commentOfComment={commentOfComment}>
@@ -38,9 +54,22 @@ const ViewCommentText = ({
             <GrayText>좋아요</GrayText>
           </TouchableOpacity>
           <GrayText style={{paddingLeft: '1%'}}>{favorite_count}</GrayText>
-          <TouchableOpacity style={{paddingLeft: '3%'}}>
-            {commentOfComment ? <></> : <GrayText>답글쓰기</GrayText>}
-          </TouchableOpacity>
+          {commentOfComment ? (
+            <></>
+          ) : (
+            <TouchableOpacity
+              style={{paddingLeft: '3%'}}
+              onPress={() => {
+                setCommentForRecoil({
+                  isClickCommentInput: true,
+                  comment_id: comment_id,
+                });
+
+                commentInputRef.current.focus();
+              }}>
+              {<GrayText>답글쓰기</GrayText>}
+            </TouchableOpacity>
+          )}
         </GrayTextWrapper>
       </CommentView>
       <HorizontalLine />

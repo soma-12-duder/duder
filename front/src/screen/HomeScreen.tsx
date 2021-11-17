@@ -1,5 +1,5 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useMemo, useCallback} from 'react';
 import {
   StyleSheet,
   Dimensions,
@@ -15,46 +15,35 @@ import HorizontalLine from '../components/HorizontalLine';
 import {postApi} from '../api/indexApi';
 import Geolocation from 'react-native-geolocation-service';
 import {useRecoilState} from 'recoil';
-import {postState} from '../states/MemberState';
+import {postsState, hotPostsState} from '../states/MemberState';
 import {useNavigation} from '@react-navigation/core';
 import styled from 'styled-components/native';
 import usePosition from '../util/usePosition';
 // import Icons from 'react-native-vector-icons/Ionicons';
 
 interface Props {
-  getPostsApi: Function;
+  posts: any;
   position: any;
 }
 
-const ViewRoute = ({getPostsApi, position}: Props) => {
+const ViewRoute = ({posts, position}: Props) => {
   const navigation: any = useNavigation();
-  const [posts, setPosts] = useRecoilState(postState);
 
-  async function getData() {
-    try {
-      const {data} = await getPostsApi(37.1, 127.1212, '1000');
-      setPosts(data);
-    } catch (e) {
-      console.error(e);
-    }
-  }
-
-  useEffect(() => {
-    getData();
-  }, []);
-
-  const renderItem = ({item}: any) => {
-    return (
-      <HomePost
-        id={item.id}
-        distance={item.distance}
-        content={item.content}
-        member={item.member}
-        favorite_count={item.favorite_count}
-        comment_count={item.comment_count}
-      />
-    );
-  };
+  const renderItem = useCallback(
+    ({item}: any) => {
+      return (
+        <HomePost
+          id={item.id}
+          distance={item.distance}
+          content={item.content}
+          member={item.member}
+          favorite_count={item.favorite_count}
+          comment_count={item.comment_count}
+        />
+      );
+    },
+    [posts],
+  );
 
   return (
     <>
@@ -78,6 +67,8 @@ const initialLayout = {width: Dimensions.get('window').width};
 
 const HomeScreen = () => {
   const [position, excuteGetCoordinates] = usePosition();
+  const [posts, setPosts] = useRecoilState(postsState);
+  const [hotPosts, setHotPosts] = useRecoilState(hotPostsState);
   const [index, setIndex] = React.useState(0);
   const [routes] = React.useState([
     {
@@ -89,6 +80,25 @@ const HomeScreen = () => {
       title: '핫 게시물',
     },
   ]);
+
+  async function getData() {
+    try {
+      const {data} = await postApi.getAllPosts(37.1, 127.1212, '1000');
+      const {data: data2} = await postApi.getAllHotPosts(
+        37.1,
+        127.1212,
+        '1000',
+      );
+      setPosts(data);
+      setHotPosts(data2);
+    } catch (e) {
+      console.error(e);
+    }
+  }
+
+  useEffect(() => {
+    getData();
+  }, [position]);
 
   useEffect(() => {
     excuteGetCoordinates();
@@ -118,12 +128,8 @@ const HomeScreen = () => {
       )}
       navigationState={{index, routes}}
       renderScene={SceneMap({
-        first: () => (
-          <ViewRoute getPostsApi={postApi.getAllPosts} position={position} />
-        ),
-        second: () => (
-          <ViewRoute getPostsApi={postApi.getAllPosts} position={position} />
-        ),
+        first: () => <ViewRoute posts={posts} position={position} />,
+        second: () => <ViewRoute posts={hotPosts} position={position} />,
       })}
       onIndexChange={setIndex}
       initialLayout={initialLayout}
