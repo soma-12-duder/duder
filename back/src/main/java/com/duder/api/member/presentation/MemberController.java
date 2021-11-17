@@ -32,8 +32,18 @@ public class MemberController {
     @PutMapping("/update")
     public ApiForm<?> updateMemberNickname(@AuthenticationPrincipal OAuth2User oAuth2User, @RequestParam String nickname){
         try {
-            return succeed(MemberResponse.of(memberService.updateMemberNickname(
-                    oAuth2User.getAttribute("member"), nickname)), SUCCESS_UPDATE_MEMBER);
+            return succeed(memberService.updateMemberNickname(
+                    oAuth2User.getAttribute("member"), nickname), SUCCESS_UPDATE_MEMBER);
+        }catch (IllegalArgumentException e){
+            return fail(e.getMessage());
+        }
+    }
+
+    @PutMapping("/update/profile")
+    public ApiForm<?> updateMemberProfile(@AuthenticationPrincipal OAuth2User oAuth2User, @RequestParam String profileUrl){
+        try {
+            return succeed(memberService.updateMemberNickname(
+                    oAuth2User.getAttribute("member"), profileUrl), SUCCESS_UPDATE_MEMBER);
         }catch (IllegalArgumentException e){
             return fail(e.getMessage());
         }

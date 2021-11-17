@@ -64,6 +64,10 @@ public class Member extends BaseEntity {
         this.nickname = nickname;
     }
 
+    public void updateProfile(String profile){
+        this.profile = profile;
+    }
+
     public boolean isNotSameId(Member member) {
         return !id.equals(member.getId());
     }

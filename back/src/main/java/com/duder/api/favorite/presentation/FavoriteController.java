@@ -19,8 +19,19 @@ import static com.duder.api.form.ApiForm.succeed;
 public class FavoriteController {
 
     private final FavoriteService favoriteService;
+    private final String SUCCESS_FIND_FAVORITE_POSTS = "좋아요된 게시글 요청에 성공했습니다.";
     private final String SUCCESS_FAVORITE = "좋아요 요청에 성공했습니다.";
     private final String SUCCESS_FAVORITE_DELETE = "좋아요 삭제 요청에 성공했습니다.";
+
+    @GetMapping("/me")
+    public ApiForm<?> findMyFavoritePosts(@AuthenticationPrincipal OAuth2User oAuth2User) {
+        try {
+            return succeed(favoriteService.findFavoritePosts(oAuth2User.getAttribute("member")),
+                    SUCCESS_FIND_FAVORITE_POSTS);
+        }catch (Exception e){
+            return fail(e.getMessage());
+        }
+    }
 
     @PostMapping
     public ApiForm<?> push(@AuthenticationPrincipal OAuth2User oAuth2User, @RequestBody FavoriteRequest favoriteRequest){

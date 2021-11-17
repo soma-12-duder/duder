@@ -5,21 +5,34 @@ import com.duder.api.favorite.domain.FavoriteRepository;
 import com.duder.api.member.domain.Member;
 import com.duder.api.post.domain.Post;
 import com.duder.api.post.domain.PostRepository;
+import com.duder.api.post.response.PostListResponse;
+import com.duder.api.post.service.PostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 @Service
 public class FavoriteService {
 
     private final FavoriteRepository favoriteRepository;
-    private final PostRepository postRepository;
+    private final PostService postService;
 
     private static final String FAILED_NOT_FOUND_POST = "게시글이 존재하지 않거나 삭제되었습니다.";
     private static final String FAILED_NOT_FOUND_DATA = "해당 좋아요는 이미 삭제되었거나 중복되어 저장되어 있습니다.";
     private static final String FAILED_NOT_DUPLICATE_DATA = "해당 중복되어 저장되어 있습니다.";
 
+    public List<PostListResponse> findFavoritePosts(Member member){
+        List<Post> posts = favoriteRepository.findAllFavoritesByMemberId(member.getId())
+                .stream()
+                .map(o -> o.getPost())
+                .collect(Collectors.toList());
+        return postService.toPostListResponse(posts);
+    }
 
     @Transactional
     public Long push(Member member, Long postId) throws IllegalArgumentException{
