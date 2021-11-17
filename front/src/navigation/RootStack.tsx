@@ -8,6 +8,8 @@ import HomeScreen from '../screen/HomeScreen';
 import PostScreen from '../screen/PostScreen';
 import PostWrittingScreen from '../screen/PostWrittingScreen';
 import NicknameScreen from '../screen/NicknameScreen';
+import ChatMessageScreen from '../screen/ChatMessageScreen';
+import {NK700} from '../util/Color';
 
 const Stack = createStackNavigator();
 
@@ -23,7 +25,9 @@ function LogoTitle() {
 const RootStack = () => {
   return (
     <>
-      <Stack.Navigator initialRouteName={'LoginScreen'}>
+      <Stack.Navigator
+        initialRouteName={'LoginScreen'}
+        screenOptions={{headerTitleStyle: {fontFamily: NK700}}}>
         <Stack.Screen name={'HomeScreen'} component={HomeScreen} />
         <Stack.Screen
           name={'LoginScreen'}
@@ -39,6 +43,10 @@ const RootStack = () => {
           name={'BottomTab'}
           component={BottomTab}
           options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name={'ChatMessageScreen'}
+          component={ChatMessageScreen}
         />
         <Stack.Screen name={'게시글'} component={PostScreen} />
         <Stack.Screen name={'글쓰기'} component={PostWrittingScreen} />

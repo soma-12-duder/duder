@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import styled from 'styled-components/native';
 import {WebView} from 'react-native-webview';
 import {useRecoilState} from 'recoil';
-import {ProfileUrlState} from '../states/MemberState';
+import {memberInfoState} from '../states/MemberState';
 import {useNavigation} from '@react-navigation/core';
 
 import LoginButton from '../components/LoginButton';
@@ -16,16 +16,18 @@ import GOOGLE_ICON from '../assets/images/GOOGLE_ICON.png';
 
 const LoginScreen = () => {
   const [isToggle, setIsToggle] = useState(true);
-  const [profileUrl, setProfileUrl] = useRecoilState(ProfileUrlState);
+  const [, setMember] = useRecoilState(memberInfoState);
   const navigation = useNavigation();
 
-  const loginApi = async (data: any) => {
+  const loginApi = async (event: any) => {
     try {
-      console.log(JSON.parse(data));
+      // console.log(JSON.parse(data));
+      const {access_token, email} = JSON.parse(event);
       navigation.navigate('NicknameScreen' as never);
-      const {access_token, email} = JSON.parse(data);
-      console.log(access_token, email);
-      authApi.getProfile(access_token);
+      // console.log(access_token, email);
+      const {data}: any = await authApi.getUserInfo(access_token);
+      console.log(data);
+      setMember(data);
     } catch (error) {
       console.error(error);
     }

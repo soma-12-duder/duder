@@ -39,7 +39,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
 //                    .csrf().requireCsrfProtectionMatcher(new AntPathRequestMatcher("'!/h2-console/**"))
                     .authorizeRequests() // url별 권한 관리
-                    .antMatchers("/", "/oauth2/**", "/h2-console/**") // 매칭되는 문자열
+                    .antMatchers("/", "/oauth2/**", "/h2-console/**", "**") // 매칭되는 문자열
                     .permitAll() // 허용
                     .anyRequest().authenticated() // 나머지는 인증과정 거친다.
                 .and()

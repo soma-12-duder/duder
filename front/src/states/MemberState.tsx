@@ -5,9 +5,14 @@ export const isLoginState = atom({
   default: false,
 });
 
-export const ProfileUrlState = atom({
-  key: 'profileUrl',
-  default: null,
+export const memberInfoState = atom({
+  key: 'member',
+  default: {
+    id: 1,
+    nickname: '지노',
+    email: '',
+    profile: '',
+  },
 });
 
 export const postsState = atom({

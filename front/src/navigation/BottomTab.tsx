@@ -14,6 +14,7 @@ import CHATTING_ICON from '../assets/images/CHATTING_ICON.png';
 import CHATTING_ICON_FOCUS from '../assets/images/CHATTING_ICON_FOCUS.png';
 import SETTING_ICON from '../assets/images/SETTING_ICON.png';
 import SETTING_ICON_FOUCS from '../assets/images/SETTING_ICON_FOCUS.png';
+import {NK700} from '../util/Color';
 
 const Tab: any = createBottomTabNavigator();
 
@@ -63,9 +64,21 @@ const BottomTab = () => {
         tabBarInactiveTintColor: 'gray',
       })}
       tabBarOptions={{showLabel: false}}>
-      <Tab.Screen name="홈" component={HomeScreen} />
-      <Tab.Screen name="채팅" component={ChattingScreen} />
-      <Tab.Screen name="설정" component={SettingScreen} />
+      <Tab.Screen
+        name="홈"
+        component={HomeScreen}
+        options={{headerTitleStyle: {fontFamily: NK700}}}
+      />
+      <Tab.Screen
+        name="채팅"
+        component={ChattingScreen}
+        options={{headerTitleStyle: {fontFamily: NK700}}}
+      />
+      <Tab.Screen
+        name="설정"
+        component={SettingScreen}
+        options={{headerTitleStyle: {fontFamily: NK700}}}
+      />
     </Tab.Navigator>
   );
 };

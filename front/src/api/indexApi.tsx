@@ -1,9 +1,10 @@
 import axios from 'axios';
 import initAuthApi from './initAuthApi';
+import initChatApi from './initChatApi';
 import initPostApi from './initPostApi';
 
 const instance = axios.create({
-  baseURL: 'http://52.79.234.33:8080',
+  baseURL: 'http://localhost:8080',
 });
 
 console.log('call instance');
@@ -13,3 +14,4 @@ instance.defaults.headers.common['X-Auth-Token'] =
 
 export const authApi = initAuthApi(instance);
 export const postApi = initPostApi(instance);
+export const chatApi = initChatApi(instance);
