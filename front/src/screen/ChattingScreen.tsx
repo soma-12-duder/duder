@@ -72,7 +72,13 @@ const ChattingScreen = () => {
             date={lastMessageList[i].created_at}
             content={lastMessageList[i].content}
             km={'3'}
-            onClick={onClick}
+            onClick={(nickname: String, chatroom_id: String, opponent: any) => {
+              navigation.navigate('ChatMessageScreen', {
+                nickname,
+                chatroom_id,
+                opponent,
+              });
+            }}
           />
         ))}
     </ScrollView>

@@ -42,7 +42,8 @@ const Chatting = ({
 
   return (
     <>
-      <ChattingWrapper onPress={() => onClick(opponent.nickname, chatroom_id)}>
+      <ChattingWrapper
+        onPress={() => onClick(opponent.nickname, chatroom_id, opponent)}>
         <ProfileNicknameTextWrapper>
           {opponent.profile ? (
             <UserProfileImage

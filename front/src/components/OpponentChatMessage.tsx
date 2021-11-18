@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components/native';
 import UtilText from '../util/UtilText';
 import {LIGHT_GRAY} from '../util/Color';
+import DUDER_IMAGE from '../assets/images/DUDER_IMAGE.png';
 
 interface Props {
   data: Object;
@@ -27,8 +28,11 @@ const UserChatMessage = ({data, picture}: Props) => {
   return (
     <Wrapper>
       <UserProfile>
-        <ProfileImage
-          source={{uri: 'https://placeimg.com/140/140/any'}}></ProfileImage>
+        {picture ? (
+          <ProfileImage source={{uri: `${picture}`}} resizeMode="cover" />
+        ) : (
+          <ProfileImage source={DUDER_IMAGE} resizeMode="contain" />
+        )}
       </UserProfile>
       <MessageView>
         <UtilText content={content} />
@@ -52,14 +56,12 @@ const Wrapper = styled.View`
 `;
 
 const UserProfile = styled.View`
-  width: 40px;
-  height: 40px;
-  margin-right: 16px;
+  margin-right: 12px;
 `;
 
 const ProfileImage = styled.Image`
-  width: 100%;
-  height: 100%;
+  width: 40px;
+  height: 40px;
   border-radius: 100px;
 `;
 

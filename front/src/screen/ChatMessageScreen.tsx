@@ -22,7 +22,7 @@ const ChatMessageScreen = ({route, navigation}: any) => {
   const [messages, setMessages]: any = useState([]);
   const [content, setContent]: any = useState('');
   const [loading, setLoading] = useState(true);
-  const {nickname, chatroom_id} = route.params;
+  const {nickname, chatroom_id, opponent} = route.params;
 
   const socket = new SockJS(`${CHAT_URL}/chat`);
   const stompClient = Stomp.over(socket);
@@ -85,9 +85,9 @@ const ChatMessageScreen = ({route, navigation}: any) => {
 
   const renderItem = ({item, index}: any) => {
     return item.sender_id === member.id ? (
-      <UserChatMessage key={index} data={item} picture={'undefined'} />
+      <UserChatMessage key={index} data={item} />
     ) : (
-      <OpponentChatMessage key={index} data={item} picture={'undefined'} />
+      <OpponentChatMessage key={index} data={item} picture={opponent.profile} />
     );
   };
 
