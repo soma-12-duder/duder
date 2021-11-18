@@ -50,7 +50,7 @@ public class OAuth2CustomSuccessHandler implements AuthenticationSuccessHandler 
         response.setCharacterEncoding("utf-8");
         response.getWriter()
                 .write(objectMapper.writeValueAsString(
-                    TokenResponse.of(member.getId(), member.getEmail(), token)
+                    TokenResponse.of(member.getId(), member.getEmail(), token, oauthUser.isExistedMember())
                 ));
 
     }

@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Map;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -37,11 +38,12 @@ public class CustomOAuth2MemberService implements OAuth2UserService<OAuth2UserRe
         Map<String, Object> attributes = oAuth2User.getAttributes();
         OAuthAttribute oAuthAttribute = OAuthAttribute.of(providerType, attributes);
 
-        Member member = memberRepository.findByProviderId(oAuthAttribute.getProviderId())
-                .orElseGet(() -> memberRepository.save(oAuthAttribute.toEntity()));
+        Optional<Member> member = memberRepository.findByProviderId(oAuthAttribute.getProviderId());
+        if (member.isPresent())
+            return new PrincipalDetail(member.get(), attributes, true);
 
         log.info("success Authentication: " + registrationId);
 
-        return new PrincipalDetail(member, attributes);
+        return new PrincipalDetail(memberRepository.save(oAuthAttribute.toEntity()), attributes, false);
     }
 }
