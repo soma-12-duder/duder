@@ -19,7 +19,7 @@ public class ChatRequest {
 
     public static Chat toChat(ChatRequest request){
         return new Chat(null, request.getSenderId(), request.getSenderNickname(),
-                request.getRoomId(), request.getContent(), LocalDateTime.now());
+                request.getRoomId(), request.getContent(), LocalDateTime.now().plusHours(9));
     }
 
 }
