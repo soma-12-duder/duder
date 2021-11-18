@@ -129,10 +129,8 @@ public class PostService {
 
 
     public List<PostListResponse> findPostByMember(Member member){
-        return postRepository.findPostByMemberId(member.getId())
-                .stream()
-                .map(PostListResponse::new)
-                .collect(Collectors.toList());
+        List<Post> posts = postRepository.findPostByMemberId(member.getId());
+        return toPostListResponse(posts);
     }
 
     public Post findById(Long postId){
