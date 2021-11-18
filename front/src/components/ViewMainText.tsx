@@ -5,7 +5,7 @@ import styled from 'styled-components/native';
 import COMMENT_ICON2 from '../assets/images/COMMENT_ICON2.png';
 import COORD_ICON from '../assets/images/COORD_ICON.png';
 import HEART_ICON from '../assets/images/HEART_ICON.png';
-import HEART_ICON_BLACK from '../assets/images/HEART_ICON_BLACK.png';
+import HEART_ICON_RED from '../assets/images/HEART_ICON_RED.png';
 import HorizontalLine from './HorizontalLine';
 import DUDER_IMAGE from '../assets/images/DUDER_IMAGE.png';
 
@@ -134,7 +134,7 @@ const ViewMainText = ({id, distance, photo_urls, member, isProfile}: Props) => {
             <TouchableOpacity onPress={() => clickHeart()}>
               {post?.favorite_state ? (
                 <Image
-                  source={HEART_ICON_BLACK}
+                  source={HEART_ICON_RED}
                   resizeMode="contain"
                   style={{width: 17}}
                 />

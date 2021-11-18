@@ -5,10 +5,9 @@ import {BROWN} from '../util/Color';
 
 interface Props {
   data: Object;
-  picture: String;
 }
 
-const UserChatMessage = ({data, picture}: Props) => {
+const UserChatMessage = ({data}: Props) => {
   const {content, created_at}: any = data;
   const re = /\d+/g;
   const parsingTime = (date: string) => {
