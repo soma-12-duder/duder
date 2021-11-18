@@ -5,6 +5,7 @@ import styled from 'styled-components/native';
 import HorizontalLine from '../components/HorizontalLine';
 import {useRecoilState} from 'recoil';
 import {commentState} from '../states/MemberState';
+import DUDER_IMAGE from '../assets/images/DUDER_IMAGE.png';
 
 interface Props {
   content: String;
@@ -30,11 +31,15 @@ const ViewCommentText = ({
     <>
       <CommentView commentOfComment={commentOfComment}>
         <ProfileWrapper>
-          <UserProfileImage
-            source={{
-              uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR5ebn2o15gmobO1xOj1ESvldLkPBxnC4ZwDg&usqp=CAU',
-            }}
-          />
+          {member.profile ? (
+            <UserProfileImage
+              source={{
+                uri: `${member.profile}`,
+              }}
+            />
+          ) : (
+            <UserProfileImage source={DUDER_IMAGE} resizeMode="contain" />
+          )}
           <Text style={{fontSize: 16, paddingLeft: '1.5%'}}>
             {member.nickname}
           </Text>
@@ -44,7 +49,7 @@ const ViewCommentText = ({
           <TouchableOpacity>
             <GrayText>좋아요</GrayText>
           </TouchableOpacity>
-          <GrayText style={{paddingLeft: '1%'}}>{favorite_count}</GrayText>
+          {/* <GrayText style={{paddingLeft: '1%'}}>{favorite_count}</GrayText> */}
           {commentOfComment ? (
             <></>
           ) : (

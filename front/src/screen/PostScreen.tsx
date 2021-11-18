@@ -28,11 +28,6 @@ const PostScreen = ({route, navigation}: Props) => {
   }
   useEffect(() => {
     getData();
-    return () => {
-      console.log('unmounted');
-      console.log(Keyboard.dismiss());
-      console.log('unmounted2');
-    };
   }, []);
   return (
     <>

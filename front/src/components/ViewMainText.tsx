@@ -7,6 +7,7 @@ import COORD_ICON from '../assets/images/COORD_ICON.png';
 import HEART_ICON from '../assets/images/HEART_ICON.png';
 import HEART_ICON_BLACK from '../assets/images/HEART_ICON_BLACK.png';
 import HorizontalLine from './HorizontalLine';
+import DUDER_IMAGE from '../assets/images/DUDER_IMAGE.png';
 
 import {useRecoilState} from 'recoil';
 import {postState} from '../states/MemberState';
@@ -77,12 +78,16 @@ const ViewMainText = ({id, distance, photo_urls, member, isProfile}: Props) => {
             onPress={() =>
               navigation.navigate('상대방 프로필', {member: member})
             }>
-            <UserProfileImage
-              source={{
-                uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR5ebn2o15gmobO1xOj1ESvldLkPBxnC4ZwDg&usqp=CAU',
-              }}
-            />
-            <Text style={{fontSize: 18, paddingLeft: '1%'}}>
+            {member.profile ? (
+              <UserProfileImage
+                source={{
+                  uri: `${member.profile}`,
+                }}
+              />
+            ) : (
+              <UserProfileImage source={DUDER_IMAGE} resizeMode="contain" />
+            )}
+            <Text style={{fontSize: 18, paddingLeft: '2%'}}>
               {post?.member?.nickname}
             </Text>
           </ProfileWrapper>

@@ -69,10 +69,9 @@ const LoginScreen = () => {
             />
             <LoginButton
               onPress={async () => {
-                const {data}: any = await authApi.getUserInfo();
-                console.log('로그인시 멤버데이터:', data);
-                setMember(data);
-                navigation.navigate('NicknameScreen' as never);
+                // const {data}: any = await authApi.getUserInfo();
+                // console.log('로그인시 멤버데이터:', data);
+                // setMember(data);
                 navigation.navigate('NicknameScreen' as never);
               }}
               name={'구글로 시작'}
