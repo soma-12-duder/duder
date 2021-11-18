@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {Image, Button} from 'react-native';
+import {Image} from 'react-native';
 import styled from 'styled-components/native';
 
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
@@ -7,7 +7,6 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 
 import HomeScreen from '../screen/HomeScreen';
 import ChattingScreen from '../screen/ChattingScreen';
-import SettingScreen from '../screen/SettingScreen';
 import ProfileScreen from '../screen/ProfileScreen';
 import HOME_ICON from '../assets/images/HOME_ICON.png';
 import HOME_ICON_FOCUS from '../assets/images/HOME_ICON_FOCUS.png';

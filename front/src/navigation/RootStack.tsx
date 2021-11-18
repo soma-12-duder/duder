@@ -1,6 +1,6 @@
 import React from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
-import {Button, Image} from 'react-native';
+import {Image} from 'react-native';
 
 import LoginScreen from '../screen/LoginScreen';
 import BottomTab from './BottomTab';

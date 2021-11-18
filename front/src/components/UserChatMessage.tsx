@@ -11,12 +11,23 @@ interface Props {
 const UserChatMessage = ({data, picture}: Props) => {
   const {content, created_at}: any = data;
   const re = /\d+/g;
-  const time = created_at.match(re);
+  const parsingTime = (date: string) => {
+    if (date == null) return;
+    const time: any = date?.match(re);
+    const now = new Date();
+    const nowMonth: any = now.getMonth() + 1;
+    const nowDate: any = now.getDate();
+    if (+time[1] === +nowMonth && +time[2] === +nowDate) {
+      return `${time[3]}시 ${time[4]}분`;
+    } else {
+      return `${time[1]}월 ${time[2]}일 ${time[3]}시 ${time[4]}분`;
+    }
+  };
   return (
     <MessageContainer>
       <Wrapper>
         <TimeView>
-          <UtilText content={`${time[3]}:${time[4]}`} />
+          <UtilText content={parsingTime(created_at)} size="10" />
         </TimeView>
         <MessageView>
           <UtilText content={content} color={'white'} />

@@ -6,9 +6,9 @@ import {useNavigation} from '@react-navigation/core';
 import HorizontalLine from './HorizontalLine';
 import {Colors} from '../util/Constants';
 import HEART_ICON from '../assets/images/HEART_ICON.png';
-import HEART_ICON_BLACK from '../assets/images/HEART_ICON_BLACK.png';
 import COMMENT_ICON from '../assets/images/COMMENT_ICON.png';
 import COORD_ICON from '../assets/images/COORD_ICON.png';
+import DUDER_IMAGE from '../assets/images/DUDER_IMAGE.png';
 
 const fullWidth: number = Dimensions.get('window').width;
 
@@ -19,6 +19,7 @@ interface Props {
   member: any;
   favorite_count: String;
   comment_count: String;
+  isProfile?: any;
 }
 
 const HomePost = ({
@@ -46,18 +47,22 @@ const HomePost = ({
         }}>
         <PostWrapper>
           <Text
-            style={{marginBottom: 7}}
+            style={{marginBottom: 20}}
             numberOfLines={3}
             ellipsizeMode="tail">
             {content}
           </Text>
           <ProfileIconWrapper>
             <ProfileWrapper>
-              <UserProfileImage
-                source={{
-                  uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR5ebn2o15gmobO1xOj1ESvldLkPBxnC4ZwDg&usqp=CAU',
-                }}
-              />
+              {member.profile ? (
+                <UserProfileImage
+                  source={{
+                    uri: `${member.profile}`,
+                  }}
+                />
+              ) : (
+                <UserProfileImage source={DUDER_IMAGE} resizeMode="contain" />
+              )}
               <Text style={{paddingLeft: 8}}>{member.nickname}</Text>
             </ProfileWrapper>
             <IconWrapper>
@@ -65,7 +70,7 @@ const HomePost = ({
                 <Image
                   source={HEART_ICON}
                   resizeMode="contain"
-                  style={{width: 14}}
+                  style={{width: 14, height: 14}}
                 />
                 <Text style={{paddingLeft: 4}}>{favorite_count}</Text>
               </InnerIconWrapper>
@@ -73,7 +78,7 @@ const HomePost = ({
                 <Image
                   source={COMMENT_ICON}
                   resizeMode="contain"
-                  style={{width: 13, top: 0.55}}
+                  style={{width: 13, height: 13, top: 0.55}}
                 />
                 <Text style={{paddingLeft: 5, paddingRight: 12}}>
                   {comment_count}
@@ -81,12 +86,12 @@ const HomePost = ({
                 <Image
                   source={COORD_ICON}
                   resizeMode="contain"
-                  style={{width: 13}}
+                  style={{width: 13, height: 15, top: 0.5}}
                 />
                 <Text
                   style={{
                     fontFamily: 'NotoSansKR-Bold',
-                    paddingLeft: 4,
+                    paddingLeft: 2.5,
                     fontSize: 15,
                     color: '#CA925D',
                   }}>
@@ -107,8 +112,7 @@ export default HomePost;
 const UserProfileImage = styled(Image)`
   width: 24px;
   height: 24px;
-  border-radius: 100px;
-  border: 1px solid #cfcfcf;
+  border-radius: 12px;
 `;
 
 const IconWrapper = styled(View)`
@@ -141,5 +145,5 @@ const ProfileIconWrapper = styled(View)`
 const PostWrapper = styled(View)`
   background-color: ${Colors.POST_BACKGROUND_COLOR};
   width: ${fullWidth};
-  padding: 20px 20px 10px 20px;
+  padding: 17px 17px 17px 17px;
 `;

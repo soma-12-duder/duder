@@ -6,9 +6,7 @@ import {useNavigation} from '@react-navigation/core';
 import HorizontalLine from './HorizontalLine';
 import {Colors} from '../util/Constants';
 import HEART_ICON from '../assets/images/HEART_ICON.png';
-import HEART_ICON_BLACK from '../assets/images/HEART_ICON_BLACK.png';
 import COMMENT_ICON from '../assets/images/COMMENT_ICON.png';
-import COORD_ICON from '../assets/images/COORD_ICON.png';
 
 const fullWidth: number = Dimensions.get('window').width;
 
@@ -42,12 +40,14 @@ const ProfilePost = ({
             favorite_count: favorite_count,
             comment_count: comment_count,
             distance: distance,
+            isProfile: true,
           });
         }}>
         <PostWrapper>
           <Text numberOfLines={1} ellipsizeMode="tail">
             {content}
           </Text>
+
           <ProfileIconWrapper>
             <Text style={{color: '#cfcfcf'}}>2021-11-16</Text>
             <IconWrapper>

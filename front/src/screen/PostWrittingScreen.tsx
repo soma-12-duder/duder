@@ -1,31 +1,16 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, {useEffect, useState} from 'react';
-import ViewMainText from '../components/ViewMainText';
-import ViewCommentText from '../components/ViewCommentText';
-import CommentAndChattingInput from '../components/CommentAndChattingInput';
-import {
-  ScrollView,
-  StyleSheet,
-  Image,
-  FlatList,
-  View,
-  TextInput,
-  Text,
-  Keyboard,
-} from 'react-native';
+import {ScrollView, StyleSheet, Image, Keyboard} from 'react-native';
 import {useRecoilState} from 'recoil';
 import {postsState, hotPostsState} from '../states/MemberState';
 import {postApi} from '../api/indexApi';
 import styled from 'styled-components/native';
-import MESSAGE_ICON from '../assets/images/MESSAGE_ICON.png';
 import CAMERA_ICON from '../assets/images/CAMERA_ICON.png';
 import HorizontalLine from '../components/HorizontalLine';
 import usePosition from '../util/usePosition';
-import {requestAuthorization} from 'react-native-geolocation-service';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {RNS3} from 'react-native-aws3';
-import {launchImageLibrary, launchCamera} from 'react-native-image-picker';
-import {assets} from '../../react-native.config';
+import {launchImageLibrary} from 'react-native-image-picker';
 import {SECRET} from '../../env';
 
 interface Props {

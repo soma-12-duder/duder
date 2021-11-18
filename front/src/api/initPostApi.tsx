@@ -29,6 +29,24 @@ export default (axios: any) => ({
     }
   },
 
+  getAllMyPosts: async () => {
+    try {
+      const {data} = await axios.get('/api/post/me');
+      return data;
+    } catch (e) {
+      console.error(e);
+    }
+  },
+
+  getAllMyFavoritePosts: async () => {
+    try {
+      const {data} = await axios.get('/api/favorite/me');
+      return data;
+    } catch (e) {
+      console.error(e);
+    }
+  },
+
   getPostById: async (id: any) => {
     try {
       const {data} = await axios.get(`/api/post/${id}`);

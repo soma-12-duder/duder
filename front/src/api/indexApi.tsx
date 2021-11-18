@@ -7,8 +7,8 @@ const instance = axios.create({
   baseURL: 'http://52.79.234.33:8080',
 });
 
-instance.defaults.headers.common['X-Auth-Token'] =
-  'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxOTI5NjA5MDA1IiwibWVtYmVyX2lkIjoyLCJyb2xlIjoiUk9MRV9VU0VSIiwiaWF0IjoxNjM2MjgzNTM2LCJleHAiOjE2Mzg4NzU1MzZ9.xYeOjxGlCQa2ToTpHymQ2l9RPMChZgapoMZH3NgpFUg';
+// instance.defaults.headers.common['X-Auth-Token'] =
+//   'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxOTI5NjA5MDA1IiwibWVtYmVyX2lkIjoyLCJyb2xlIjoiUk9MRV9VU0VSIiwiaWF0IjoxNjM2MjgzNTM2LCJleHAiOjE2Mzg4NzU1MzZ9.xYeOjxGlCQa2ToTpHymQ2l9RPMChZgapoMZH3NgpFUg';
 
 export const authApi = initAuthApi(instance);
 export const postApi = initPostApi(instance);

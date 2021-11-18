@@ -13,7 +13,7 @@ interface Props {
   nickname: String;
 }
 
-const CHAT_URL = 'http://localhost:8080';
+const CHAT_URL = 'http://52.79.234.33:8080';
 const SockJS = require('sockjs-client/dist/sockjs.js');
 const Stomp = require('stompjs/lib/stomp').Stomp;
 
@@ -21,7 +21,7 @@ const ChatMessageScreen = ({route, navigation}: any) => {
   const member = useRecoilValue(memberInfoState);
   const [messages, setMessages]: any = useState([]);
   const [content, setContent]: any = useState('');
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const {nickname, chatroom_id} = route.params;
 
   const socket = new SockJS(`${CHAT_URL}/chat`);
@@ -29,7 +29,7 @@ const ChatMessageScreen = ({route, navigation}: any) => {
 
   const connect = () => {
     stompClient.connect({}, (frame: any) => {
-      setLoading(true);
+      setLoading(false);
       console.log('connected', +frame);
       stompClient.subscribe('/pop/message', function (chat: any) {
         console.log(JSON.parse(chat.body).data);
@@ -60,7 +60,6 @@ const ChatMessageScreen = ({route, navigation}: any) => {
       }),
     );
     setContent('');
-    // Keyboard.dismiss();
   }
 
   const getData = async () => {
@@ -106,7 +105,7 @@ const ChatMessageScreen = ({route, navigation}: any) => {
         keyExtractor={(item: any) => item.id}
       />
       <TextInputButton
-        height={'10%'}
+        height={'70px'}
         content={content}
         onChangeText={onChangeText}
         onPress={sendChat}

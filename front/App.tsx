@@ -20,6 +20,8 @@ const customTextProps = {
 setCustomText(customTextProps);
 
 const App = () => {
+  console.disableYellowBox = true;
+
   return (
     <SafeAreaProvider>
       <RecoilRoot>
