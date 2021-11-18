@@ -22,6 +22,5 @@ public class Chat {
     private Long roomId;
     private String content;
 
-    @CreatedDate
     private LocalDateTime createdAt;
 }
