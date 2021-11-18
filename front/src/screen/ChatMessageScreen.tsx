@@ -82,7 +82,7 @@ const ChatMessageScreen = ({route, navigation}: any) => {
     connect();
   }, []);
 
-  const flatListRef = useRef();
+  const flatListRef: any = useRef();
 
   const renderItem = ({item, index}: any) => {
     return item.sender_id === member.id ? (

@@ -37,6 +37,7 @@ const PostScreen = ({route, navigation}: Props) => {
           id={route.params.id}
           distance={route.params.distance}
           photo_urls={post.photo_urls}
+          member={post.member}
         />
         {post?.comments?.map((item: any, index: any) => {
           return (

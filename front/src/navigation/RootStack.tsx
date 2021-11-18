@@ -9,6 +9,7 @@ import PostScreen from '../screen/PostScreen';
 import PostWrittingScreen from '../screen/PostWrittingScreen';
 import NicknameScreen from '../screen/NicknameScreen';
 import ChatMessageScreen from '../screen/ChatMessageScreen';
+import OpponentProfileScreen from '../screen/OpponentProfileScreen';
 import {NK700} from '../util/Color';
 
 const Stack = createStackNavigator();
@@ -47,6 +48,10 @@ const RootStack = () => {
         <Stack.Screen
           name={'ChatMessageScreen'}
           component={ChatMessageScreen}
+        />
+        <Stack.Screen
+          name={'상대방 프로필'}
+          component={OpponentProfileScreen}
         />
         <Stack.Screen name={'게시글'} component={PostScreen} />
         <Stack.Screen name={'글쓰기'} component={PostWrittingScreen} />

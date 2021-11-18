@@ -21,13 +21,11 @@ const LoginScreen = () => {
 
   const loginApi = async (event: any) => {
     try {
-      // console.log(JSON.parse(data));
       const {access_token, email} = JSON.parse(event);
-      navigation.navigate('NicknameScreen' as never);
-      // console.log(access_token, email);
-      const {data}: any = await authApi.getUserInfo(access_token);
-      console.log(data);
+      const {data}: any = await authApi.getUserInfo();
+      console.log('로그인시 멤버데이터:', data);
       setMember(data);
+      navigation.navigate('NicknameScreen' as never);
     } catch (error) {
       console.error(error);
     }
@@ -59,7 +57,13 @@ const LoginScreen = () => {
               kind="Kakao"
             />
             <LoginButton
-              onPress={() => navigation.navigate('NicknameScreen' as never)}
+              onPress={async () => {
+                const {data}: any = await authApi.getUserInfo();
+                console.log('로그인시 멤버데이터:', data);
+                setMember(data);
+                navigation.navigate('NicknameScreen' as never);
+                navigation.navigate('NicknameScreen' as never);
+              }}
               name={'구글로 시작'}
               image={GOOGLE_ICON}
               kind="Google"
