@@ -1,6 +1,6 @@
 /* eslint-disable react-native/no-inline-styles */
 import React from 'react';
-import {StyleSheet, Image} from 'react-native';
+import {Image} from 'react-native';
 import styled from 'styled-components/native';
 import MESSAGE_ICON from '../assets/images/MESSAGE_ICON.png';
 
@@ -44,7 +44,7 @@ const TextInputButton = ({
 
 export default TextInputButton;
 
-const InputView = styled.View`
+const InputView = styled.View<{height: any}>`
   background-color: #ffffff;
   width: 100%;
   height: ${(props: any) => props.height};

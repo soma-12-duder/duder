@@ -21,11 +21,22 @@ const LoginScreen = () => {
 
   const loginApi = async (event: any) => {
     try {
-      const {access_token, email} = JSON.parse(event);
-      const {data}: any = await authApi.getUserInfo();
-      console.log('로그인시 멤버데이터:', data);
+      const {access_token, email, existed_member} = JSON.parse(event);
+      const {data}: any = await authApi.getUserInfo(access_token);
+      console.log(
+        '로그인시 멤버데이터:',
+        data,
+        'exsited_member:',
+        existed_member,
+        'json.parse.event',
+        JSON.parse(event),
+      );
       setMember(data);
-      navigation.navigate('NicknameScreen' as never);
+      if (existed_member) {
+        navigation.navigate('BottomTab' as never);
+      } else {
+        navigation.navigate('NicknameScreen' as never);
+      }
     } catch (error) {
       console.error(error);
     }

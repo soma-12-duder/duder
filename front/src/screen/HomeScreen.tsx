@@ -1,33 +1,28 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, {useEffect, useState, useMemo, useCallback} from 'react';
-import {
-  StyleSheet,
-  Dimensions,
-  FlatList,
-  View,
-  PermissionsAndroid,
-  Platform,
-} from 'react-native';
+import React, {useEffect, useCallback} from 'react';
+import {StyleSheet, Dimensions, FlatList, View} from 'react-native';
 import {TabView, TabBar, SceneMap} from 'react-native-tab-view';
 import HomePost from '../components/HomePost';
-import HomeNotice from '../components/HomeNotice';
-import HorizontalLine from '../components/HorizontalLine';
 import {postApi} from '../api/indexApi';
-import Geolocation from 'react-native-geolocation-service';
 import {useRecoilState} from 'recoil';
-import {postsState, hotPostsState} from '../states/MemberState';
+import {
+  postsState,
+  hotPostsState,
+  isRefreshingState,
+} from '../states/MemberState';
 import {useNavigation} from '@react-navigation/core';
 import styled from 'styled-components/native';
 import usePosition from '../util/usePosition';
-// import Icons from 'react-native-vector-icons/Ionicons';
 
 interface Props {
   posts: any;
   position: any;
+  apiFunc: any;
 }
 
-const ViewRoute = ({posts, position}: Props) => {
+const ViewRoute = ({posts, position, apiFunc}: Props) => {
   const navigation: any = useNavigation();
+  const [isRefreshing, setIsRefreshing] = useRecoilState(isRefreshingState);
 
   const renderItem = useCallback(
     ({item}: any) => {
@@ -51,7 +46,11 @@ const ViewRoute = ({posts, position}: Props) => {
         <FlatList
           data={posts}
           renderItem={renderItem}
-          keyExtractor={(item: any) => item.id}></FlatList>
+          keyExtractor={(item: any) => item.id}
+          onRefresh={() => {
+            apiFunc();
+          }}
+          refreshing={isRefreshing}></FlatList>
       </View>
       <PostWriteButton
         onPress={() => {
@@ -80,8 +79,10 @@ const HomeScreen = () => {
       title: '핫 게시물',
     },
   ]);
+  const [isRefreshing, setIsRefreshing] = useRecoilState(isRefreshingState);
 
   async function getData() {
+    setIsRefreshing(true);
     try {
       const {data} = await postApi.getAllPosts(37.1, 127.1212, '1000');
       const {data: data2} = await postApi.getAllHotPosts(
@@ -91,6 +92,7 @@ const HomeScreen = () => {
       );
       setPosts(data);
       setHotPosts(data2);
+      setIsRefreshing(false);
     } catch (e) {
       console.error(e);
     }
@@ -128,8 +130,12 @@ const HomeScreen = () => {
       )}
       navigationState={{index, routes}}
       renderScene={SceneMap({
-        first: () => <ViewRoute posts={posts} position={position} />,
-        second: () => <ViewRoute posts={hotPosts} position={position} />,
+        first: () => (
+          <ViewRoute posts={posts} position={position} apiFunc={getData} />
+        ),
+        second: () => (
+          <ViewRoute posts={hotPosts} position={position} apiFunc={getData} />
+        ),
       })}
       onIndexChange={setIndex}
       initialLayout={initialLayout}

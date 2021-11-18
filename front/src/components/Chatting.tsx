@@ -1,10 +1,11 @@
 /* eslint-disable react-native/no-inline-styles */
 import * as React from 'react';
-import {View, Text} from 'react-native';
+import {Text} from 'react-native';
 import styled from 'styled-components/native';
 import HorizontalLine from '../components/HorizontalLine';
 import UtilText from '../util/UtilText';
-import {NK700, GRAY, BROWN} from '../util/Color';
+import {NK700, GRAY} from '../util/Color';
+import DUDER_IMAGE from '../assets/images/DUDER_IMAGE.png';
 
 interface Props {
   opponent: any;
@@ -27,18 +28,31 @@ const Chatting = ({
   const parsingTime = (date: string) => {
     if (date == null) return;
     const time: any = date?.match(re);
-    return `${time[1]}월 ${time[2]}일 \n${time[3]}시 ${time[4]}분`;
+    const now = new Date();
+    const nowMonth: any = now.getMonth() + 1 + '';
+    const nowDate: any = now.getDate() + '';
+    if (+time[1] === +nowMonth && +time[2] === +nowDate - 1) {
+      return `어제`;
+    } else if (+time[1] === +nowMonth && +time[2] === +nowDate) {
+      return `${time[1]}월 ${time[2]}일`;
+    } else {
+      return `${time[1]}월 ${time[2]}일 ${time[3]}시 ${time[4]}분`;
+    }
   };
 
   return (
     <>
       <ChattingWrapper onPress={() => onClick(opponent.nickname, chatroom_id)}>
         <ProfileNicknameTextWrapper>
-          <UserProfileImage
-            source={{
-              uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR5ebn2o15gmobO1xOj1ESvldLkPBxnC4ZwDg&usqp=CAU',
-            }}
-          />
+          {opponent.profile ? (
+            <UserProfileImage
+              source={{
+                uri: `${opponent.profile}`,
+              }}
+            />
+          ) : (
+            <UserProfileImage source={DUDER_IMAGE} resizeMode="contain" />
+          )}
           <NicknameTextWrapper>
             <NicknameKmWrapper>
               <UtilText
@@ -47,7 +61,7 @@ const Chatting = ({
                 family={NK700}
                 style={{marginRight: 8}}
               />
-              <UtilText size={'15px'} content={km + 'km'} family={NK700} />
+              {/* <UtilText size={'15px'} content={km + 'km'} family={NK700} /> */}
             </NicknameKmWrapper>
             <Text style={{color: GRAY}} numberOfLines={1} ellipsizeMode="tail">
               {content}
@@ -58,7 +72,7 @@ const Chatting = ({
           <Text style={{fontSize: 10, paddingBottom: '7%'}}>
             {parsingTime(date)}
           </Text>
-          {chatroom_id && +chatroom_id > 0 ? (
+          {/* {chatroom_id && +chatroom_id > 0 ? (
             <View
               style={{
                 backgroundColor: BROWN,
@@ -72,7 +86,7 @@ const Chatting = ({
             </View>
           ) : (
             <View style={{height: 24}}></View>
-          )}
+          )} */}
         </DateChattingsNumberWrapper>
       </ChattingWrapper>
       <HorizontalLine />
@@ -114,6 +128,6 @@ const ProfileNicknameTextWrapper = styled.View`
 const DateChattingsNumberWrapper = styled.View`
   justify-content: center;
   align-items: flex-end;
-  flex: 1;
+  flex: 1.5;
   padding-right: 3%;
 `;

@@ -1,37 +1,40 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, {useEffect, useState, useMemo, useCallback} from 'react';
+import React, {useEffect, useCallback} from 'react';
 import {
   StyleSheet,
   Dimensions,
   FlatList,
   View,
-  PermissionsAndroid,
-  Platform,
   Image,
   Text,
 } from 'react-native';
 import {TabView, TabBar, SceneMap} from 'react-native-tab-view';
 import ProfilePost from '../components/ProfilePost';
-import HomeNotice from '../components/HomeNotice';
 import HorizontalLine from '../components/HorizontalLine';
 import {postApi} from '../api/indexApi';
-import Geolocation from 'react-native-geolocation-service';
 import {useRecoilState} from 'recoil';
-import {postsState, hotPostsState} from '../states/MemberState';
+import {
+  myPostsState,
+  myFavoritePostsState,
+  isProfileRefreshingState,
+} from '../states/MemberState';
 import {useNavigation} from '@react-navigation/core';
 import styled from 'styled-components/native';
 import usePosition from '../util/usePosition';
 import PENCIL_ICON from '../assets/images/PENCIL_ICON.png';
 import {TouchableOpacity} from 'react-native-gesture-handler';
-// import Icons from 'react-native-vector-icons/Ionicons';
 
 interface Props {
   posts: any;
   position: any;
+  apiFunc: any;
 }
 
-const ViewRoute = ({posts, position}: Props) => {
+const ViewRoute = ({posts, position, apiFunc}: Props) => {
   const navigation: any = useNavigation();
+  const [isRefreshing, setIsRefreshing] = useRecoilState(
+    isProfileRefreshingState,
+  );
 
   const renderItem = useCallback(
     ({item}: any) => {
@@ -56,7 +59,11 @@ const ViewRoute = ({posts, position}: Props) => {
           data={posts}
           renderItem={renderItem}
           keyExtractor={(item: any) => item.id}
-          initialNumToRender={7}></FlatList>
+          initialNumToRender={7}
+          onRefresh={() => {
+            apiFunc();
+          }}
+          refreshing={isRefreshing}></FlatList>
       </View>
     </>
   );
@@ -66,8 +73,9 @@ const initialLayout = {width: Dimensions.get('window').width};
 
 const ProfileScreen = () => {
   const [position, excuteGetCoordinates] = usePosition();
-  const [posts, setPosts] = useRecoilState(postsState);
-  const [hotPosts, setHotPosts] = useRecoilState(hotPostsState);
+  const [posts, setPosts] = useRecoilState(myPostsState);
+  const [favoritePosts, setfavoritePosts] =
+    useRecoilState(myFavoritePostsState);
   const [index, setIndex] = React.useState(0);
   const [routes] = React.useState([
     {
@@ -79,20 +87,21 @@ const ProfileScreen = () => {
       title: '좋아요한 글',
     },
   ]);
+  const [isRefreshing, setIsRefreshing] = useRecoilState(
+    isProfileRefreshingState,
+  );
 
   async function getData() {
+    setIsRefreshing(true);
     try {
-      const {data} = await postApi.getAllPosts(37.1, 127.1212, '1000');
-      const {data: data2} = await postApi.getAllHotPosts(
-        37.1,
-        127.1212,
-        '1000',
-      );
+      const {data} = await postApi.getAllMyPosts();
+      const {data: data2} = await postApi.getAllMyFavoritePosts();
       setPosts(data);
-      setHotPosts(data2);
+      setfavoritePosts(data2);
     } catch (e) {
       console.error(e);
     }
+    setIsRefreshing(false);
   }
 
   useEffect(() => {
@@ -103,15 +112,22 @@ const ProfileScreen = () => {
     excuteGetCoordinates();
   }, []);
 
+  useEffect(() => {
+    console.log('myFuckingPosts:', posts);
+  }, [posts]);
+
   return (
     <>
       <HorizontalLine />
       <ProfilePictureAndNickName>
-        <ProfileImage
-          source={{
-            uri: 'https://soma12-s3.s3.ap-northeast-2.amazonaws.com/profile/testbeen.png',
-          }}
-        />
+        <ImageView>
+          <ProfileImage
+            source={{
+              uri: 'https://soma12-s3.s3.ap-northeast-2.amazonaws.com/profile/testbeen.png',
+            }}
+          />
+        </ImageView>
+
         <TouchableOpacity>
           <NicknameAndIcon>
             <Text>승패</Text>
@@ -145,8 +161,16 @@ const ProfileScreen = () => {
         )}
         navigationState={{index, routes}}
         renderScene={SceneMap({
-          first: () => <ViewRoute posts={posts} position={position} />,
-          second: () => <ViewRoute posts={hotPosts} position={position} />,
+          first: () => (
+            <ViewRoute posts={posts} position={position} apiFunc={getData} />
+          ),
+          second: () => (
+            <ViewRoute
+              posts={favoritePosts}
+              position={position}
+              apiFunc={getData}
+            />
+          ),
         })}
         onIndexChange={setIndex}
         initialLayout={initialLayout}
@@ -178,7 +202,14 @@ const NicknameAndIcon = styled.View`
 `;
 
 const ProfileImage = styled.Image`
-  width: 80;
-  height: 80;
+  width: 100%;
+  height: 100%;
+  border-radius: 40;
+`;
+
+const ImageView = styled.TouchableOpacity`
+  width: 80px;
+  height: 80px;
+  border: 3px solid #c38753;
   border-radius: 40;
 `;

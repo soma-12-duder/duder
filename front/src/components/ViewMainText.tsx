@@ -1,7 +1,6 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import {View, Text, Image, TouchableOpacity, Dimensions} from 'react-native';
-import Ionicons from 'react-native-vector-icons/Ionicons';
 import styled from 'styled-components/native';
 import COMMENT_ICON2 from '../assets/images/COMMENT_ICON2.png';
 import COORD_ICON from '../assets/images/COORD_ICON.png';
@@ -22,9 +21,10 @@ interface Props {
   distance: string;
   photo_urls: [];
   member: any;
+  isProfile: any;
 }
 
-const ViewMainText = ({id, distance, photo_urls, member}: Props) => {
+const ViewMainText = ({id, distance, photo_urls, member, isProfile}: Props) => {
   const navigation: any = useNavigation();
 
   const [post, setPost] = useRecoilState(postState);
@@ -86,22 +86,24 @@ const ViewMainText = ({id, distance, photo_urls, member}: Props) => {
               {post?.member?.nickname}
             </Text>
           </ProfileWrapper>
-          <CoordKmWrapper>
-            <Image
-              source={COORD_ICON}
-              resizeMode="contain"
-              style={{width: 13}}
-            />
-            <Text
-              style={{
-                fontWeight: 'bold',
-                fontSize: 18,
-                paddingLeft: 4,
-                color: '#CA925D',
-              }}>
-              {distance}km
-            </Text>
-          </CoordKmWrapper>
+          {isProfile || (
+            <CoordKmWrapper>
+              <Image
+                source={COORD_ICON}
+                resizeMode="contain"
+                style={{width: 13}}
+              />
+              <Text
+                style={{
+                  fontWeight: 'bold',
+                  fontSize: 18,
+                  paddingLeft: 4,
+                  color: '#CA925D',
+                }}>
+                {distance}km
+              </Text>
+            </CoordKmWrapper>
+          )}
         </ProfileKmWrapper>
         <HorizontalLine />
         <Text

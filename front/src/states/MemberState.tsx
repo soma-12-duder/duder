@@ -25,6 +25,16 @@ export const hotPostsState = atom({
   default: [],
 });
 
+export const myPostsState = atom({
+  key: 'myPosts',
+  default: [],
+});
+
+export const myFavoritePostsState = atom({
+  key: 'myFavoritePosts',
+  default: [],
+});
+
 export const postState = atom({
   key: 'post',
   default: {
@@ -44,4 +54,14 @@ export const postState = atom({
 export const commentState = atom({
   key: 'comment',
   default: {isClickCommentInput: false, comment_id: null},
+});
+
+export const isRefreshingState = atom({
+  key: 'isRefreshing',
+  default: false,
+});
+
+export const isProfileRefreshingState = atom({
+  key: 'isProfileRefreshing',
+  default: false,
 });

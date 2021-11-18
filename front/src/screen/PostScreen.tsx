@@ -1,14 +1,13 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, {useEffect, useState} from 'react';
+import React, {useEffect} from 'react';
 import ViewMainText from '../components/ViewMainText';
 import ViewCommentText from '../components/ViewCommentText';
 import CommentAndChattingInput from '../components/CommentAndChattingInput';
-import {ScrollView, StyleSheet, Image, FlatList, View} from 'react-native';
+import {ScrollView, StyleSheet, Keyboard} from 'react-native';
 import {useRecoilState} from 'recoil';
 import {postState} from '../states/MemberState';
 import {postApi} from '../api/indexApi';
 import styled from 'styled-components/native';
-import MESSAGE_ICON from '../assets/images/MESSAGE_ICON.png';
 
 interface Props {
   route: any;
@@ -29,15 +28,23 @@ const PostScreen = ({route, navigation}: Props) => {
   }
   useEffect(() => {
     getData();
+    return () => {
+      console.log('unmounted');
+      console.log(Keyboard.dismiss());
+      console.log('unmounted2');
+    };
   }, []);
   return (
     <>
-      <ScrollView contentContainerStyle={styles.container}>
+      <ScrollView
+        contentContainerStyle={styles.container}
+        keyboardShouldPersistTaps={true}>
         <ViewMainText
           id={route.params.id}
           distance={route.params.distance}
           photo_urls={post.photo_urls}
           member={post.member}
+          isProfile={route.params.isProfile}
         />
         {post?.comments?.map((item: any, index: any) => {
           return (

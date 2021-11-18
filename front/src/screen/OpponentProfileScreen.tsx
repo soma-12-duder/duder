@@ -1,34 +1,24 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, {useEffect, useState, useMemo, useCallback} from 'react';
-import {
-  StyleSheet,
-  Dimensions,
-  FlatList,
-  View,
-  PermissionsAndroid,
-  Platform,
-  Image,
-  Text,
-  Alert,
-} from 'react-native';
-import {TabView, TabBar, SceneMap} from 'react-native-tab-view';
-import ProfilePost from '../components/ProfilePost';
-import HomeNotice from '../components/HomeNotice';
+import React, {useLayoutEffect} from 'react';
+import {View, Image, Text, Alert} from 'react-native';
 import HorizontalLine from '../components/HorizontalLine';
-import {postApi} from '../api/indexApi';
-import Geolocation from 'react-native-geolocation-service';
 import {useRecoilState} from 'recoil';
-import {postsState, hotPostsState} from '../states/MemberState';
-import {useNavigation} from '@react-navigation/core';
+import {memberInfoState} from '../states/MemberState';
 import styled from 'styled-components/native';
-import usePosition from '../util/usePosition';
 import PENCIL_ICON from '../assets/images/PENCIL_ICON.png';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {chatApi} from '../api/indexApi';
 
-const initialLayout = {width: Dimensions.get('window').width};
-
 const OpponentProfileScreen = ({route, navigation}: any) => {
+  const [myInfo, setMyInfo] = useRecoilState(memberInfoState);
+  const {member} = route.params;
+
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      title: `${myInfo.id === member.id ? '내 프로필' : '상대방 프로필'}`,
+    });
+  }, [navigation]);
+
   return (
     <>
       <HorizontalLine />
@@ -56,18 +46,17 @@ const OpponentProfileScreen = ({route, navigation}: any) => {
         <ButtonWrapper>
           <OneOnOneChattingButton
             onPress={async () => {
-              const {data} = await chatApi.chatWithOpponent(
-                route?.params?.member?.id,
-              );
-              const member = route.params.member;
-              console.log(route.params.member);
+              const {data} = await chatApi.chatWithOpponent(member?.id);
+              console.log(member);
               console.log('chat_room_id:', data);
               navigation.navigate('ChatMessageScreen', {
                 nickname: member.nickname,
                 chatroom_id: data,
               });
             }}>
-            <Text style={{color: '#ffffff'}}>1대1 채팅하기</Text>
+            <Text style={{color: '#ffffff'}}>
+              {myInfo.id === member.id ? '나와 채팅하기' : '1대1 채팅하기'}
+            </Text>
           </OneOnOneChattingButton>
           <ReportButton onPress={() => Alert.alert('접수 되었습니다.')}>
             <Text style={{color: '#000000'}}>신고하기</Text>

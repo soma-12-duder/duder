@@ -1,5 +1,5 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, {useEffect, useState, useRef} from 'react';
+import React, {useState} from 'react';
 import {StyleSheet, Image, Keyboard} from 'react-native';
 import {postApi} from '../api/indexApi';
 import styled from 'styled-components/native';
