@@ -7,6 +7,7 @@ public class TokenResponse {
     private Long id;
     private String email;
     private String accessToken;
+    private boolean existedMember;
 
     public TokenResponse(){}
 
@@ -14,8 +15,8 @@ public class TokenResponse {
         return new TokenResponse(id, accessToken);
     }
 
-    public static TokenResponse of(Long id, String email, String accessToken){
-        return new TokenResponse(id, email, accessToken);
+    public static TokenResponse of(Long id, String email, String accessToken, boolean existedMember){
+        return new TokenResponse(id, email, accessToken, existedMember);
     }
 
 
@@ -24,10 +25,11 @@ public class TokenResponse {
         this.accessToken = accessToken;
     }
 
-    public TokenResponse (Long id, String email, String accessToken){
+    public TokenResponse (Long id, String email, String accessToken, boolean existedMember){
         this.id = id;
         this.email = email;
         this.accessToken = accessToken;
+        this.existedMember = existedMember;
     }
 
 }

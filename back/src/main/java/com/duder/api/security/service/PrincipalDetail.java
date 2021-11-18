@@ -17,6 +17,7 @@ public class PrincipalDetail implements OAuth2User {
 
     private Member member;
     private Map<String, Object> attributes;
+    private boolean existedMember;
 
     @Override
     public Map<String, Object> getAttributes() {
@@ -31,7 +32,6 @@ public class PrincipalDetail implements OAuth2User {
 
     @Override
     public String getName() {
-        System.out.println("member.getName() = " + member.getName());
         return member.getName();
     }
 
