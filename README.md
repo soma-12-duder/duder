@@ -1,8 +1,7 @@
 # Duder
-SW 마에스트로 12기 프로젝트
 
-<div justify-content="center">
-    <img src="images/Duder_image.png" width="100%" height="100%">
+<div align="center">
+    <img src="images/Duder_image.png" width="20%" height="20%">
 </div>
 
 - 위치기반 익명 SNS 서비스
