@@ -1,10 +1,10 @@
 package com.duder.api.post.presentation;
 
 import com.duder.api.form.ApiForm;
-import com.duder.api.member.domain.Member;
 import com.duder.api.post.request.PostEnrollRequest;
 import com.duder.api.post.request.PostUpdateRequest;
 import com.duder.api.post.service.PostService;
+import com.duder.api.post.service.PostViewService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -21,6 +21,7 @@ import static com.duder.api.form.ApiForm.succeed;
 public class PostController {
 
     private final PostService postService;
+    private final PostViewService postViewService;
     public final String SUCCESS_ENROLL_POST = "게시글 등록에 성공했습니다.";
     public final String SUCCESS_FIND_POST = "게시글을 조회에 성공했습니다.";
     public final String SUCCESS_UPDATE_POST = "게시글을 수정했습니다.";
@@ -39,7 +40,7 @@ public class PostController {
     @GetMapping("/{postId}")
     public ApiForm<?> findPostById(@AuthenticationPrincipal OAuth2User oAuth2User, @PathVariable Long postId) {
         try {
-            return succeed(postService.findPostById(oAuth2User.getAttribute("member"), postId), SUCCESS_FIND_POST);
+            return succeed(postViewService.findPostById(oAuth2User.getAttribute("member"), postId), SUCCESS_FIND_POST);
         }catch (IllegalArgumentException e){
             return fail(e.getMessage());
         }
@@ -48,7 +49,7 @@ public class PostController {
     @GetMapping("/me")
     public ApiForm<?> findMyPosts(@AuthenticationPrincipal OAuth2User oAuth2User) {
         try {
-            return succeed(postService.findPostByMember(oAuth2User.getAttribute("member")), SUCCESS_FIND_POST);
+            return succeed(postViewService.findPostByMember(oAuth2User.getAttribute("member")), SUCCESS_FIND_POST);
         }catch (IllegalArgumentException e){
             return fail(e.getMessage());
         }
@@ -58,7 +59,7 @@ public class PostController {
     public ApiForm<?> findPostsByDistance(@RequestParam("latitude") double latitude, @RequestParam("longitude") double longitude,
                                           @RequestParam("distance") int distance){
         try{
-            return succeed(postService.findPostsOrderByCreatedAt(latitude, longitude, distance), SUCCESS_FIND_POST);
+            return succeed(postViewService.findPostsOrderByCreatedAt(latitude, longitude, distance), SUCCESS_FIND_POST);
         }catch (IllegalArgumentException e){
             return fail(e.getMessage());
         }
@@ -68,7 +69,7 @@ public class PostController {
     public ApiForm<?> findPostsByDistanceOrderByFavorite(@RequestParam("latitude") double latitude, @RequestParam("longitude") double longitude,
                                           @RequestParam("distance") int distance){
         try{
-            return succeed(postService.findPostsOrderByFavorite(latitude, longitude, distance), SUCCESS_FIND_POST);
+            return succeed(postViewService.findPostsOrderByFavorite(latitude, longitude, distance), SUCCESS_FIND_POST);
         }catch (IllegalArgumentException e){
             return fail(e.getMessage());
         }
