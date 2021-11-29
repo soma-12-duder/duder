@@ -53,7 +53,11 @@ public class ChatController {
     @ResponseBody
     @GetMapping("/chat/room/{roomId}/last")
     public ApiForm<ChatResponse> findLastMessage(@PathVariable Long roomId){
-        return succeed(chatService.findLastMessage(roomId), SUCCESS_FIND_CHAT);
+        try {
+            return succeed(chatService.findLastMessage(roomId), SUCCESS_FIND_CHAT);
+        } catch (Exception e){
+            return fail(e.getMessage());
+        }
     }
 
 }
