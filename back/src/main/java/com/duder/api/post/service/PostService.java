@@ -1,5 +1,8 @@
 package com.duder.api.post.service;
 
+import com.duder.api.comment.application.CommentService;
+import com.duder.api.comment.domain.CommentRepository;
+import com.duder.api.favorite.application.FavoriteService;
 import com.duder.api.member.domain.Member;
 import com.duder.api.post.domain.Post;
 import com.duder.api.post.domain.PostRepository;
@@ -19,6 +22,8 @@ import org.springframework.transaction.annotation.Transactional;
 public class PostService {
 
     private final PostRepository postRepository;
+    private final CommentService commentService;
+    private final FavoriteService favoriteService;
 
     @Transactional
     public Long enroll(Member member, PostEnrollRequest request) throws Exception {
@@ -44,6 +49,8 @@ public class PostService {
         if (member.isNotSameId(post.getMember())){
             throw new IllegalArgumentException("회원이 올린 글이 아닙니다.");
         }
+        commentService.deleteAllByPostId(post.getId());
+        favoriteService.deleteAllByPostId(post.getId());
         postRepository.delete(post);
         return postId;
     }

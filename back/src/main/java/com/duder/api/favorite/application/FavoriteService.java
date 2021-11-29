@@ -4,9 +4,9 @@ import com.duder.api.favorite.domain.Favorite;
 import com.duder.api.favorite.domain.FavoriteRepository;
 import com.duder.api.member.domain.Member;
 import com.duder.api.post.domain.Post;
-import com.duder.api.post.domain.PostRepository;
 import com.duder.api.post.response.PostListResponse;
 import com.duder.api.post.service.PostService;
+import com.duder.api.post.service.PostViewService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,9 +20,8 @@ import java.util.stream.Collectors;
 public class FavoriteService {
 
     private final FavoriteRepository favoriteRepository;
-    private final PostService postService;
+    private final PostViewService postViewService;
 
-    private static final String FAILED_NOT_FOUND_POST = "게시글이 존재하지 않거나 삭제되었습니다.";
     private static final String FAILED_NOT_FOUND_DATA = "해당 좋아요는 이미 삭제되었거나 중복되어 저장되어 있습니다.";
     private static final String FAILED_NOT_DUPLICATE_DATA = "해당 중복되어 저장되어 있습니다.";
 
@@ -31,7 +30,7 @@ public class FavoriteService {
                 .stream()
                 .map(o -> o.getPost())
                 .collect(Collectors.toList());
-        return postService.toPostListResponse(posts);
+        return postViewService.toPostListResponse(posts);
     }
 
     @Transactional
@@ -50,6 +49,12 @@ public class FavoriteService {
                 );
         favoriteRepository.delete(favorite);
         return favorite.getId();
+    }
+
+    @Transactional
+    public void deleteAllByPostId(Long postId) {
+        List<Favorite> favorites = favoriteRepository.findAllByPostId(postId);
+        favoriteRepository.deleteAll(favorites);
     }
 
     public boolean findFavorite(Long memberId, Long postId){
