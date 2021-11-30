@@ -8,10 +8,11 @@ export const isLoginState = atom({
 export const memberInfoState = atom({
   key: 'member',
   default: {
-    id: 1,
-    nickname: '지노',
+    id: 2,
+    nickname: '승패',
     email: '',
-    profile: '',
+    profile:
+      'https://soma12-s3.s3.ap-northeast-2.amazonaws.com/profile/testbeen.png',
   },
 });
 
