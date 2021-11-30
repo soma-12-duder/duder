@@ -46,7 +46,7 @@ class PostServiceTest {
 
     @BeforeEach
     public void init(){
-        postService = new PostService(postRepository, commentService, favoriteRepository, commentRepository);
+        postService = new PostService(postRepository);
     }
 
     @DisplayName("1. 게시글 등록 테스트")
@@ -59,37 +59,7 @@ class PostServiceTest {
         assertThat(postId).isEqualTo(POST1.getId());
     }
 
-    @DisplayName("2. 게시글 조회 테스트")
-    @Test
-    public void findPostById() throws Exception{
-        Long postId = 1L;
-        when(postRepository.findPostById(postId)).thenReturn(Optional.of(POST1));
-        when(commentService.getCommentByPostId(POST1.getId())).thenReturn(Arrays.asList(ALL_COMMENT1, ALL_COMMENT2));
-
-        PostWithCommentResponse response = postService.findPostById(MEMBER1, postId);
-
-        assertThat(response.getComments().size()).isEqualTo(2);
-        assertThat(response.getId()).isEqualTo(postId);
-    }
-
-    @DisplayName("3. 게시글 조회 테스트: 주변 게시글 조회")
-    @Test
-    public void findPostAll() throws Exception{
-        //given
-        when(postRepository.findCellByRange(any(), any(), any(), any()))
-                .thenReturn(Arrays.asList(POST1, POST2, POST3));
-        when(commentRepository.findCommentCount(Arrays.asList(POST1, POST2, POST3)))
-                .thenReturn(Arrays.asList(new CommentCountDto(POST1.getId(), 1L)));
-        when(favoriteRepository.findFavoriteCount(Arrays.asList(POST1, POST2, POST3)))
-                .thenReturn(Arrays.asList(new FavoriteCountDto(POST1.getId(), 1L)));
-        //when
-        List<PostListResponse> responses = postService.findPostsOrderByCreatedAt(POST1.getLatitude(), POST1.getLongitude(), 10);
-
-        //then
-        assertThat(responses.size()).isEqualTo(3);
-    }
-
-    @DisplayName("4. 게시글 삭제 테스트 ")
+    @DisplayName("2. 게시글 삭제 테스트 ")
     @Test
     public void postDelete(){
         //given
@@ -102,7 +72,7 @@ class PostServiceTest {
         verify(postRepository).delete(POST1);
     }
 
-    @DisplayName("5. 게시물 업데이트 테스트")
+    @DisplayName("3. 게시물 업데이트 테스트")
     @Test
     public void postUpdate(){
         //given
@@ -114,16 +84,6 @@ class PostServiceTest {
         //then
         assertThat(POST1.getContent()).isEqualTo(게시글_수정_요청.getContent());
         assertThat(POST1.getTitle()).isEqualTo(게시글_수정_요청.getTitle());
-    }
-
-
-    @DisplayName("6. 내 게시글 보기")
-    @Test
-    public void getMyPost(){
-        //given
-        when(postRepository.findPostByMemberId(MEMBER_ID)).thenReturn(Arrays.asList(POST1, POST2));
-
-        assertThat(postService.findPostByMember(MEMBER1).size()).isEqualTo(2L);
     }
 
 }
