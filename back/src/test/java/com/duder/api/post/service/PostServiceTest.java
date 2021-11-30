@@ -3,6 +3,7 @@ package com.duder.api.post.service;
 import com.duder.api.comment.application.CommentService;
 import com.duder.api.comment.domain.CommentCountDto;
 import com.duder.api.comment.domain.CommentRepository;
+import com.duder.api.favorite.application.FavoriteService;
 import com.duder.api.favorite.domain.FavoriteCountDto;
 import com.duder.api.favorite.domain.FavoriteRepository;
 import com.duder.api.post.domain.PostRepository;
@@ -36,7 +37,7 @@ class PostServiceTest {
     private PostRepository postRepository;
 
     @Mock
-    private FavoriteRepository favoriteRepository;
+    private FavoriteService favoriteService;
 
     @Mock
     private CommentRepository commentRepository;
@@ -46,7 +47,7 @@ class PostServiceTest {
 
     @BeforeEach
     public void init(){
-        postService = new PostService(postRepository);
+        postService = new PostService(postRepository, commentService, favoriteService);
     }
 
     @DisplayName("1. 게시글 등록 테스트")
