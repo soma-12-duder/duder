@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components/native';
 import {Text} from 'react-native';
+import {NK500} from './Color';
 
 interface Style {
   height: number;
@@ -15,10 +16,12 @@ interface Props {
   content: any;
   color?: string;
   backgroundColor?: string;
+  family?: string;
 }
 
 interface Content {
   color: string;
+  family: string;
 }
 
 const UtilButton = ({
@@ -28,11 +31,14 @@ const UtilButton = ({
   backgroundColor = 'white',
   color = 'black',
   content,
+  family = NK500,
 }: Props) => {
   return (
     <Wrapper height={height} width={width} backgroundColor={backgroundColor}>
       <Button onPress={onPress}>
-        <ButtonContent color={color}>{content}</ButtonContent>
+        <ButtonContent color={color} family={family}>
+          {content}
+        </ButtonContent>
       </Button>
     </Wrapper>
   );
@@ -55,6 +61,7 @@ const Button = styled.TouchableOpacity`
 `;
 
 const ButtonContent = styled.Text`
+  font-family: ${(props: Content) => props.family};
   font-size: 15px;
   letter-spacing: -0.3;
   color: ${(props: Content) => props.color};

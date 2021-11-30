@@ -124,4 +124,13 @@ export default (axios: any) => ({
       console.error(e);
     }
   },
+
+  deletePost: async (postId: any) => {
+    try {
+      const {data} = await axios.delete(`/api/post/${postId}`);
+      return data;
+    } catch (e) {
+      console.error(e);
+    }
+  },
 });
