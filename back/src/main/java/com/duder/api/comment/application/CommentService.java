@@ -41,6 +41,9 @@ public class CommentService {
     @Transactional
     public Long deleteComment(Member member, Long commentId){
         Comment comment = findCommentById(commentId);
+        if (member.isNotSameId(comment.getMember())){
+            throw new IllegalArgumentException("회원이 올린 글이 아닙니다.");
+        }
         comment.setVisibleFalse();
         return comment.getId();
     }
@@ -63,6 +66,12 @@ public class CommentService {
         }
 
         return responses;
+    }
+
+    @Transactional
+    public void deleteAllByPostId(Long postId) {
+        List<Comment> comments = commentRepository.findCommentByPostId(postId);
+        commentRepository.deleteAll(comments);
     }
 
     public Comment findCommentById(Long commentId){

@@ -3,6 +3,7 @@ package com.duder.api.favorite.application;
 import com.duder.api.favorite.domain.FavoriteRepository;
 import com.duder.api.post.domain.PostRepository;
 import com.duder.api.post.service.PostService;
+import com.duder.api.post.service.PostViewService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -30,11 +31,11 @@ class FavoriteServiceTest {
     private FavoriteRepository favoriteRepository;
 
     @Mock
-    private PostService postService;
+    private PostViewService postViewService;
 
     @BeforeEach
     void init(){
-        favoriteService = new FavoriteService(favoriteRepository, postService);
+        favoriteService = new FavoriteService(favoriteRepository, postViewService);
     }
 
     @Test

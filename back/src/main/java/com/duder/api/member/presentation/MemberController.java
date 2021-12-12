@@ -2,7 +2,6 @@ package com.duder.api.member.presentation;
 
 import com.duder.api.form.ApiForm;
 import com.duder.api.member.application.MemberService;
-import com.duder.api.member.domain.Member;
 import com.duder.api.member.response.MemberResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -42,7 +41,7 @@ public class MemberController {
     @PutMapping("/update/profile")
     public ApiForm<?> updateMemberProfile(@AuthenticationPrincipal OAuth2User oAuth2User, @RequestParam String profileUrl){
         try {
-            return succeed(memberService.updateMemberNickname(
+            return succeed(memberService.updateMemberProfile(
                     oAuth2User.getAttribute("member"), profileUrl), SUCCESS_UPDATE_MEMBER);
         }catch (IllegalArgumentException e){
             return fail(e.getMessage());

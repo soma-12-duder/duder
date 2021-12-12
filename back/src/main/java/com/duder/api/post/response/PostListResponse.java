@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
-public class PostListResponse {
+public class PostListResponse implements Comparable<PostListResponse>{
     private Long id;
     private double latitude;
     private double longitude;
@@ -75,4 +75,8 @@ public class PostListResponse {
                 .collect(Collectors.toList());
     }
 
+    @Override
+    public int compareTo(PostListResponse o) {
+        return Integer.compare((int) o.getFavoriteCount(), (int) this.favoriteCount);
+    }
 }
