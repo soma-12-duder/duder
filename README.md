@@ -22,3 +22,11 @@
 ## 기술스택
 
 ![Tech/Stack](images/Tech_stack.png)
+
+
+## 팀원 소개
+
+|             fumyparli (이승범)              |            KIMJINOH97 (김진오)             
+|:----------------------------------------:|:---------------------------------------:|
+|                Front-end                 |                Back-end                 |
+|  [Github](https://github.com/fumyparli)  | [Github](https://github.com/KIMJINOH97) 
