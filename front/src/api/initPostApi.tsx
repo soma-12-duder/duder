@@ -127,7 +127,7 @@ export default (axios: any) => ({
 
   deletePost: async (postId: any) => {
     try {
-      const {data} = await axios.delete(`/api/post/${postId}`);
+      const {data} = await axios.delete(`/api/post/delete/${postId}`);
       return data;
     } catch (e) {
       console.error(e);

@@ -3,7 +3,7 @@ import React, {useEffect, useLayoutEffect} from 'react';
 import ViewMainText from '../components/ViewMainText';
 import ViewCommentText from '../components/ViewCommentText';
 import CommentAndChattingInput from '../components/CommentAndChattingInput';
-import {ScrollView, StyleSheet} from 'react-native';
+import {Alert, ScrollView, StyleSheet} from 'react-native';
 import {useRecoilState, useRecoilValue} from 'recoil';
 import {memberInfoState, postState} from '../states/MemberState';
 import {postApi} from '../api/indexApi';
@@ -23,15 +23,30 @@ const PostScreen = ({route, navigation}: Props) => {
   const {member: postMember, id: postId} = route.params;
 
   const onPressDeleteButton = async () => {
+    console.log(postId);
     const {data} = await postApi.deletePost(postId);
-    console.log('delete data!!!!!!!!!', data);
+    console.log('delete post data', data);
+    Alert.alert('게시글이 삭제되었습니다.');
     navigation.pop();
   };
 
+  const onPressUpdateButton = async () => navigation.pop();
+
   const getData = async () => {
     try {
-      const {data} = await postApi.getPostById(route.params.id);
-      setPost(data);
+      const {status, data, message} = await postApi.getPostById(
+        route.params.id,
+      );
+      if (status === 200) {
+        setPost(data);
+        return;
+      }
+
+      if (status === 400) {
+        console.log(data, message);
+        Alert.alert(message); // 게시글이 존재하지 않을 때
+        navigation.pop();
+      }
     } catch (e) {
       console.error(e);
     }
@@ -47,7 +62,7 @@ const PostScreen = ({route, navigation}: Props) => {
                 width="40px"
                 content="수정"
                 family={NK700}
-                onPress={() => console.log('click')}
+                onPress={onPressUpdateButton}
                 color={BROWN}
               />
               <UtilButton
