@@ -17,12 +17,14 @@ import {
   myPostsState,
   myFavoritePostsState,
   isProfileRefreshingState,
+  memberInfoState,
 } from '../states/MemberState';
 import {useNavigation} from '@react-navigation/core';
 import styled from 'styled-components/native';
 import usePosition from '../util/usePosition';
 import PENCIL_ICON from '../assets/images/PENCIL_ICON.png';
 import {TouchableOpacity} from 'react-native-gesture-handler';
+import UtilProfile from '../util/UtilProfile';
 
 interface Props {
   posts: any;
@@ -74,6 +76,7 @@ const initialLayout = {width: Dimensions.get('window').width};
 const ProfileScreen = () => {
   const [position, excuteGetCoordinates] = usePosition();
   const [posts, setPosts] = useRecoilState(myPostsState);
+  const [myInfo] = useRecoilState(memberInfoState);
   const [favoritePosts, setfavoritePosts] =
     useRecoilState(myFavoritePostsState);
   const [index, setIndex] = React.useState(0);
@@ -113,6 +116,7 @@ const ProfileScreen = () => {
   }, []);
 
   useEffect(() => {
+    console.log('my info ', myInfo);
     console.log('myFuckingPosts:', posts);
   }, [posts]);
 
@@ -121,16 +125,16 @@ const ProfileScreen = () => {
       <HorizontalLine />
       <ProfilePictureAndNickName>
         <ImageView>
-          <ProfileImage
+          {/* <ProfileImage
             source={{
               uri: 'https://soma12-s3.s3.ap-northeast-2.amazonaws.com/profile/testbeen.png',
             }}
-          />
+          /> */}
+          <UtilProfile picture={myInfo.profile} width="76px" height="76px" />
         </ImageView>
-
         <TouchableOpacity>
           <NicknameAndIcon>
-            <Text>승패</Text>
+            <Text>{myInfo.nickname}</Text>
             <Image
               source={PENCIL_ICON}
               style={{width: 13, height: 13, top: 1, marginLeft: 3}}
@@ -199,12 +203,6 @@ const ProfilePictureAndNickName = styled.View`
 const NicknameAndIcon = styled.View`
   flex-direction: row;
   align-items: center;
-`;
-
-const ProfileImage = styled.Image`
-  width: 100%;
-  height: 100%;
-  border-radius: 40;
 `;
 
 const ImageView = styled.TouchableOpacity`

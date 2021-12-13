@@ -1,6 +1,6 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, {useEffect, useCallback} from 'react';
-import {StyleSheet, Dimensions, FlatList, View} from 'react-native';
+import {Dimensions, FlatList} from 'react-native';
 import {TabView, TabBar, SceneMap} from 'react-native-tab-view';
 import HomePost from '../components/HomePost';
 import {postApi} from '../api/indexApi';
@@ -13,6 +13,7 @@ import {
 import {useNavigation} from '@react-navigation/core';
 import styled from 'styled-components/native';
 import usePosition from '../util/usePosition';
+import POST_WRITING_LOGO from '../assets/images/POST_WRITING_LOGO.png';
 
 interface Props {
   posts: any;
@@ -42,7 +43,7 @@ const ViewRoute = ({posts, position, apiFunc}: Props) => {
 
   return (
     <>
-      <View style={styles.container}>
+      <Wrapper>
         <FlatList
           data={posts}
           renderItem={renderItem}
@@ -51,11 +52,12 @@ const ViewRoute = ({posts, position, apiFunc}: Props) => {
             apiFunc();
           }}
           refreshing={isRefreshing}></FlatList>
-      </View>
+      </Wrapper>
       <PostWriteButton
         onPress={() => {
           navigation.navigate('글쓰기', {});
         }}>
+        <PostWritingImage source={POST_WRITING_LOGO} />
         <PostWriteText>글쓰기</PostWriteText>
       </PostWriteButton>
     </>
@@ -145,24 +147,28 @@ const HomeScreen = () => {
 
 export default HomeScreen;
 
-const styles = StyleSheet.create({
-  container: {
-    flexDirection: 'column',
-    alignItems: 'center',
-    backgroundColor: '#ffffff',
-  },
-});
+const Wrapper = styled.View`
+  flex-direction: column;
+  align-items: center;
+  background-color: white;
+`;
 
 const PostWriteButton = styled.TouchableOpacity`
+  flex-direction: row;
   background-color: #c38753;
   position: absolute;
   left: 41%;
   bottom: 5px;
-  width: 70px;
+  width: 90px;
   height: 40px;
   justify-content: center;
   align-items: center;
   border-radius: 35px;
+`;
+
+const PostWritingImage = styled.Image`
+  width: 25px;
+  height: 20px;
 `;
 
 const PostWriteText = styled.Text`

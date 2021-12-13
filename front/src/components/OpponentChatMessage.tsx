@@ -1,39 +1,23 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import styled from 'styled-components/native';
 import UtilText from '../util/UtilText';
 import {LIGHT_GRAY} from '../util/Color';
-import DUDER_IMAGE from '../assets/images/DUDER_IMAGE.png';
+import UtilProfile from '../util/UtilProfile';
+import {parsingTime} from '../util/Utils';
 
 interface Props {
   data: Object;
   picture: String;
 }
 
-const UserChatMessage = ({data, picture}: Props) => {
+const OpponentChatMessage = ({data, picture}: Props) => {
   const {content, created_at}: any = data;
-  const re = /\d+/g;
-  const parsingTime = (date: string) => {
-    if (date == null) return;
-    const time: any = date?.match(re);
-    const now = new Date();
-    const nowMonth: any = now.getMonth() + 1;
-    const nowDate: any = now.getDate();
-    if (+time[1] === +nowMonth && +time[2] === +nowDate) {
-      return `${time[3]}시 ${time[4]}분`;
-    } else {
-      return `${time[1]}월 ${time[2]}일 ${time[3]}시 ${time[4]}분`;
-    }
-  };
+
+  // useEffect(() => console.log('useChat!!!!!!!!!1'), []);
 
   return (
     <Wrapper>
-      <UserProfile>
-        {picture ? (
-          <ProfileImage source={{uri: `${picture}`}} resizeMode="cover" />
-        ) : (
-          <ProfileImage source={DUDER_IMAGE} resizeMode="contain" />
-        )}
-      </UserProfile>
+      <UtilProfile picture={picture} />
       <MessageView>
         <UtilText content={content} />
       </MessageView>
@@ -44,7 +28,7 @@ const UserChatMessage = ({data, picture}: Props) => {
   );
 };
 
-export default UserChatMessage;
+export default OpponentChatMessage;
 
 const Wrapper = styled.View`
   display: flex;
@@ -55,22 +39,13 @@ const Wrapper = styled.View`
   width: 50%;
 `;
 
-const UserProfile = styled.View`
-  margin-right: 12px;
-`;
-
-const ProfileImage = styled.Image`
-  width: 40px;
-  height: 40px;
-  border-radius: 100px;
-`;
-
 const MessageView = styled.View`
   background-color: ${LIGHT_GRAY};
   border-bottom-left-radius: 12px;
   border-bottom-right-radius: 12px;
   border-top-right-radius: 12px;
   padding: 18px 16px;
+  margin-left: 12px;
 `;
 
 const TimeView = styled.View`

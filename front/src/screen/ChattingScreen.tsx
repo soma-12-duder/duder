@@ -62,7 +62,7 @@ const ChattingScreen = () => {
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <HorizontalLine />
-      {chatList.length > 0 &&
+      {chatList &&
         lastMessageList.length > 0 &&
         chatList.map(({chatroom_id, member, opponent}: any, i: any) => (
           <Chatting
