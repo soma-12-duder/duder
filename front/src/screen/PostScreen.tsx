@@ -1,13 +1,15 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, {useEffect} from 'react';
+import React, {useEffect, useLayoutEffect} from 'react';
 import ViewMainText from '../components/ViewMainText';
 import ViewCommentText from '../components/ViewCommentText';
 import CommentAndChattingInput from '../components/CommentAndChattingInput';
-import {ScrollView, StyleSheet, Keyboard} from 'react-native';
-import {useRecoilState} from 'recoil';
-import {postState} from '../states/MemberState';
+import {Alert, ScrollView, StyleSheet} from 'react-native';
+import {useRecoilState, useRecoilValue} from 'recoil';
+import {memberInfoState, postState} from '../states/MemberState';
 import {postApi} from '../api/indexApi';
 import styled from 'styled-components/native';
+import {BROWN, NK700} from '../util/Color';
+import UtilButton from '../util/UtilButton';
 
 interface Props {
   route: any;
@@ -16,16 +18,67 @@ interface Props {
 
 const PostScreen = ({route, navigation}: Props) => {
   const [post, setPost]: any = useRecoilState(postState);
+  const myInfo = useRecoilValue(memberInfoState);
   const commentInputRef: any = React.useRef(null);
+  const {member: postMember, id: postId} = route.params;
 
-  async function getData() {
+  const onPressDeleteButton = async () => {
+    console.log(postId);
+    const {data} = await postApi.deletePost(postId);
+    console.log('delete post data', data);
+    Alert.alert('게시글이 삭제되었습니다.');
+    navigation.pop();
+  };
+
+  const onPressUpdateButton = async () => navigation.pop();
+
+  const getData = async () => {
     try {
-      const {data} = await postApi.getPostById(route.params.id);
-      setPost(data);
+      const {status, data, message} = await postApi.getPostById(
+        route.params.id,
+      );
+      if (status === 200) {
+        setPost(data);
+        return;
+      }
+
+      if (status === 400) {
+        console.log(data, message);
+        Alert.alert(message); // 게시글이 존재하지 않을 때
+        navigation.pop();
+      }
     } catch (e) {
       console.error(e);
     }
-  }
+  };
+
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerRight: () => {
+        if (postMember.id === myInfo.id) {
+          return (
+            <RightButtonBox>
+              <UtilButton
+                width="40px"
+                content="수정"
+                family={NK700}
+                onPress={onPressUpdateButton}
+                color={BROWN}
+              />
+              <UtilButton
+                width="40px"
+                content="삭제"
+                family={NK700}
+                onPress={onPressDeleteButton}
+                color={BROWN}
+              />
+            </RightButtonBox>
+          );
+        }
+      },
+    });
+  }, [navigation]);
+
   useEffect(() => {
     getData();
   }, []);
@@ -89,38 +142,9 @@ const styles = StyleSheet.create({
   },
 });
 
-const InputView = styled.View`
-  background-color: #ffffff;
-  position: absolute;
-  left: 0;
-  bottom: 0;
-  width: 100%;
-  height: 70px;
-  justify-content: center;
-  align-items: center;
-`;
-
-const InputWraaper = styled.View`
-  width: 96%;
-  height: 50px;
-  border-radius: 22px;
-  background-color: #f0f0f0;
+const RightButtonBox = styled.TouchableOpacity`
   flex-direction: row;
-  align-items: center;
-  justify-content: space-around;
-`;
-
-const CommentInput = styled.TextInput`
-  width: 83%;
-  height: 50px;
-`;
-
-const CommentInputButton = styled.TouchableOpacity`
-  background-color: #c38753;
-  width: 40px;
+  width: 100px;
   height: 40px;
-  border-radius: 20px;
-  margin-right: 2%;
   justify-content: center;
-  align-items: center;
 `;

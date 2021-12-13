@@ -6,6 +6,7 @@ import HorizontalLine from '../components/HorizontalLine';
 import UtilText from '../util/UtilText';
 import {NK700, GRAY} from '../util/Color';
 import DUDER_IMAGE from '../assets/images/DUDER_IMAGE.png';
+import {parsingLastTime} from '../util/Utils';
 
 interface Props {
   opponent: any;
@@ -24,22 +25,6 @@ const Chatting = ({
   onClick,
   content,
 }: Props) => {
-  const re = /\d+/g;
-  const parsingTime = (date: string) => {
-    if (date == null) return;
-    const time: any = date?.match(re);
-    const now = new Date();
-    const nowMonth: any = now.getMonth() + 1 + '';
-    const nowDate: any = now.getDate() + '';
-    if (+time[1] === +nowMonth && +time[2] === +nowDate - 1) {
-      return `어제`;
-    } else if (+time[1] === +nowMonth && +time[2] === +nowDate) {
-      return `${time[1]}월 ${time[2]}일`;
-    } else {
-      return `${time[1]}월 ${time[2]}일 ${time[3]}시 ${time[4]}분`;
-    }
-  };
-
   return (
     <>
       <ChattingWrapper
@@ -70,8 +55,8 @@ const Chatting = ({
           </NicknameTextWrapper>
         </ProfileNicknameTextWrapper>
         <DateChattingsNumberWrapper>
-          <Text style={{fontSize: 10, paddingBottom: '7%'}}>
-            {parsingTime(date)}
+          <Text style={{fontSize: 10, paddingBottom: '7%', color: GRAY}}>
+            {parsingLastTime(date)}
           </Text>
           {/* {chatroom_id && +chatroom_id > 0 ? (
             <View

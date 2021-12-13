@@ -1,7 +1,8 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import styled from 'styled-components/native';
 import UtilText from '../util/UtilText';
 import {BROWN} from '../util/Color';
+import {parsingTime} from '../util/Utils';
 
 interface Props {
   data: Object;
@@ -9,19 +10,9 @@ interface Props {
 
 const UserChatMessage = ({data}: Props) => {
   const {content, created_at}: any = data;
-  const re = /\d+/g;
-  const parsingTime = (date: string) => {
-    if (date == null) return;
-    const time: any = date?.match(re);
-    const now = new Date();
-    const nowMonth: any = now.getMonth() + 1;
-    const nowDate: any = now.getDate();
-    if (+time[1] === +nowMonth && +time[2] === +nowDate) {
-      return `${time[3]}시 ${time[4]}분`;
-    } else {
-      return `${time[1]}월 ${time[2]}일 ${time[3]}시 ${time[4]}분`;
-    }
-  };
+
+  // useEffect(() => console.log('useChat!!!!!!!!!1'), []);
+
   return (
     <MessageContainer>
       <Wrapper>
